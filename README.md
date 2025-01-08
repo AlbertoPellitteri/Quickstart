@@ -1,3 +1,5 @@
+### WIP, not fully functional
+
 ![image](./static/images/header.png)
 
 ![image](./static/images/wizard.webp)
