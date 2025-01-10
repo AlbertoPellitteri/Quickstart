@@ -193,6 +193,7 @@ def step(name):
         )
 
         page_info["yaml_valid"] = validated
+        session["yaml_content"] = yaml_content
 
         return render_template(
             "900-final.html",
@@ -224,7 +225,7 @@ def download():
             download_name="config.yml",
         )
     flash("No configuration to download", "danger")
-    return redirect(url_for("final_step"))
+    return redirect(request.referrer or url_for("step", page="900-final"))
 
 
 @app.route("/validate_gotify", methods=["POST"])

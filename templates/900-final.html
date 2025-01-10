@@ -48,6 +48,7 @@
       </div>
     </div>
     <hr class="hr">
+    {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
     <div class="form-floating">
       <select id="header-style" name="header_style" class="form-select">
         <option value="ascii" {% if page_info['header_style'] == 'ascii' %}selected{% endif %}>With ASCII Art</option>
@@ -84,5 +85,23 @@
       <br>
       <a href="{{ url_for('download') }}" id="download-btn" class="btn btn-success d-none">Download Config</a>
     {% endif %}
+    <div class="form-floating">
+      <div class="form-text">
+        <br><h5>Here is an example of what the Collections might look like.</h5><br>
+      </div>
+    </div>
+    <div class="text-center"></div>
+    <div>
+      <img src="https://kometa.wiki/en/latest/kometa/install/images/wt-default-collections.png" alt="Kometa Default Collections" class="img-fluid">
+    </div>
+    <div class="form-floating">
+      <div class="form-text">
+        <br><h5>Here is an example of what the Ribbon Overlays might look like.</h5><br>
+      </div>
+    </div>
+    <div class="text-center"></div>
+    <div>
+      <img src="https://kometa.wiki/en/latest/defaults/overlays/images/ribbon.png" alt="Kometa Ribbon" class="img-fluid">
+    </div>
 </form>
 {% endblock %}
