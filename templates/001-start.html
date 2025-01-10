@@ -62,12 +62,15 @@
     <center>
       <img src="{{ url_for('static', filename='images/wizard.webp') }}" alt="Header Image" class="header-image"/>
     </center>
-    <p class="fs-2">This wizard will step you through creating a config file for Kometa.</p>
-    <p class="fs-4">You will need some stuff.</p>
+    <p class="fs-5">This wizard will step you through creating a config file for Kometa.</p>
+    <p class="fs-5">Minimally, you will need information about your media server (URL and Token) and your TMDb information (API Key) before downloading the final config.yml file.</p>
     <p class="fs-5">Once you have gathered that stuff, click next "Arrow" above.</p>
   </div>
   <div class="form-text" id="name-info">
-    <p class="fs-6">This name is used for saving your config and progress on the server, and allows you to come back and modify an existing config.  You can change it if you wish.</p>
+    <p class="fs-6">The config name below is used for saving your config and progress on the server. You can change it if you wish before getting started.</p>
+    <div class="alert alert-warning" role="alert">
+      <strong>Note:</strong> Please write down the config name for future reference. This will help you to retrieve and modify your configuration later.
+    </div>
   </div>
   <div class="form-floating">
     <input type="text" class="form-control" id="config_name" name="config_name" value="{{ page_info['config_name'] }}" title="enter a config name if you wish" required="" onkeyup="validate_name(this)">
