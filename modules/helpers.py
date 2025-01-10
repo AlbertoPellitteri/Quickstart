@@ -86,8 +86,8 @@ def user_visible_name(raw_name):
         formatted_name = "AniDB"
     elif raw_name == "playlist_files":
         formatted_name = "Playlist"
-    elif raw_name == "library_selection":
-        formatted_name = "Select Libraries"
+    elif raw_name == "libraries":
+        formatted_name = "Libraries"
     elif raw_name == "final":
         formatted_name = "Final Validation"
     else:
