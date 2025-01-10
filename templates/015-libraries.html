@@ -85,12 +85,12 @@
         {% endfor %}
       </div>
     </div>
-    <div class="form-floating">
+    <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="libraries" name="libraries" value="{{ data['libraries']['libraries'] }}" readonly>
       <label for="libraries">Selected Libraries</label>
     </div>
     <div class="input-group input-group-lg form-floating"></div>
-    <div class="form-floating">
+    <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="libraries_validated" name="libraries_validated" value="{{ data['validated'] }}" readonly>
       <label for="libraries_validated">Libraries Validated</label>
     </div>

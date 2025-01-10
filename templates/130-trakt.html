@@ -89,7 +89,7 @@
     <input type="hidden" class="form-control" id="refresh_token" name="refresh_token" value="{{ data['trakt']['authorization']['refresh_token'] }}" readonly>
     <input type="hidden" class="form-control" id="scope" name="scope" value="{{ data['trakt']['authorization']['scope'] }}" readonly>
     <input type="hidden" class="form-control" id="created_at" name="created_at" value="{{ data['trakt']['authorization']['created_at'] }}" readonly>
-    <div class="form-floating">
+    <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="trakt_validated" name="trakt_validated" value="{{ data['validated'] }}" title="">
       <label for="trakt_validated">Trakt Validated</label>
     </div>
