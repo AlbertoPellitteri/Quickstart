@@ -1,6 +1,7 @@
 {% extends "000-base.html" %} {% block content %}
 <form method="post" id="configForm" name="configForm">
   <div id="{{page_info['title']}}Section">
+    <!-- Navigation Buttons -->
     <div class="row">
       <div class="col align-self-center">
         <div class="input-group justify-content-start">
@@ -41,6 +42,8 @@
         </div>
       </div>
     </div>
+
+    <!-- Progress Bar -->
     <div class="container text-center">
       <div class="row">
         <div class="col"></div>
@@ -56,42 +59,207 @@
         <div class="col"></div>
       </div>
     </div>
+
     <hr class="hr">
     {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
     <div id="validation-messages" class="alert alert-danger" role="alert" style="display: none;">
     </div>
-    <div id="libraries-container" style="display: none;">
-      <div class="form-floating">
-      <label for="libraries">Movie Libraries:</label><br><br>
+    <!-- Movie Library Selection -->
+    <div id="movie-libraries-container">
+      <h3>Select Movie Libraries</h3>
       <div id="movieLibraries">
         {% set movie_libraries = plex_data['plex']['tmp_movie_libraries'].split(',')|sort if plex_data['plex']['tmp_movie_libraries'] else [] %}
         {% for library in movie_libraries %}
         <div class="form-check form-switch">
-          <input class="form-check-input library-checkbox" type="checkbox" value="{{ library }}" id="library_{{ library }}">
-          <label class="form-check-label" for="library_{{ library }}">{{ library }}</label>
+          <input class="form-check-input library-checkbox" type="checkbox" value="{{ library }}" id="mov-library_{{ library }}" name="mov-library_{{ library }}">
+          <label class="form-check-label" for="mov-library_{{ library }}">{{ library }}</label>
         </div>
         {% endfor %}
       </div>
     </div>
-    <div class="form-floating">
-      <label for="libraries">Show Libraries:</label><br><br>
+
+    <!-- Movie Library Accordions -->
+    <div class="accordion mt-4" id="accordionMovies">
+      <!-- Movie Collections Accordion -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#movieCollections" aria-expanded="false" aria-controls="movieCollections">
+            Movie Collections
+          </button>
+        </h2>
+        <div id="movieCollections" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="mov-collection_basic" name="mov-collection_basic" value="true" {% if data['libraries']['mov-collection_basic']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-collection_basic" value="false">
+              <label class="form-check-label" for="mov-collection_basic">Basic</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="mov-collection_imdb" name="mov-collection_imdb" value="true" {% if data['libraries']['mov-collection_imdb']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-collection_imdb" value="false">
+              <label class="form-check-label" for="mov-collection_imdb">IMDb</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Movie Overlays Accordion -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#movieOverlays" aria-expanded="false" aria-controls="movieOverlays">
+            Movie Overlays
+          </button>
+        </h2>
+        <div id="movieOverlays" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="mov-overlay_ribbon" name="mov-overlay_ribbon" value="true" {% if data['libraries']['mov-overlay_ribbon']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-overlay_ribbon" value="false">
+              <label class="form-check-label" for="mov-overlay_ribbon">Ribbon</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="mov-overlay_resolution" name="mov-overlay_resolution" value="true" {% if data['libraries']['mov-overlay_resolution']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-overlay_resolution" value="false">
+              <label class="form-check-label" for="mov-overlay_resolution">Resolution</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Movie Attributes Accordion -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#movieAttributes" aria-expanded="false" aria-controls="movieAttributes">
+            Movie Attributes
+          </button>
+        </h2>
+        <div id="movieAttributes" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
+          <div class="accordion-body">
+            <div class="form-floating mb-3">
+              <select class="form-select" id="mov-attribute_reset_overlays" name="mov-attribute_reset_overlays">
+                <option value="" {% if data['libraries'].get('mov-attribute_reset_overlays') == "" %}selected{% endif %}>None</option>
+                <option value="tmdb" {% if data['libraries'].get('mov-attribute_reset_overlays') == "tmdb" %}selected{% endif %}>TMDb</option>
+                <option value="plex" {% if data['libraries'].get('mov-attribute_reset_overlays') == "plex" %}selected{% endif %}>Plex</option>
+              </select>
+              <label for="mov-attribute_reset_overlays">Reset Overlays</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="mov-attribute_reapply_overlays" name="mov-attribute_reapply_overlays" value="true" {% if data['libraries']['mov-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-attribute_reapply_overlays" value="false">
+              <label class="form-check-label" for="mov-attribute_reapply_overlays">Reapply Overlays</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="mov-attribute_remove_overlays" name="mov-attribute_remove_overlays" value="true" {% if data['libraries']['mov-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-attribute_remove_overlays" value="false">
+              <label class="form-check-label" for="mov-attribute_remove_overlays">Remove Overlays</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<br>
+    <!-- Show Library Selection -->
+    <div id="show-libraries-container">
+      <h3>Select Show Libraries</h3>
       <div id="showLibraries">
         {% set show_libraries = plex_data['plex']['tmp_show_libraries'].split(',')|sort if plex_data['plex']['tmp_show_libraries'] else [] %}
         {% for library in show_libraries %}
         <div class="form-check form-switch">
-          <input class="form-check-input library-checkbox" type="checkbox" value="{{ library }}" id="library_{{ library }}">
-          <label class="form-check-label" for="library_{{ library }}">{{ library }}</label>
+          <input class="form-check-input library-checkbox" type="checkbox" value="{{ library }}" id="sho-library_{{ library }}" name="sho-library_{{ library }}">
+          <label class="form-check-label" for="sho-library_{{ library }}">{{ library }}</label>
         </div>
         {% endfor %}
       </div>
     </div>
-    <div class="form-floating" style="display:none;">
+
+    <!-- Show Library Accordions -->
+    <div class="accordion mt-4" id="accordionShows">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#showCollections" aria-expanded="false" aria-controls="showCollections">
+            Show Collections
+          </button>
+        </h2>
+        <div id="showCollections" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sho-collection_tmdb" name="sho-collection_tmdb" value="true" {% if data['libraries']['sho-collection_tmdb']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-collection_tmdb" value="false">
+              <label class="form-check-label" for="sho-collection_tmdb">TMDb</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sho-collection_network" name="sho-collection_network" value="true" {% if data['libraries']['sho-collection_network']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-collection_network" value="false">
+              <label class="form-check-label" for="sho-collection_network">Network</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show Overlays -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#showOverlays" aria-expanded="false" aria-controls="showOverlays">
+            Show Overlays
+          </button>
+        </h2>
+        <div id="showOverlays" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sho-overlay_video_format" name="sho-overlay_video_format" value="true" {% if data['libraries']['sho-overlay_video_format']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-overlay_video_format" value="false">
+              <label class="form-check-label" for="sho-overlay_video_format">Video Format</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sho-overlay_audio_codec" name="sho-overlay_audio_codec" value="true" {% if data['libraries']['sho-overlay_audio_codec']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-overlay_audio_codec" value="false">
+              <label class="form-check-label" for="sho-overlay_audio_codec">Audio Codec</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show Attributes -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#showAttributes" aria-expanded="false" aria-controls="showAttributes">
+            Show Attributes
+          </button>
+        </h2>
+        <div id="showAttributes" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <div class="form-floating mb-3">
+              <select class="form-select" id="sho-attribute_reset_overlays" name="sho-attribute_reset_overlays">
+                <option value="" {% if data['libraries'].get('sho-attribute_reset_overlays') == "" %}selected{% endif %}>None</option>
+                <option value="tmdb" {% if data['libraries'].get('sho-attribute_reset_overlays') == "tmdb" %}selected{% endif %}>TMDb</option>
+                <option value="plex" {% if data['libraries'].get('sho-attribute_reset_overlays') == "plex" %}selected{% endif %}>Plex</option>
+              </select>
+              <label for="sho-attribute_reset_overlays">Reset Overlays</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sho-attribute_reapply_overlays" name="sho-attribute_reapply_overlays" value="true" {% if data['libraries']['sho-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-attribute_reapply_overlays" value="false">
+              <label class="form-check-label" for="sho-attribute_reapply_overlays">Reapply Overlays</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sho-attribute_remove_overlays" name="sho-attribute_remove_overlays" value="true" {% if data['libraries']['sho-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-attribute_remove_overlays" value="false">
+              <label class="form-check-label" for="sho-attribute_remove_overlays">Remove Overlays</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-floating">
       <input type="text" class="form-control" id="libraries" name="libraries" value="{{ data['libraries']['libraries'] }}" readonly>
       <label for="libraries">Selected Libraries</label>
     </div>
     <div class="input-group input-group-lg form-floating"></div>
-    <div class="form-floating" style="display:none;">
-      <input type="text" class="form-control" id="libraries_validated" name="libraries_validated" value="{{ data['validated'] }}" readonly>
+    <div class="form-floating">
+      <input type="text" class="form-control" id="libraries_validated" name="libraries_validated" value="{{ data['validated'] }}">
       <label for="libraries_validated">Libraries Validated</label>
     </div>
     <div id="statusMessage" class="status-message"></div><br>

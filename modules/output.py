@@ -61,6 +61,9 @@ def generate_library_sections_simple(
 
 
 def clean_section_data(section_data, config_attribute):
+    """
+    Cleans out temporary or irrelevant data before integrating it into the final config.
+    """
     clean_data = {}
 
     for key, value in section_data.items():
@@ -77,19 +80,83 @@ def clean_section_data(section_data, config_attribute):
     return clean_data
 
 
-def build_config(header_style="ascii"):
-    sections = get_template_list()
+def build_libraries_section(
+    movie_libraries,
+    show_libraries,
+    movie_collections,
+    show_collections,
+    movie_overlays,
+    show_overlays,
+    movie_attributes,
+    show_attributes,
+):
+    """
+    Build the libraries section for the YAML config, ensuring that settings are
+    correctly applied to movies and shows. Exclude empty fields from the final output.
+    """
+    libraries_section = {}
 
+    # Helper function to clean and add entries
+    def add_entry(library_name, library_type, collections, overlays, attributes):
+        entry = {}
+
+        # Process collections
+        collection_files = [
+            {"default": collection.replace(f"{library_type}-collection_", "")}
+            for collection, selected in collections.items()
+            if selected
+        ]
+        if collection_files:
+            entry["collection_files"] = collection_files
+
+        # Process overlays
+        overlay_files = [
+            {"default": overlay.replace(f"{library_type}-overlay_", "")}
+            for overlay, selected in overlays.items()
+            if selected
+        ]
+        if overlay_files:
+            entry["overlay_files"] = overlay_files
+
+        # Process attributes
+        for attr_key, attr_value in attributes.items():
+            clean_key = attr_key.replace(f"{library_type}-attribute_", "")
+            if attr_value not in [None, False, [], {}, ""]:
+                entry[clean_key] = attr_value
+
+        # Add only non-empty entries
+        if entry:
+            libraries_section[library_name] = entry
+
+    # Process movie libraries
+    for library_key, library_name in movie_libraries.items():
+        add_entry(
+            library_name, "mov", movie_collections, movie_overlays, movie_attributes
+        )
+
+    # Process show libraries
+    for library_key, library_name in show_libraries.items():
+        add_entry(library_name, "sho", show_collections, show_overlays, show_attributes)
+
+    return {"libraries": libraries_section}
+
+
+def build_config(header_style="ascii"):
+    """
+    Build the final configuration, including all sections and headers,
+    ensuring the libraries section is properly processed.
+    """
+    sections = get_template_list()
     config_data = {}
     header_art = {}
 
     # Process sections and generate header art
     for name in sections:
         item = sections[name]
-        # {'num': '001', 'file': '001-start.html', 'stem': '001-start', 'name': 'Start', 'raw_name': 'start', 'next': '010-plex', 'prev': '001-start'}
         persistence_key = item["stem"]
         config_attribute = item["raw_name"]
 
+        # Generate ASCII art or divider headers
         if header_style == "ascii":
             header_art[config_attribute] = section_heading(item["name"])
         elif header_style == "divider":
@@ -99,39 +166,88 @@ def build_config(header_style="ascii"):
         else:
             header_art[config_attribute] = ""
 
+        # Retrieve settings for each section
         section_data = retrieve_settings(persistence_key)
 
-        # {'mal': {'authorization': {'code_verifier': 'OEOOZwnH8RWLczgahkUbo__vabgHl7XyvWkDx0twLB4FCaxPY88C9tNXnmxzBq946vSekKbPc3WhW4SwWrq0ld5xKpm27foQx4RXfnXY25iL7Pm0WCCuYkO-iQga69jv', 'localhost_url': '', 'access_token': 'None', 'token_type': 'None', 'expires_in': 'None', 'refresh_token': 'None'}, 'client_id': 'Enter MyAnimeList Client ID', 'client_secret': 'Enter MyAnimeList Client Secret'}, 'valid': True}
-
         if "validated" in section_data and section_data["validated"]:
-            # it's valid data and needs to end up in the config
-            # but first clear some chaff
+            # Clean and store data
             clean_data = clean_section_data(section_data, config_attribute)
             config_data[config_attribute] = clean_data
 
-    # Process libraries specifically
-    if "libraries" in config_data:
-        libraries_data = config_data["libraries"].get("libraries", "")
+    # Process the libraries section
+    if "libraries" in config_data and "libraries" in config_data["libraries"]:
+        nested_libraries_data = config_data["libraries"]["libraries"]
 
-        # If libraries_data is a dictionary, extract its values
-        if isinstance(libraries_data, dict):
-            libraries_data = libraries_data.get("libraries", "")
+        # Debugging
+        print("Raw nested libraries data:", nested_libraries_data)
 
-        # Ensure libraries_data is a string before splitting
-        if isinstance(libraries_data, str):
-            selected_libraries = libraries_data.split(",")
-        else:
-            selected_libraries = []
+        # Separate data by prefix
+        movie_libraries = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("mov-library_")
+        }
+        show_libraries = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("sho-library_")
+        }
+        movie_collections = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("mov-collection_")
+        }
+        show_collections = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("sho-collection_")
+        }
+        movie_overlays = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("mov-overlay_")
+        }
+        show_overlays = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("sho-overlay_")
+        }
+        movie_attributes = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("mov-attribute_")
+        }
+        show_attributes = {
+            key: value
+            for key, value in nested_libraries_data.items()
+            if key.startswith("sho-attribute_")
+        }
 
-        selected_libraries = [lib.strip() for lib in selected_libraries if lib.strip()]
+        # Debugging
+        print("Extracted Movie Libraries:", movie_libraries)
+        print("Extracted Show Libraries:", show_libraries)
+        print("Extracted Movie Collections:", movie_collections)
+        print("Extracted Show Collections:", show_collections)
+        print("Extracted Movie Overlays:", movie_overlays)
+        print("Extracted Show Overlays:", show_overlays)
+        print("Extracted Movie Attributes:", movie_attributes)
+        print("Extracted Show Attributes:", show_attributes)
 
-        # Generate the YAML entries as a dictionary
-        library_sections = generate_library_sections_simple(selected_libraries)
+        # Build nested libraries structure
+        libraries_section = build_libraries_section(
+            movie_libraries,
+            show_libraries,
+            movie_collections,
+            show_collections,
+            movie_overlays,
+            show_overlays,
+            movie_attributes,
+            show_attributes,
+        )
+        config_data["libraries"] = libraries_section
+        print("Final Libraries Section:", libraries_section)
 
-        # Directly replace config_data["libraries"] with the generated structure
-        yaml_loader = YAML(typ="safe", pure=True)  # Initialize a YAML instance
-        config_data["libraries"] = yaml_loader.load(library_sections)
-
+    # Header comment for YAML file
     header_comment = (
         "### We highly recommend using Visual Studio Code with indent-rainbow by oderwat extension "
         "and YAML by Red Hat extension. VSC will also leverage the above link to enhance Kometa yml edits."
@@ -154,19 +270,7 @@ def build_config(header_style="ascii"):
 
     # Function to dump YAML sections
     def dump_section(title, name, data):
-        # Convert 'true' and 'false' strings to boolean values
-        #  this should be handled in the persistence
-        for key, value in data.items():
-            if value == "true":
-                data[key] = True
-            elif value == "false":
-                data[key] = False
-
-        # Remove 'valid' key if present
-        data = {k: v for k, v in data.items() if k != "valid"}
-
-        yaml = YAML()
-
+        data = {k: v for k, v in data.items() if k != "valid"}  # Remove 'valid' key
         with io.StringIO() as stream:
             yaml.dump(data, stream)
             return f"{title}\n{stream.getvalue().strip()}\n\n"
@@ -195,14 +299,7 @@ def build_config(header_style="ascii"):
         if section_key in config_data:
             section_data = config_data[section_key]
             section_art = header_art[section_key]
-
             yaml_content += dump_section(section_art, section_key, section_data)
-
-    print("\n==================================================\n")
-    print(f"config_data:\n{config_data}")
-    print("\n==================================================\n")
-    print(f"yaml_content:\n{yaml_content}")
-    print("\n==================================================\n")
 
     validated = False
     validation_error = None

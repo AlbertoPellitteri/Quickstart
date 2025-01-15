@@ -1,7 +1,0 @@
-  LIBRARYNAME:
-    remove_overlays: false
-    collection_files:
-      - default: basic
-      - default: imdb
-    overlay_files:
-      - default: ribbon
