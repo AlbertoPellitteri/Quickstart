@@ -954,7 +954,7 @@
             "properties": {
                 "pmm": {
                     "type": "string",
-                    "enum": ["actor", "anilist","aspect","audio_language","bafta","based","basic","berlinale","cannes","cesar","choice","collectionless","content_rating_au","content_rating_cs","content_rating_de","content_rating_nz","content_rating_mal","content_rating_uk","content_rating_us","continent","country","decade","director","emmy","flixpatrol","franchise","genre","golden","imdb","myanimelist","network","nfr","oscars","other_chart","pca","producer","razzie","region","resolution","sag","seasonal","separator_award","separator_chart","spirit","streaming","studio","subtitle_language","sundance","tautulli","tiff","tmdb","trakt","universe","venice","writer","year"]
+                    "enum": ["actor", "anilist","aspect","audio_language","bafta","based","basic","berlinale","cannes","cesar","choice","collectionless","content_rating_au","content_rating_cs","content_rating_de","content_rating_nz","content_rating_mal","content_rating_uk","content_rating_us","continent","country","decade","director","emmy","flixpatrol","franchise","genre","golden","imdb","letterboxd","myanimelist","network","nfr","oscars","other_chart","pca","producer","razzie","region","resolution","sag","seasonal","separator_award","separator_chart","spirit","streaming","studio","subtitle_language","sundance","tautulli","tiff","tmdb","trakt","universe","venice","writer","year"]
                 },
                 "schedule": {
                     "type": "string"
@@ -979,7 +979,7 @@
             "properties": {
                 "default": {
                     "type": "string",
-                    "enum": ["actor", "anilist","aspect","audio_language","bafta","based","basic","berlinale","cannes","cesar","choice","collectionless","content_rating_au","content_rating_cs","content_rating_de","content_rating_nz","content_rating_mal","content_rating_uk","content_rating_us","continent","country","decade","director","emmy","flixpatrol","franchise","genre","golden","imdb","myanimelist","network","nfr","oscars","other_chart","pca","producer","razzie","region","resolution","sag","seasonal","separator_award","separator_chart","spirit","streaming","studio","subtitle_language","sundance","tautulli","tiff","tmdb","trakt","universe","venice","writer","year"]
+                    "enum": ["actor", "anilist","aspect","audio_language","bafta","based","basic","berlinale","cannes","cesar","choice","collectionless","content_rating_au","content_rating_cs","content_rating_de","content_rating_nz","content_rating_mal","content_rating_uk","content_rating_us","continent","country","decade","director","emmy","flixpatrol","franchise","genre","golden","imdb","letterboxd","myanimelist","network","nfr","oscars","other_chart","pca","producer","razzie","region","resolution","sag","seasonal","separator_award","separator_chart","spirit","streaming","studio","subtitle_language","sundance","tautulli","tiff","tmdb","trakt","universe","venice","writer","year"]
                 },
                 "schedule": {
                     "type": "string"
@@ -1637,34 +1637,34 @@
                     {
                         "$ref": "#/definitions/legacy-default-collection-path",
                         "deprecated": true
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/kometa-default-collection-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/file-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/file-path-collection-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/folder-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/url-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/url-path-collection-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/git-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/git-path-collection-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/repo-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/repo-path-collection-with-template-variables"
                     }
@@ -1682,28 +1682,28 @@
                         "deprecated": true
                     }, {
                         "$ref": "#/definitions/kometa-default-overlay-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/file-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/file-path-overlay-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/folder-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/url-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/url-path-overlay-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/git-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/git-path-overlay-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/repo-path"
                     },
@@ -1725,31 +1725,31 @@
                         "deprecated": true
                     }, {
                         "$ref": "#/definitions/kometa-default-collection-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/file-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/file-path-collection-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/folder-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/url-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/url-path-collection-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/git-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/git-path-collection-with-template-variables"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/repo-path"
-                    }, 
+                    },
                     {
                         "$ref": "#/definitions/repo-path-collection-with-template-variables"
                     }
@@ -1847,14 +1847,14 @@
                 },
                 "mass_genre_update": {
                     "anyOf": [
-                        { 
+                        {
                             "type": "string",
                             "enum": ["tmdb","tvdb","imdb","omdb","anidb","anidb_3_0","anidb_2_5","anidb_2_0","anidb_1_5","anidb_1_0","anidb_0_5","mal","lock","unlock","remove","reset"]
                         },
-                        { 
-                            "type": "array", 
-                            "uniqueItems": true, 
-                            "items": 
+                        {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items":
                             {
                                 "anyOf": [
                                     {"enum": ["tmdb","tvdb","imdb","omdb","anidb","anidb_3_0","anidb_2_5","anidb_2_0","anidb_1_5","anidb_1_0","anidb_0_5","mal","lock","unlock","remove","reset"]}
@@ -1865,14 +1865,14 @@
                 },
                 "mass_content_rating_update": {
                     "anyOf": [
-                        { 
+                        {
                             "type": "string",
                             "enum": ["mdb","mdb_commonsense","mdb_commonsense0","omdb","mal","lock","unlock","remove","reset"]
                         },
-                        { 
-                            "type": "array", 
-                            "uniqueItems": true, 
-                            "items": 
+                        {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items":
                             {
                                 "anyOf": [
                                     {"enum": ["mdb","mdb_commonsense","mdb_commonsense0","omdb","mal","lock","unlock","remove","reset"]}
@@ -1887,14 +1887,14 @@
                 },
                 "mass_studio_update": {
                     "anyOf": [
-                        { 
+                        {
                             "type": "string",
                             "enum": ["anidb","mal","tmdb","lock","unlock","remove","reset"]
                         },
-                        { 
-                            "type": "array", 
-                            "uniqueItems": true, 
-                            "items": 
+                        {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items":
                             {
                                 "anyOf": [
                                     {"enum": ["anidb","mal","tmdb","lock","unlock","remove","reset"]}
@@ -1905,14 +1905,14 @@
                 },
                 "mass_originally_available_update": {
                     "anyOf": [
-                        { 
+                        {
                             "type": "string",
                             "enum": ["tmdb","tvdb","omdb","mdb","anidb","mal","lock","unlock","remove","reset"]
                         },
-                        { 
-                            "type": "array", 
-                            "uniqueItems": true, 
-                            "items": 
+                        {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items":
                             {
                                 "anyOf": [
                                     {"enum": ["tmdb","tvdb","omdb","mdb","anidb","mal","lock","unlock","remove","reset"]}
