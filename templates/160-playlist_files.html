@@ -1,6 +1,7 @@
 {% extends "000-base.html" %} {% block content %}
 <form method="post" id="configForm" name="configForm">
   <div id="{{page_info['title']}}Section">
+    <!-- Navigation Buttons -->
     <div class="row">
       <div class="col align-self-center">
         <div class="input-group justify-content-start">
@@ -80,14 +81,6 @@
           <label class="form-check-label" for="library_{{ library }}">{{ library }}</label>
         </div>
         {% endfor %}
-      </div>
-      <div class="form-floating">
-        <input type="hidden" class="form-control" id="default" name="default" value="playlist" readonly>
-        <label for="default">- default: playlist</label>
-      </div>
-      <div class="form-floating">
-        <input type="hidden" class="form-control" id="template_variables" name="template_variables" value="{{ data['playlist_files']['template_variables'] }}" readonly>
-        <label for="template_variables">template_variables</label>
       </div>
       <div class="form-floating" style="display:none;">
         <input type="text" class="form-control" id="libraries" name="libraries" value="{{ data['playlist_files']['libraries'] }}" readonly>

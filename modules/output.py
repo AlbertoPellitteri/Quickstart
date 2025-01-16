@@ -142,6 +142,43 @@ def build_config(header_style="ascii"):
             clean_data = clean_section_data(section_data, config_attribute)
             config_data[config_attribute] = clean_data
 
+    # Process playlist_files section
+    if "playlist_files" in config_data:
+        playlist_data = config_data["playlist_files"]
+
+        # Debug raw data
+        print("Raw config_data['playlist_files'] content (Level 1):", playlist_data)
+
+        # Adjust for possible extra nesting
+        if "playlist_files" in playlist_data and isinstance(
+            playlist_data["playlist_files"], dict
+        ):
+            playlist_data = playlist_data["playlist_files"]
+            print("Adjusted playlist_data after extra nesting:", playlist_data)
+
+        # Extract and process libraries
+        libraries_value = playlist_data.get("libraries", "")
+        print("Extracted libraries value:", libraries_value)
+
+        libraries_list = [
+            lib.strip() for lib in libraries_value.split(",") if lib.strip()
+        ]
+        print("Processed libraries list:", libraries_list)
+
+        # Format playlist_files data
+        formatted_playlist_files = {
+            "playlist_files": [
+                {
+                    "default": "playlist",
+                    "template_variables": {"libraries": libraries_list},
+                }
+            ]
+        }
+        print("Formatted playlist_files data:", formatted_playlist_files)
+
+        # Replace in config_data
+        config_data["playlist_files"] = formatted_playlist_files
+
     # Process the libraries section
     if "libraries" in config_data and "libraries" in config_data["libraries"]:
         nested_libraries_data = config_data["libraries"]["libraries"]

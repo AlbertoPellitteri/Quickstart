@@ -4,29 +4,19 @@ $(document).ready(function () {
   const plexValid = $('#plex_valid').data('plex-valid') === 'True'
   console.log('Plex Valid:', plexValid)
 
-  // Initialize validation messages array
-  const validationMessages = []
-
-  // Add messages based on validation status
   if (!plexValid) {
-    validationMessages.push('Plex settings have not been validated successfully. Please return to that page and hit the validate button and ensure success before returning here.')
-    // Hide the libraries container if plex is not valid
     $('#libraries-container').hide()
+    $('#validation-messages').html(
+      'Plex settings have not been validated successfully. Please return to that page and validate before proceeding.'
+    ).show()
   } else {
-    // Show the libraries container if plex is valid
     $('#libraries-container').show()
+    $('#validation-messages').hide()
   }
 
-  // If there are validation messages, display them
-  if (validationMessages.length > 0) {
-    $('#validation-messages').html(validationMessages.join('<br>')).show()
-  } else {
-    $('#validation-messages').html('').hide()
-  }
-
-  // Initialize checkboxes based on the hidden input field value
-  const selectedLibraries = document.getElementById('libraries').value.split(',').map(item => item.trim())
-  console.log('Selected Libraries:', selectedLibraries)
+  // Initialize checkboxes based on preselected libraries
+  const selectedLibraries = $('#libraries').val().split(',').map(item => item.trim())
+  console.log('Preselected Libraries:', selectedLibraries)
   $('.library-checkbox').each(function () {
     if (selectedLibraries.includes($(this).val())) {
       $(this).prop('checked', true)
@@ -35,21 +25,28 @@ $(document).ready(function () {
 
   // Update hidden input field when checkboxes are changed
   $('.library-checkbox').change(function () {
-    const selectedLibraries = []
+    const updatedLibraries = []
     $('.library-checkbox:checked').each(function () {
-      selectedLibraries.push($(this).val())
+      updatedLibraries.push($(this).val())
     })
-    document.getElementById('libraries').value = selectedLibraries.join(', ')
-    setSettingsValidated(selectedLibraries.length > 0)
+    $('#libraries').val(updatedLibraries.join(', '))
+    updateValidationState(updatedLibraries.length > 0)
+    console.log('Updated Libraries:', updatedLibraries)
   })
 
-  const isValidated = document.getElementById('playlist_files_validated').value.toLowerCase()
-  console.log('Validated: ' + isValidated)
+  // Update validation state
+  function updateValidationState (isValid) {
+    $('#playlist_files_validated').val(isValid ? 'true' : 'false')
+    console.log('Validation State Updated:', isValid)
+  }
 
-  setSettingsValidated(isValidated === 'true')
+  // Preserve data on form submission for backend processing
+  $('#configForm').on('submit', function () {
+    // Log the data being submitted for debugging
+    console.log('Form Submitted:')
+    console.log('Default:', $('#default').val())
+    console.log('Libraries:', $('#libraries').val())
+    console.log('Validated:', $('#playlist_files_validated').val())
+    console.log('Template Variables:', $('#template_variables').val())
+  })
 })
-
-function setSettingsValidated (isValid) {
-  const settingsValidatedInput = document.getElementById('playlist_files_validated')
-  settingsValidatedInput.value = isValid ? 'true' : 'false'
-}
