@@ -39,11 +39,15 @@ libraries:
     - default: based
     - default: content_rating_us
     - default: content_rating_uk
+    - default: content_rating_de
+    - default: content_rating_nz
+    - default: content_rating_au
     - default: content_rating_mal
     - default: content_rating_cs
     - default: country
     - default: region
     - default: continent
+    - default: letterboxd
     - default: aspect
     - default: subtitle_language
     - default: actor
