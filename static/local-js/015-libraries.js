@@ -4,69 +4,130 @@ $(document).ready(function () {
   const plexValid = $('#plex_valid').data('plex-valid') === 'True'
   console.log('Plex Valid:', plexValid)
 
-  // Initialize validation messages array
-  const validationMessages = []
-
-  // Add messages based on validation status
+  // Show or hide the libraries container based on Plex validation
   if (!plexValid) {
-    validationMessages.push('Plex settings have not been validated successfully. Please return to that page and hit the validate button and ensure success before returning here.')
-    // Hide the libraries container if plex is not valid
-    $('#libraries-container').hide()
+    $('#movie-libraries-container').hide()
+    $('#show-libraries-container').hide()
+    showValidationMessage(
+      'Plex settings have not been validated successfully. Please return to that page and validate before proceeding.',
+      'danger'
+    )
+    disableNavigation()
+    return // Exit early since we cannot proceed without Plex validation
   } else {
-    // Show the libraries container if plex is valid
-    $('#libraries-container').show()
+    $('#movie-libraries-container').show()
+    $('#show-libraries-container').show()
   }
 
-  // If there are validation messages, display them
-  if (validationMessages.length > 0) {
-    $('#validation-messages').html(validationMessages.join('<br>')).show()
-  } else {
-    $('#validation-messages').html('').hide()
+  // Restore saved library selections
+  const librariesInput = $('#libraries')
+  if (!librariesInput.val()) {
+    console.log('Libraries field is empty. Initializing...')
+    librariesInput.val('') // Initialize if empty
   }
+  const selectedLibraries = librariesInput.val().split(',').map(item => item.trim())
+  console.log('Restoring Selected Libraries:', selectedLibraries)
 
-  // Initialize checkboxes based on the hidden input field value
-  const selectedLibraries = document.getElementById('libraries').value.split(',').map(item => item.trim())
-  console.log('Selected Libraries:', selectedLibraries)
   $('.library-checkbox').each(function () {
     if (selectedLibraries.includes($(this).val())) {
       $(this).prop('checked', true)
     }
   })
 
-  // Update hidden input field when checkboxes are changed
-  $('.library-checkbox').change(function () {
-    const selectedLibraries = []
-    $('.library-checkbox:checked').each(function () {
-      selectedLibraries.push($(this).val())
-    })
-    document.getElementById('libraries').value = selectedLibraries.join(', ')
-    setSettingsValidated(selectedLibraries.length > 0)
+  // Attach change listeners to library and accordion checkboxes
+  $('.library-checkbox, .accordion-item input[type="checkbox"]').change(function () {
+    updateValidationState()
   })
 
-  const isValidated = document.getElementById('libraries_validated').value.toLowerCase()
-  console.log('Validated: ' + isValidated)
-
-  setSettingsValidated(isValidated === 'true')
-
-  // Add event listener to the form submission
+  // Validate form on submission
   $('#configForm').on('submit', function (e) {
     if (!validateForm()) {
       e.preventDefault() // Prevent form submission if validation fails
     }
   })
-})
 
-function setSettingsValidated (isValid) {
-  const settingsValidatedInput = document.getElementById('libraries_validated')
-  settingsValidatedInput.value = isValid ? 'true' : 'false'
-}
+  // Initial validation check
+  updateValidationState()
 
-function validateForm () {
-  const selectedLibraries = $('.library-checkbox:checked').length
-  if (selectedLibraries === 0) {
-    // Display a warning message
-    $('#validation-messages').html('You must select at least one library before proceeding.').show()
-    return false
+  function updateValidationState () {
+    const selectedMovieLibraries = getSelectedLibraries('mov-library_')
+    const selectedShowLibraries = getSelectedLibraries('sho-library_')
+    const isValid = validateForm()
+
+    // Update libraries input value
+    $('#libraries').val([...selectedMovieLibraries, ...selectedShowLibraries].join(', '))
+    $('#libraries_validated').val(isValid ? 'true' : 'false')
+
+    if (isValid) {
+      showValidationMessage('Validation successful! You may proceed.', 'success')
+      enableNavigation()
+    } else {
+      showValidationMessage(
+        'You must select at least one library and at least one corresponding accordion item.',
+        'danger'
+      )
+      disableNavigation(false) // Allow interaction with the accordions
+    }
   }
-  return true
-}
+
+  function validateForm () {
+    // Check movie libraries and accordions
+    const movieLibrarySelected = $('[id^="mov-library_"]:checked').length > 0
+    const movieAccordionSelected = $('#accordionMovies .accordion-item input[type="checkbox"]:checked').length > 0
+
+    // Check show libraries and accordions
+    const showLibrarySelected = $('[id^="sho-library_"]:checked').length > 0
+    const showAccordionSelected = $('#accordionShows .accordion-item input[type="checkbox"]:checked').length > 0
+
+    // Determine if movies and shows are independently valid
+    const moviesValid = !movieLibrarySelected || movieAccordionSelected // Movie valid if no library or accordion selected
+    const showsValid = !showLibrarySelected || showAccordionSelected // Show valid if no library or accordion selected
+
+    // Validate that at least one library is selected
+    const atLeastOneLibrarySelected = movieLibrarySelected || showLibrarySelected
+    const librariesValid = moviesValid && showsValid
+
+    // Debug logs for validation state
+    console.log('Validation Debug Logs:')
+    console.log('  Movie Library Selected:', movieLibrarySelected)
+    console.log('  Movie Accordion Selected:', movieAccordionSelected)
+    console.log('  Show Library Selected:', showLibrarySelected)
+    console.log('  Show Accordion Selected:', showAccordionSelected)
+    console.log('  Movies Valid:', moviesValid)
+    console.log('  Shows Valid:', showsValid)
+    console.log('  At Least One Library Selected:', atLeastOneLibrarySelected)
+    console.log('  Libraries Valid:', librariesValid)
+    console.log('  Final Validation Result:', atLeastOneLibrarySelected && librariesValid)
+
+    return atLeastOneLibrarySelected && librariesValid
+  }
+
+  function getSelectedLibraries (prefix) {
+    return $(`[id^="${prefix}"]:checked`).map(function () {
+      return $(this).val()
+    }).get()
+  }
+
+  function showValidationMessage (message, type) {
+    const validationBox = $('#validation-messages')
+    validationBox
+      .html(message)
+      .removeClass('alert-danger alert-success')
+      .addClass(`alert-${type}`)
+      .show()
+  }
+
+  function disableNavigation (lockAccordions = true) {
+    $('#configForm button').prop('disabled', true)
+    $('#configForm .dropdown-toggle').prop('disabled', true)
+
+    if (!lockAccordions) {
+      $('.accordion-button').prop('disabled', false)
+    }
+  }
+
+  function enableNavigation () {
+    $('#configForm button').prop('disabled', false)
+    $('#configForm .dropdown-toggle').prop('disabled', false)
+  }
+})
