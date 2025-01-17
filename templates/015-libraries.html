@@ -923,7 +923,7 @@
               </select>
               <label for="mov-attribute_reset_overlays">Reset Overlays</label>
             </div>
-            <div class="form-check form-switch">
+            <div class="form-check form-switch" style="display:none;">
               <input class="form-check-input" type="checkbox" id="mov-attribute_reapply_overlays"
                 name="mov-attribute_reapply_overlays" value="true" {% if
                 data['libraries']['mov-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
@@ -1708,7 +1708,7 @@
               </select>
               <label for="sho-attribute_reset_overlays">Reset Overlays</label>
             </div>
-            <div class="form-check form-switch">
+            <div class="form-check form-switch" style="display:none;">
               <input class="form-check-input" type="checkbox" id="sho-attribute_reapply_overlays"
                 name="sho-attribute_reapply_overlays" value="true" {% if
                 data['libraries']['sho-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
