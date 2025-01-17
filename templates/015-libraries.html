@@ -77,400 +77,565 @@
         {% endfor %}
       </div>
     </div>
-
     <!-- Movie Library Accordions -->
     <div class="accordion mt-4" id="accordionMovies">
-<!-- Movie Collections Accordion -->
-<div class="accordion-item">
-  <h2 class="accordion-header">
-    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-      data-bs-target="#movieCollections" aria-expanded="false" aria-controls="movieCollections">
-      Movie Collections
-    </button>
-  </h2>
-  <div id="movieCollections" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
-    <div class="accordion-body">
-
-      <!-- Award Collections Accordion -->
-      <div class="accordion mt-3" id="awardCollectionsAccordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#awardCollections" aria-expanded="false" aria-controls="awardCollections">
-              Award Collections
-            </button>
-          </h2>
-          <div id="awardCollections" class="accordion-collapse collapse" data-bs-parent="#awardCollectionsAccordion">
-            <div class="accordion-body">
-              <!-- Award Collection Toggles -->
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_separator_award" name="mov-collection_separator_award" value="true" {% if data['libraries']['mov-collection_separator_award']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_separator_award" value="false">
-                <label class="form-check-label" for="mov-collection_separator_award">Award Separator</label>
+      <!-- Movie Collections Accordion -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#movieCollections" aria-expanded="false" aria-controls="movieCollections">
+            Movie Collections
+          </button>
+        </h2>
+        <div id="movieCollections" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
+          <div class="accordion-body">
+            <!-- Award Collections Accordion -->
+            <div class="accordion mt-3" id="mov-awardCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-awardCollections" aria-expanded="false" aria-controls="mov-awardCollections">
+                    Award Collections
+                  </button>
+                </h2>
+                <div id="mov-awardCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-awardCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Award Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_separator_award"
+                        name="mov-collection_separator_award" value="true" {% if
+                        data['libraries']['mov-collection_separator_award']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_separator_award" value="false">
+                      <label class="form-check-label" for="mov-collection_separator_award">Award Separator</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_oscars"
+                        name="mov-collection_oscars" value="true" {% if
+                        data['libraries']['mov-collection_oscars']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_oscars" value="false">
+                      <label class="form-check-label" for="mov-collection_oscars">Oscars</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_berlinale"
+                        name="mov-collection_berlinale" value="true" {% if
+                        data['libraries']['mov-collection_berlinale']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_berlinale" value="false">
+                      <label class="form-check-label" for="mov-collection_berlinale">Berlinale</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_bafta"
+                        name="mov-collection_bafta" value="true" {% if
+                        data['libraries']['mov-collection_bafta']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_bafta" value="false">
+                      <label class="form-check-label" for="mov-collection_bafta">BAFTA</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_cannes"
+                        name="mov-collection_cannes" value="true" {% if
+                        data['libraries']['mov-collection_cannes']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_cannes" value="false">
+                      <label class="form-check-label" for="mov-collection_cannes">Cannes</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_cesar"
+                        name="mov-collection_cesar" value="true" {% if
+                        data['libraries']['mov-collection_cesar']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_cesar" value="false">
+                      <label class="form-check-label" for="mov-collection_cesar">Cesar</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_choice"
+                        name="mov-collection_choice" value="true" {% if
+                        data['libraries']['mov-collection_choice']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_choice" value="false">
+                      <label class="form-check-label" for="mov-collection_choice">Choice</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_emmy"
+                        name="mov-collection_emmy" value="true" {% if
+                        data['libraries']['mov-collection_emmy']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_emmy" value="false">
+                      <label class="form-check-label" for="mov-collection_emmy">Emmy</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_golden"
+                        name="mov-collection_golden" value="true" {% if
+                        data['libraries']['mov-collection_golden']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_golden" value="false">
+                      <label class="form-check-label" for="mov-collection_golden">Golden Globe</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_spirit"
+                        name="mov-collection_spirit" value="true" {% if
+                        data['libraries']['mov-collection_spirit']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_spirit" value="false">
+                      <label class="form-check-label" for="mov-collection_spirit">Spirit</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_nfr" name="mov-collection_nfr"
+                        value="true" {% if data['libraries']['mov-collection_nfr']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="mov-collection_nfr" value="false">
+                      <label class="form-check-label" for="mov-collection_nfr">NFR</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_pca" name="mov-collection_pca"
+                        value="true" {% if data['libraries']['mov-collection_pca']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="mov-collection_pca" value="false">
+                      <label class="form-check-label" for="mov-collection_pca">PCA</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_razzie"
+                        name="mov-collection_razzie" value="true" {% if
+                        data['libraries']['mov-collection_razzie']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_razzie" value="false">
+                      <label class="form-check-label" for="mov-collection_razzie">Razzie</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_sag" name="mov-collection_sag"
+                        value="true" {% if data['libraries']['mov-collection_sag']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="mov-collection_sag" value="false">
+                      <label class="form-check-label" for="mov-collection_sag">SAG</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_sundance"
+                        name="mov-collection_sundance" value="true" {% if
+                        data['libraries']['mov-collection_sundance']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_sundance" value="false">
+                      <label class="form-check-label" for="mov-collection_sundance">Sundance</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_tiff"
+                        name="mov-collection_tiff" value="true" {% if
+                        data['libraries']['mov-collection_tiff']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_tiff" value="false">
+                      <label class="form-check-label" for="mov-collection_tiff">TIFF</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_venice"
+                        name="mov-collection_venice" value="true" {% if
+                        data['libraries']['mov-collection_venice']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_venice" value="false">
+                      <label class="form-check-label" for="mov-collection_venice">Venice</label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_oscars" name="mov-collection_oscars" value="true" {% if data['libraries']['mov-collection_oscars']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_oscars" value="false">
-                <label class="form-check-label" for="mov-collection_oscars">Oscars</label>
+            </div>
+            <!-- Chart Collections Accordion -->
+            <div class="accordion mt-3" id="mov-chartCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-chartCollections" aria-expanded="false" aria-controls="mov-chartCollections">
+                    Chart Collections
+                  </button>
+                </h2>
+                <div id="mov-chartCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-chartCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Chart Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_separator_chart"
+                        name="mov-collection_separator_chart" value="true" {% if
+                        data['libraries']['mov-collection_separator_chart']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_separator_chart" value="false">
+                      <label class="form-check-label" for="mov-collection_separator_chart">Chart Separator</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_basic"
+                        name="mov-collection_basic" value="true" {% if
+                        data['libraries']['mov-collection_basic']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_basic" value="false">
+                      <label class="form-check-label" for="mov-collection_basic">Basic</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_tautulli"
+                        name="mov-collection_tautulli" value="true" {% if
+                        data['libraries']['mov-collection_tautulli']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_tautulli" value="false">
+                      <label class="form-check-label" for="mov-collection_tautulli">Tautulli</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_imdb"
+                        name="mov-collection_imdb" value="true" {% if
+                        data['libraries']['mov-collection_imdb']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_imdb" value="false">
+                      <label class="form-check-label" for="mov-collection_imdb">IMDb</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_tmdb"
+                        name="mov-collection_tmdb" value="true" {% if
+                        data['libraries']['mov-collection_tmdb']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_tmdb" value="false">
+                      <label class="form-check-label" for="mov-collection_tmdb">TMDb</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_trakt"
+                        name="mov-collection_trakt" value="true" {% if
+                        data['libraries']['mov-collection_trakt']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_trakt" value="false">
+                      <label class="form-check-label" for="mov-collection_trakt">Trakt</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_anilist"
+                        name="mov-collection_anilist" value="true" {% if
+                        data['libraries']['mov-collection_anilist']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_anilist" value="false">
+                      <label class="form-check-label" for="mov-collection_anilist">AniList</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_myanimelist"
+                        name="mov-collection_myanimelist" value="true" {% if
+                        data['libraries']['mov-collection_myanimelist']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_myanimelist" value="false">
+                      <label class="form-check-label" for="mov-collection_myanimelist">MyAnimeList</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_letterboxd"
+                        name="mov-collection_letterboxd" value="true" {% if
+                        data['libraries']['mov-collection_letterboxd']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_letterboxd" value="false">
+                      <label class="form-check-label" for="mov-collection_letterboxd">Letterboxd</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_other_chart"
+                        name="mov-collection_other_chart" value="true" {% if
+                        data['libraries']['mov-collection_other_chart']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_other_chart" value="false">
+                      <label class="form-check-label" for="mov-collection_other_chart">Other Chart</label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_berlinale" name="mov-collection_berlinale" value="true" {% if data['libraries']['mov-collection_berlinale']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_berlinale" value="false">
-                <label class="form-check-label" for="mov-collection_berlinale">Berlinale</label>
+            </div>
+            <!-- Content Collections Accordion -->
+            <div class="accordion mt-3" id="mov-contentCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-contentCollections" aria-expanded="false"
+                    aria-controls="mov-contentCollections">
+                    Content Collections
+                  </button>
+                </h2>
+                <div id="mov-contentCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-contentCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_genre"
+                        name="mov-collection_genre" value="true" {% if
+                        data['libraries']['mov-collection_genre']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_genre" value="false">
+                      <label class="form-check-label" for="mov-collection_genre">Genre</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_franchise"
+                        name="mov-collection_franchise" value="true" {% if
+                        data['libraries']['mov-collection_franchise']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_franchise" value="false">
+                      <label class="form-check-label" for="mov-collection_franchise">Franchise</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_universe"
+                        name="mov-collection_universe" value="true" {% if
+                        data['libraries']['mov-collection_universe']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_universe" value="false">
+                      <label class="form-check-label" for="mov-collection_universe">Universe</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_based"
+                        name="mov-collection_based" value="true" {% if
+                        data['libraries']['mov-collection_based']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_based" value="false">
+                      <label class="form-check-label" for="mov-collection_based">Based</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_collectionless"
+                        name="mov-collection_collectionless" value="true" {% if
+                        data['libraries']['mov-collection_collectionless']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_collectionless" value="false">
+                      <label class="form-check-label" for="mov-collection_collectionless">Collectionless</label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_bafta" name="mov-collection_bafta" value="true" {% if data['libraries']['mov-collection_bafta']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_bafta" value="false">
-                <label class="form-check-label" for="mov-collection_bafta">BAFTA</label>
+            </div>
+            <!-- Content Rating Collections Accordion -->
+            <div class="accordion mt-3" id="mov-contentRatingCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-contentRatingCollections" aria-expanded="false"
+                    aria-controls="mov-contentRatingCollections">
+                    Content Rating Collections
+                  </button>
+                </h2>
+                <div id="mov-contentRatingCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-contentRatingCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Rating Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_us"
+                        name="mov-collection_content_rating_us" value="true" {% if
+                        data['libraries']['mov-collection_content_rating_us']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_content_rating_us" value="false">
+                      <label class="form-check-label" for="mov-collection_content_rating_us">Content Rating US</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_uk"
+                        name="mov-collection_content_rating_uk" value="true" {% if
+                        data['libraries']['mov-collection_content_rating_uk']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_content_rating_uk" value="false">
+                      <label class="form-check-label" for="mov-collection_content_rating_uk">Content Rating UK</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_nz"
+                        name="mov-collection_content_rating_nz" value="true" {% if
+                        data['libraries']['mov-collection_content_rating_nz']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_content_rating_nz" value="false">
+                      <label class="form-check-label" for="mov-collection_content_rating_nz">Content Rating NZ</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_au"
+                        name="mov-collection_content_rating_au" value="true" {% if
+                        data['libraries']['mov-collection_content_rating_au']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_content_rating_au" value="false">
+                      <label class="form-check-label" for="mov-collection_content_rating_au">Content Rating AU</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_de"
+                        name="mov-collection_content_rating_de" value="true" {% if
+                        data['libraries']['mov-collection_content_rating_de']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_content_rating_de" value="false">
+                      <label class="form-check-label" for="mov-collection_content_rating_de">Content Rating DE</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_cs"
+                        name="mov-collection_content_rating_cs" value="true" {% if
+                        data['libraries']['mov-collection_content_rating_cs']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_content_rating_cs" value="false">
+                      <label class="form-check-label" for="mov-collection_content_rating_cs">Content Rating
+                        Commonsense</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_mal"
+                        name="mov-collection_content_rating_mal" value="true" {% if
+                        data['libraries']['mov-collection_content_rating_mal']|string|lower=='true' %}checked{% endif
+                        %}>
+                      <input type="hidden" name="mov-collection_content_rating_mal" value="false">
+                      <label class="form-check-label" for="mov-collection_content_rating_mal">Content Rating MAL</label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_cannes" name="mov-collection_cannes" value="true" {% if data['libraries']['mov-collection_cannes']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_cannes" value="false">
-                <label class="form-check-label" for="mov-collection_cannes">Cannes</label>
+            </div>
+            <!-- Location Collections Accordion -->
+            <div class="accordion mt-3" id="mov-locationCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-locationCollections" aria-expanded="false"
+                    aria-controls="mov-locationCollections">
+                    Location Collections
+                  </button>
+                </h2>
+                <div id="mov-locationCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-locationCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Location Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_country"
+                        name="mov-collection_country" value="true" {% if
+                        data['libraries']['mov-collection_country']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_country" value="false">
+                      <label class="form-check-label" for="mov-collection_country">Country</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_region"
+                        name="mov-collection_region" value="true" {% if
+                        data['libraries']['mov-collection_region']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_region" value="false">
+                      <label class="form-check-label" for="mov-collection_region">Region</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_continent"
+                        name="mov-collection_continent" value="true" {% if
+                        data['libraries']['mov-collection_continent']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_continent" value="false">
+                      <label class="form-check-label" for="mov-collection_continent">Continent</label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_cesar" name="mov-collection_cesar" value="true" {% if data['libraries']['mov-collection_cesar']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_cesar" value="false">
-                <label class="form-check-label" for="mov-collection_cesar">Cesar</label>
+            </div>
+            <!-- Media Collections Accordion -->
+            <div class="accordion mt-3" id="mov-mediaCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-mediaCollections" aria-expanded="false" aria-controls="mov-mediaCollections">
+                    Media Collections
+                  </button>
+                </h2>
+                <div id="mov-mediaCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-mediaCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Media Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_aspect"
+                        name="mov-collection_aspect" value="true" {% if
+                        data['libraries']['mov-collection_aspect']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_aspect" value="false">
+                      <label class="form-check-label" for="mov-collection_aspect">Aspect</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_resolution"
+                        name="mov-collection_resolution" value="true" {% if
+                        data['libraries']['mov-collection_resolution']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_resolution" value="false">
+                      <label class="form-check-label" for="mov-collection_resolution">Resolution</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_audio_language"
+                        name="mov-collection_audio_language" value="true" {% if
+                        data['libraries']['mov-collection_audio_language']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_audio_language" value="false">
+                      <label class="form-check-label" for="mov-collection_audio_language">Audio Language</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_subtitle_language"
+                        name="mov-collection_subtitle_language" value="true" {% if
+                        data['libraries']['mov-collection_subtitle_language']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_subtitle_language" value="false">
+                      <label class="form-check-label" for="mov-collection_subtitle_language">Subtitle Language</label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_choice" name="mov-collection_choice" value="true" {% if data['libraries']['mov-collection_choice']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_choice" value="false">
-                <label class="form-check-label" for="mov-collection_choice">Choice</label>
+            </div>
+            <!-- Production Collections Accordion -->
+            <div class="accordion mt-3" id="mov-productionCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-productionCollections" aria-expanded="false"
+                    aria-controls="mov-productionCollections">
+                    Production Collections
+                  </button>
+                </h2>
+                <div id="mov-productionCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-productionCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Production Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_streaming"
+                        name="mov-collection_streaming" value="true" {% if
+                        data['libraries']['mov-collection_streaming']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_streaming" value="false">
+                      <label class="form-check-label" for="mov-collection_streaming">Streaming</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_studio"
+                        name="mov-collection_studio" value="true" {% if
+                        data['libraries']['mov-collection_studio']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_studio" value="false">
+                      <label class="form-check-label" for="mov-collection_studio">Studio</label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mov-collection_venice" name="mov-collection_venice" value="true" {% if data['libraries']['mov-collection_venice']|string|lower=='true' %}checked{% endif %}>
-                <input type="hidden" name="mov-collection_venice" value="false">
-                <label class="form-check-label" for="mov-collection_venice">Venice</label>
+            </div>
+            <!-- People Collections Accordion -->
+            <div class="accordion mt-3" id="mov-peopleCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-peopleCollections" aria-expanded="false" aria-controls="mov-peopleCollections">
+                    People Collections
+                  </button>
+                </h2>
+                <div id="mov-peopleCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-peopleCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- People Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_actor"
+                        name="mov-collection_actor" value="true" {% if
+                        data['libraries']['mov-collection_actor']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_actor" value="false">
+                      <label class="form-check-label" for="mov-collection_actor">Actor</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_director"
+                        name="mov-collection_director" value="true" {% if
+                        data['libraries']['mov-collection_director']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_director" value="false">
+                      <label class="form-check-label" for="mov-collection_director">Director</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_producer"
+                        name="mov-collection_producer" value="true" {% if
+                        data['libraries']['mov-collection_producer']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_producer" value="false">
+                      <label class="form-check-label" for="mov-collection_producer">Producer</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_writer"
+                        name="mov-collection_writer" value="true" {% if
+                        data['libraries']['mov-collection_writer']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_writer" value="false">
+                      <label class="form-check-label" for="mov-collection_writer">Writer</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Time Collections Accordion -->
+            <div class="accordion mt-3" id="mov-timeCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-timeCollections" aria-expanded="false" aria-controls="mov-timeCollections">
+                    Time Collections
+                  </button>
+                </h2>
+                <div id="mov-timeCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-timeCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Time Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_seasonal"
+                        name="mov-collection_seasonal" value="true" {% if
+                        data['libraries']['mov-collection_seasonal']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_seasonal" value="false">
+                      <label class="form-check-label" for="mov-collection_seasonal">Seasonal</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_year"
+                        name="mov-collection_year" value="true" {% if
+                        data['libraries']['mov-collection_year']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_year" value="false">
+                      <label class="form-check-label" for="mov-collection_year">Year</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-collection_decade"
+                        name="mov-collection_decade" value="true" {% if
+                        data['libraries']['mov-collection_decade']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-collection_decade" value="false">
+                      <label class="form-check-label" for="mov-collection_decade">Decade</label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Chart Collections Accordion -->
-      <div class="accordion mt-3" id="chartCollectionsAccordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#chartCollections" aria-expanded="false" aria-controls="chartCollections">
-          Chart Collections
-        </button>
-          </h2>
-          <div id="chartCollections" class="accordion-collapse collapse" data-bs-parent="#chartCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- Chart Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_separator_chart" name="mov-collection_separator_chart" value="true" {% if data['libraries']['mov-collection_separator_chart']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_separator_chart" value="false">
-            <label class="form-check-label" for="mov-collection_separator_chart">Chart Separator</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_basic" name="mov-collection_basic" value="true" {% if data['libraries']['mov-collection_basic']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_basic" value="false">
-            <label class="form-check-label" for="mov-collection_basic">Basic</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_tautulli" name="mov-collection_tautulli" value="true" {% if data['libraries']['mov-collection_tautulli']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_tautulli" value="false">
-            <label class="form-check-label" for="mov-collection_tautulli">Tautulli</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_imdb" name="mov-collection_imdb" value="true" {% if data['libraries']['mov-collection_imdb']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_imdb" value="false">
-            <label class="form-check-label" for="mov-collection_imdb">IMDb</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_tmdb" name="mov-collection_tmdb" value="true" {% if data['libraries']['mov-collection_tmdb']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_tmdb" value="false">
-            <label class="form-check-label" for="mov-collection_tmdb">TMDb</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_trakt" name="mov-collection_trakt" value="true" {% if data['libraries']['mov-collection_trakt']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_trakt" value="false">
-            <label class="form-check-label" for="mov-collection_trakt">Trakt</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_anilist" name="mov-collection_anilist" value="true" {% if data['libraries']['mov-collection_anilist']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_anilist" value="false">
-            <label class="form-check-label" for="mov-collection_anilist">AniList</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_myanimelist" name="mov-collection_myanimelist" value="true" {% if data['libraries']['mov-collection_myanimelist']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_myanimelist" value="false">
-            <label class="form-check-label" for="mov-collection_myanimelist">MyAnimeList</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_letterboxd" name="mov-collection_letterboxd" value="true" {% if data['libraries']['mov-collection_letterboxd']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_letterboxd" value="false">
-            <label class="form-check-label" for="mov-collection_letterboxd">Letterboxd</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_other_chart" name="mov-collection_other_chart" value="true" {% if data['libraries']['mov-collection_other_chart']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_other_chart" value="false">
-            <label class="form-check-label" for="mov-collection_other_chart">Other Chart</label>
-          </div>
-        </div>
-      </div>
-    </div>
-      </div>
-      <!-- Content Collections Accordion -->
-      <div class="accordion mt-3" id="contentCollectionsAccordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#contentCollections" aria-expanded="false" aria-controls="contentCollections">
-          Content Collections
-        </button>
-          </h2>
-          <div id="contentCollections" class="accordion-collapse collapse" data-bs-parent="#contentCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- Content Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_genre" name="mov-collection_genre" value="true" {% if data['libraries']['mov-collection_genre']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_genre" value="false">
-            <label class="form-check-label" for="mov-collection_genre">Genre</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_franchise" name="mov-collection_franchise" value="true" {% if data['libraries']['mov-collection_franchise']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_franchise" value="false">
-            <label class="form-check-label" for="mov-collection_franchise">Franchise</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_universe" name="mov-collection_universe" value="true" {% if data['libraries']['mov-collection_universe']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_universe" value="false">
-            <label class="form-check-label" for="mov-collection_universe">Universe</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_based" name="mov-collection_based" value="true" {% if data['libraries']['mov-collection_based']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_based" value="false">
-            <label class="form-check-label" for="mov-collection_based">Based</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_collectionless" name="mov-collection_collectionless" value="true" {% if data['libraries']['mov-collection_collectionless']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_collectionless" value="false">
-            <label class="form-check-label" for="mov-collection_collectionless">Collectionless</label>
-          </div>
-        </div>
-      </div>
-    </div>
-      </div>
-  <!-- Content Rating Collections Accordion -->
-  <div class="accordion mt-3" id="contentRatingCollectionsAccordion">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#contentRatingCollections" aria-expanded="false" aria-controls="contentRatingCollections">
-          Content Rating Collections
-        </button>
-      </h2>
-      <div id="contentRatingCollections" class="accordion-collapse collapse" data-bs-parent="#contentRatingCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- Content Rating Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_us" name="mov-collection_content_rating_us" value="true" {% if data['libraries']['mov-collection_content_rating_us']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_content_rating_us" value="false">
-            <label class="form-check-label" for="mov-collection_content_rating_us">US</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_uk" name="mov-collection_content_rating_uk" value="true" {% if data['libraries']['mov-collection_content_rating_uk']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_content_rating_uk" value="false">
-            <label class="form-check-label" for="mov-collection_content_rating_uk">UK</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_nz" name="mov-collection_content_rating_nz" value="true" {% if data['libraries']['mov-collection_content_rating_nz']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_content_rating_nz" value="false">
-            <label class="form-check-label" for="mov-collection_content_rating_nz">NZ</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_au" name="mov-collection_content_rating_au" value="true" {% if data['libraries']['mov-collection_content_rating_au']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_content_rating_au" value="false">
-            <label class="form-check-label" for="mov-collection_content_rating_au">AU</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_de" name="mov-collection_content_rating_de" value="true" {% if data['libraries']['mov-collection_content_rating_de']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_content_rating_de" value="false">
-            <label class="form-check-label" for="mov-collection_content_rating_de">DE</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_cs" name="mov-collection_content_rating_cs" value="true" {% if data['libraries']['mov-collection_content_rating_cs']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_content_rating_cs" value="false">
-            <label class="form-check-label" for="mov-collection_content_rating_cs">CS</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_content_rating_mal" name="mov-collection_content_rating_mal" value="true" {% if data['libraries']['mov-collection_content_rating_mal']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_content_rating_mal" value="false">
-            <label class="form-check-label" for="mov-collection_content_rating_mal">MAL</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Location Collections Accordion -->
-  <div class="accordion mt-3" id="locationCollectionsAccordion">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#locationCollections" aria-expanded="false" aria-controls="locationCollections">
-          Location Collections
-        </button>
-      </h2>
-      <div id="locationCollections" class="accordion-collapse collapse" data-bs-parent="#locationCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- Location Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_country" name="mov-collection_country" value="true" {% if data['libraries']['mov-collection_country']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_country" value="false">
-            <label class="form-check-label" for="mov-collection_country">Country</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_region" name="mov-collection_region" value="true" {% if data['libraries']['mov-collection_region']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_region" value="false">
-            <label class="form-check-label" for="mov-collection_region">Region</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_continent" name="mov-collection_continent" value="true" {% if data['libraries']['mov-collection_continent']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_continent" value="false">
-            <label class="form-check-label" for="mov-collection_continent">Continent</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Media Collections Accordion -->
-  <div class="accordion mt-3" id="mediaCollectionsAccordion">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#mediaCollections" aria-expanded="false" aria-controls="mediaCollections">
-          Media Collections
-        </button>
-      </h2>
-      <div id="mediaCollections" class="accordion-collapse collapse" data-bs-parent="#mediaCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- Media Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_aspect" name="mov-collection_aspect" value="true" {% if data['libraries']['mov-collection_aspect']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_aspect" value="false">
-            <label class="form-check-label" for="mov-collection_aspect">Aspect</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_resolution" name="mov-collection_resolution" value="true" {% if data['libraries']['mov-collection_resolution']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_resolution" value="false">
-            <label class="form-check-label" for="mov-collection_resolution">Resolution</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_audio_language" name="mov-collection_audio_language" value="true" {% if data['libraries']['mov-collection_audio_language']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_audio_language" value="false">
-            <label class="form-check-label" for="mov-collection_audio_language">Audio Language</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_subtitle_language" name="mov-collection_subtitle_language" value="true" {% if data['libraries']['mov-collection_subtitle_language']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_subtitle_language" value="false">
-            <label class="form-check-label" for="mov-collection_subtitle_language">Subtitle Language</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Production Collections Accordion -->
-  <div class="accordion mt-3" id="productionCollectionsAccordion">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#productionCollections" aria-expanded="false" aria-controls="productionCollections">
-          Production Collections
-        </button>
-      </h2>
-      <div id="productionCollections" class="accordion-collapse collapse" data-bs-parent="#productionCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- Production Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_streaming" name="mov-collection_streaming" value="true" {% if data['libraries']['mov-collection_streaming']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_streaming" value="false">
-            <label class="form-check-label" for="mov-collection_streaming">Streaming</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_studio" name="mov-collection_studio" value="true" {% if data['libraries']['mov-collection_studio']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_studio" value="false">
-            <label class="form-check-label" for="mov-collection_studio">Studio</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- People Collections Accordion -->
-  <div class="accordion mt-3" id="peopleCollectionsAccordion">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#peopleCollections" aria-expanded="false" aria-controls="peopleCollections">
-          People Collections
-        </button>
-      </h2>
-      <div id="peopleCollections" class="accordion-collapse collapse" data-bs-parent="#peopleCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- People Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_actor" name="mov-collection_actor" value="true" {% if data['libraries']['mov-collection_actor']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_actor" value="false">
-            <label class="form-check-label" for="mov-collection_actor">Actor</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_director" name="mov-collection_director" value="true" {% if data['libraries']['mov-collection_director']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_director" value="false">
-            <label class="form-check-label" for="mov-collection_director">Director</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_producer" name="mov-collection_producer" value="true" {% if data['libraries']['mov-collection_producer']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_producer" value="false">
-            <label class="form-check-label" for="mov-collection_producer">Producer</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_writer" name="mov-collection_writer" value="true" {% if data['libraries']['mov-collection_writer']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_writer" value="false">
-            <label class="form-check-label" for="mov-collection_writer">Writer</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Time Collections Accordion -->
-  <div class="accordion mt-3" id="timeCollectionsAccordion">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#timeCollections" aria-expanded="false" aria-controls="timeCollections">
-          Time Collections
-        </button>
-      </h2>
-      <div id="timeCollections" class="accordion-collapse collapse" data-bs-parent="#timeCollectionsAccordion">
-        <div class="accordion-body">
-          <!-- Time Collection Toggles -->
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_seasonal" name="mov-collection_seasonal" value="true" {% if data['libraries']['mov-collection_seasonal']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_seasonal" value="false">
-            <label class="form-check-label" for="mov-collection_seasonal">Seasonal</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_year" name="mov-collection_year" value="true" {% if data['libraries']['mov-collection_year']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_year" value="false">
-            <label class="form-check-label" for="mov-collection_year">Year</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mov-collection_decade" name="mov-collection_decade" value="true" {% if data['libraries']['mov-collection_decade']|string|lower=='true' %}checked{% endif %}>
-            <input type="hidden" name="mov-collection_decade" value="false">
-            <label class="form-check-label" for="mov-collection_decade">Decade</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-  </div>
-  </div>
-</div>
       <!-- Movie Overlays Accordion -->
       <div class="accordion-item">
         <h2 class="accordion-header">
@@ -481,24 +646,267 @@
         </h2>
         <div id="movieOverlays" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
           <div class="accordion-body">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="mov-overlay_ribbon" name="mov-overlay_ribbon" value="true" {% if data['libraries']['mov-overlay_ribbon']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="mov-overlay_ribbon" value="false">
-              <label class="form-check-label" for="mov-overlay_ribbon">Ribbon</label>
+            <!-- Chart Overlays Accordion -->
+            <div class="accordion mt-3" id="mov-chartOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-chartOverlays" aria-expanded="false" aria-controls="mov-chartOverlays">
+                    Chart Overlays
+                  </button>
+                </h2>
+                <div id="mov-chartOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-chartOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Chart Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_ribbon" name="mov-overlay_ribbon"
+                        value="true" {% if data['libraries']['mov-overlay_ribbon']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="mov-overlay_ribbon" value="false">
+                      <label class="form-check-label" for="mov-overlay_ribbon">Ribbon</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="mov-overlay_resolution" name="mov-overlay_resolution" value="true" {% if data['libraries']['mov-overlay_resolution']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="mov-overlay_resolution" value="false">
-              <label class="form-check-label" for="mov-overlay_resolution">Resolution</label>
+            <!-- Content Overlays Accordion -->
+            <div class="accordion mt-3" id="mov-contentOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-contentOverlays" aria-expanded="false" aria-controls="mov-contentOverlays">
+                    Content Overlays
+                  </button>
+                </h2>
+                <div id="mov-contentOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-contentOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_mediastinger"
+                        name="mov-overlay_mediastinger" value="true" {% if
+                        data['libraries']['mov-overlay_mediastinger']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_mediastinger" value="false">
+                      <label class="form-check-label" for="mov-overlay_mediastinger">Media Stinger</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_ratings"
+                        name="mov-overlay_ratings" value="true" {% if
+                        data['libraries']['mov-overlay_ratings']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_ratings" value="false">
+                      <label class="form-check-label" for="mov-overlay_ratings">Ratings</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_status" name="mov-overlay_status"
+                        value="true" {% if data['libraries']['mov-overlay_status']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="mov-overlay_status" value="false">
+                      <label class="form-check-label" for="mov-overlay_status">Status</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Content Rating Overlays Accordion -->
+            <div class="accordion mt-3" id="mov-contentRatingOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-contentRatingOverlays" aria-expanded="false"
+                    aria-controls="mov-contentRatingOverlays">
+                    Content Rating Overlays
+                  </button>
+                </h2>
+                <div id="mov-contentRatingOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-contentRatingOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Rating Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_content_rating_us_movie"
+                        name="mov-overlay_content_rating_us_movie" value="true" {% if
+                        data['libraries']['mov-overlay_content_rating_us_movie']|string|lower=='true' %}checked{% endif
+                        %}>
+                      <input type="hidden" name="mov-overlay_content_rating_us_movie" value="false">
+                      <label class="form-check-label" for="mov-overlay_content_rating_us_movie">Content Rating
+                        US</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_content_rating_uk"
+                        name="mov-overlay_content_rating_uk" value="true" {% if
+                        data['libraries']['mov-overlay_content_rating_uk']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_content_rating_uk" value="false">
+                      <label class="form-check-label" for="mov-overlay_content_rating_uk">Content Rating UK</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_content_rating_nz"
+                        name="mov-overlay_content_rating_nz" value="true" {% if
+                        data['libraries']['mov-overlay_content_rating_nz']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_content_rating_nz" value="false">
+                      <label class="form-check-label" for="mov-overlay_content_rating_nz">Content Rating NZ</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_content_rating_au"
+                        name="mov-overlay_content_rating_au" value="true" {% if
+                        data['libraries']['mov-overlay_content_rating_au']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_content_rating_au" value="false">
+                      <label class="form-check-label" for="mov-overlay_content_rating_au">Content Rating AU</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_content_rating_de"
+                        name="mov-overlay_content_rating_de" value="true" {% if
+                        data['libraries']['mov-overlay_content_rating_de']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_content_rating_de" value="false">
+                      <label class="form-check-label" for="mov-overlay_content_rating_de">Content Rating DE</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_commonsense"
+                        name="mov-overlay_commonsense" value="true" {% if
+                        data['libraries']['mov-overlay_commonsense']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_commonsense" value="false">
+                      <label class="form-check-label" for="mov-overlay_commonsense">Content Rating Commonsense</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Media Overlays Accordion -->
+            <div class="accordion mt-3" id="mov-mediaOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-mediaOverlays" aria-expanded="false" aria-controls="mov-mediaOverlays">
+                    Media Overlays
+                  </button>
+                </h2>
+                <div id="mov-mediaOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-mediaOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Media Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_aspect" name="mov-overlay_aspect"
+                        value="true" {% if data['libraries']['mov-overlay_aspect']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="mov-overlay_aspect" value="false">
+                      <label class="form-check-label" for="mov-overlay_aspect">Aspect</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_audio_codec"
+                        name="mov-overlay_audio_codec" value="true" {% if
+                        data['libraries']['mov-overlay_audio_codec']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_audio_codec" value="false">
+                      <label class="form-check-label" for="mov-overlay_audio_codec">Audio Codec</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_language_count"
+                        name="mov-overlay_language_count" value="true" {% if
+                        data['libraries']['mov-overlay_language_count']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_language_count" value="false">
+                      <label class="form-check-label" for="mov-overlay_language_count">Language Count</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_languages"
+                        name="mov-overlay_languages" value="true" {% if
+                        data['libraries']['mov-overlay_languages']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_languages" value="false">
+                      <label class="form-check-label" for="mov-overlay_languages">Languages</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_resolution"
+                        name="mov-overlay_resolution" value="true" {% if
+                        data['libraries']['mov-overlay_resolution']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_resolution" value="false">
+                      <label class="form-check-label" for="mov-overlay_resolution">Resolution</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_runtimes"
+                        name="mov-overlay_runtimes" value="true" {% if
+                        data['libraries']['mov-overlay_runtimes']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_runtimes" value="false">
+                      <label class="form-check-label" for="mov-overlay_runtimes">Runtimes</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_versions"
+                        name="mov-overlay_versions" value="true" {% if
+                        data['libraries']['mov-overlay_versions']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_versions" value="false">
+                      <label class="form-check-label" for="mov-overlay_versions">Versions</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_video_format"
+                        name="mov-overlay_video_format" value="true" {% if
+                        data['libraries']['mov-overlay_video_format']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_video_format" value="false">
+                      <label class="form-check-label" for="mov-overlay_video_format">Video Format</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Production Overlays Accordion -->
+            <div class="accordion mt-3" id="mov-productionOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-productionOverlays" aria-expanded="false"
+                    aria-controls="mov-productionOverlays">
+                    Production Overlays
+                  </button>
+                </h2>
+                <div id="mov-productionOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-productionOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Production Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_streaming"
+                        name="mov-overlay_streaming" value="true" {% if
+                        data['libraries']['mov-overlay_streaming']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_streaming" value="false">
+                      <label class="form-check-label" for="mov-overlay_streaming">Streaming</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_studio" name="mov-overlay_studio"
+                        value="true" {% if data['libraries']['mov-overlay_studio']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="mov-overlay_studio" value="false">
+                      <label class="form-check-label" for="mov-overlay_studio">Studio</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Utility Overlays Accordion -->
+            <div class="accordion mt-3" id="mov-utilityOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mov-utilityOverlays" aria-expanded="false" aria-controls="mov-utilityOverlays">
+                    Utility Overlays
+                  </button>
+                </h2>
+                <div id="mov-utilityOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#mov-utilityOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Utility Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="mov-overlay_direct_play"
+                        name="mov-overlay_direct_play" value="true" {% if
+                        data['libraries']['mov-overlay_direct_play']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="mov-overlay_direct_play" value="false">
+                      <label class="form-check-label" for="mov-overlay_direct_play">Direct Play</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
       <!-- Movie Attributes Accordion -->
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#movieAttributes" aria-expanded="false" aria-controls="movieAttributes">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#movieAttributes" aria-expanded="false" aria-controls="movieAttributes">
             Movie Attributes
           </button>
         </h2>
@@ -506,19 +914,26 @@
           <div class="accordion-body">
             <div class="form-floating mb-3">
               <select class="form-select" id="mov-attribute_reset_overlays" name="mov-attribute_reset_overlays">
-                <option value="" {% if data['libraries'].get('mov-attribute_reset_overlays') == "" %}selected{% endif %}>None</option>
-                <option value="tmdb" {% if data['libraries'].get('mov-attribute_reset_overlays') == "tmdb" %}selected{% endif %}>TMDb</option>
-                <option value="plex" {% if data['libraries'].get('mov-attribute_reset_overlays') == "plex" %}selected{% endif %}>Plex</option>
+                <option value="" {% if data['libraries'].get('mov-attribute_reset_overlays')=="" %}selected{% endif %}>
+                  None</option>
+                <option value="tmdb" {% if data['libraries'].get('mov-attribute_reset_overlays')=="tmdb" %}selected{%
+                  endif %}>TMDb</option>
+                <option value="plex" {% if data['libraries'].get('mov-attribute_reset_overlays')=="plex" %}selected{%
+                  endif %}>Plex</option>
               </select>
               <label for="mov-attribute_reset_overlays">Reset Overlays</label>
             </div>
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="mov-attribute_reapply_overlays" name="mov-attribute_reapply_overlays" value="true" {% if data['libraries']['mov-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input class="form-check-input" type="checkbox" id="mov-attribute_reapply_overlays"
+                name="mov-attribute_reapply_overlays" value="true" {% if
+                data['libraries']['mov-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
               <input type="hidden" name="mov-attribute_reapply_overlays" value="false">
               <label class="form-check-label" for="mov-attribute_reapply_overlays">Reapply Overlays</label>
             </div>
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="mov-attribute_remove_overlays" name="mov-attribute_remove_overlays" value="true" {% if data['libraries']['mov-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input class="form-check-input" type="checkbox" id="mov-attribute_remove_overlays"
+                name="mov-attribute_remove_overlays" value="true" {% if
+                data['libraries']['mov-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
               <input type="hidden" name="mov-attribute_remove_overlays" value="false">
               <label class="form-check-label" for="mov-attribute_remove_overlays">Remove Overlays</label>
             </div>
@@ -526,72 +941,757 @@
         </div>
       </div>
     </div>
-<br>
+    <br>
     <!-- Show Library Selection -->
     <div id="show-libraries-container">
       <h3>Select Show Libraries</h3>
       <div id="showLibraries">
-        {% set show_libraries = plex_data['plex']['tmp_show_libraries'].split(',')|sort if plex_data['plex']['tmp_show_libraries'] else [] %}
+        {% set show_libraries = plex_data['plex']['tmp_show_libraries'].split(',')|sort if
+        plex_data['plex']['tmp_show_libraries'] else [] %}
         {% for library in show_libraries %}
         <div class="form-check form-switch">
-          <input class="form-check-input library-checkbox" type="checkbox" value="{{ library }}" id="sho-library_{{ library }}" name="sho-library_{{ library }}">
+          <input class="form-check-input library-checkbox" type="checkbox" value="{{ library }}"
+            id="sho-library_{{ library }}" name="sho-library_{{ library }}">
           <label class="form-check-label" for="sho-library_{{ library }}">{{ library }}</label>
         </div>
         {% endfor %}
       </div>
     </div>
-
     <!-- Show Library Accordions -->
     <div class="accordion mt-4" id="accordionShows">
+      <!-- Show Collections Accordion -->
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#showCollections" aria-expanded="false" aria-controls="showCollections">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#showCollections" aria-expanded="false" aria-controls="showCollections">
             Show Collections
           </button>
         </h2>
-        <div id="showCollections" class="accordion-collapse collapse">
+        <div id="showCollections" class="accordion-collapse collapse" data-bs-parent="#accordionShows">
           <div class="accordion-body">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-collection_tmdb" name="sho-collection_tmdb" value="true" {% if data['libraries']['sho-collection_tmdb']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="sho-collection_tmdb" value="false">
-              <label class="form-check-label" for="sho-collection_tmdb">TMDb</label>
+            <!-- Award Collections Accordion -->
+            <div class="accordion mt-3" id="sho-awardCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-awardCollections" aria-expanded="false" aria-controls="sho-awardCollections">
+                    Award Collections
+                  </button>
+                </h2>
+                <div id="sho-awardCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-awardCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Award Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_separator_award"
+                        name="sho-collection_separator_award" value="true" {% if
+                        data['libraries']['sho-collection_separator_award']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_separator_award" value="false">
+                      <label class="form-check-label" for="sho-collection_separator_award">Award
+                        Separator</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_choice"
+                        name="sho-collection_choice" value="true" {% if
+                        data['libraries']['sho-collection_choice']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_choice" value="false">
+                      <label class="form-check-label" for="sho-collection_choice">Choice</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_emmy"
+                        name="sho-collection_emmy" value="true" {% if
+                        data['libraries']['sho-collection_emmy']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_emmy" value="false">
+                      <label class="form-check-label" for="sho-collection_emmy">Emmy</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_golden"
+                        name="sho-collection_golden" value="true" {% if
+                        data['libraries']['sho-collection_golden']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_golden" value="false">
+                      <label class="form-check-label" for="sho-collection_golden">Golden Globe</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_pca" name="sho-collection_pca"
+                        value="true" {% if data['libraries']['sho-collection_pca']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="sho-collection_pca" value="false">
+                      <label class="form-check-label" for="sho-collection_pca">PCA</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_sag" name="sho-collection_sag"
+                        value="true" {% if data['libraries']['sho-collection_sag']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="sho-collection_sag" value="false">
+                      <label class="form-check-label" for="sho-collection_sag">SAG</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-collection_network" name="sho-collection_network" value="true" {% if data['libraries']['sho-collection_network']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="sho-collection_network" value="false">
-              <label class="form-check-label" for="sho-collection_network">Network</label>
+            <!-- Chart Collections Accordion -->
+            <div class="accordion mt-3" id="sho-chartCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-chartCollections" aria-expanded="false" aria-controls="sho-chartCollections">
+                    Chart Collections
+                  </button>
+                </h2>
+                <div id="sho-chartCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-chartCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Chart Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_separator_chart"
+                        name="sho-collection_separator_chart" value="true" {% if
+                        data['libraries']['sho-collection_separator_chart']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_separator_chart" value="false">
+                      <label class="form-check-label" for="sho-collection_separator_chart">Chart
+                        Separator</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_basic"
+                        name="sho-collection_basic" value="true" {% if
+                        data['libraries']['sho-collection_basic']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_basic" value="false">
+                      <label class="form-check-label" for="sho-collection_basic">Basic</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_tautulli"
+                        name="sho-collection_tautulli" value="true" {% if
+                        data['libraries']['sho-collection_tautulli']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_tautulli" value="false">
+                      <label class="form-check-label" for="sho-collection_tautulli">Tautulli</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_imdb"
+                        name="sho-collection_imdb" value="true" {% if
+                        data['libraries']['sho-collection_imdb']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_imdb" value="false">
+                      <label class="form-check-label" for="sho-collection_imdb">IMDb</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_tmdb"
+                        name="sho-collection_tmdb" value="true" {% if
+                        data['libraries']['sho-collection_tmdb']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_tmdb" value="false">
+                      <label class="form-check-label" for="sho-collection_tmdb">TMDb</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_trakt"
+                        name="sho-collection_trakt" value="true" {% if
+                        data['libraries']['sho-collection_trakt']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_trakt" value="false">
+                      <label class="form-check-label" for="sho-collection_trakt">Trakt</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_anilist"
+                        name="sho-collection_anilist" value="true" {% if
+                        data['libraries']['sho-collection_anilist']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_anilist" value="false">
+                      <label class="form-check-label" for="sho-collection_anilist">AniList</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_myanimelist"
+                        name="sho-collection_myanimelist" value="true" {% if
+                        data['libraries']['sho-collection_myanimelist']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_myanimelist" value="false">
+                      <label class="form-check-label" for="sho-collection_myanimelist">MyAnimeList</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_other_chart"
+                        name="sho-collection_other_chart" value="true" {% if
+                        data['libraries']['sho-collection_other_chart']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_other_chart" value="false">
+                      <label class="form-check-label" for="sho-collection_other_chart">Other Chart</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Content Collections Accordion -->
+            <div class="accordion mt-3" id="sho-contentCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-contentCollections" aria-expanded="false"
+                    aria-controls="sho-contentCollections">
+                    Content Collections
+                  </button>
+                </h2>
+                <div id="sho-contentCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-contentCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_genre"
+                        name="sho-collection_genre" value="true" {% if
+                        data['libraries']['sho-collection_genre']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_genre" value="false">
+                      <label class="form-check-label" for="sho-collection_genre">Genre</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_franchise"
+                        name="sho-collection_franchise" value="true" {% if
+                        data['libraries']['sho-collection_franchise']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_franchise" value="false">
+                      <label class="form-check-label" for="sho-collection_franchise">Franchise</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_universe"
+                        name="sho-collection_universe" value="true" {% if
+                        data['libraries']['sho-collection_universe']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_universe" value="false">
+                      <label class="form-check-label" for="sho-collection_universe">Universe</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_based"
+                        name="sho-collection_based" value="true" {% if
+                        data['libraries']['sho-collection_based']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_based" value="false">
+                      <label class="form-check-label" for="sho-collection_based">Based</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_collectionless"
+                        name="sho-collection_collectionless" value="true" {% if
+                        data['libraries']['sho-collection_collectionless']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_collectionless" value="false">
+                      <label class="form-check-label" for="sho-collection_collectionless">Collectionless</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Content Rating Collections Accordion -->
+            <div class="accordion mt-3" id="sho-contentRatingCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-contentRatingCollections" aria-expanded="false"
+                    aria-controls="sho-contentRatingCollections">
+                    Content Rating Collections
+                  </button>
+                </h2>
+                <div id="sho-contentRatingCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-contentRatingCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Rating Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_content_rating_us"
+                        name="sho-collection_content_rating_us" value="true" {% if
+                        data['libraries']['sho-collection_content_rating_us']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_content_rating_us" value="false">
+                      <label class="form-check-label" for="sho-collection_content_rating_us">Content Rating US</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_content_rating_uk"
+                        name="sho-collection_content_rating_uk" value="true" {% if
+                        data['libraries']['sho-collection_content_rating_uk']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_content_rating_uk" value="false">
+                      <label class="form-check-label" for="sho-collection_content_rating_uk">Content Rating UK</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_content_rating_nz"
+                        name="sho-collection_content_rating_nz" value="true" {% if
+                        data['libraries']['sho-collection_content_rating_nz']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_content_rating_nz" value="false">
+                      <label class="form-check-label" for="sho-collection_content_rating_nz">Content Rating NZ</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_content_rating_au"
+                        name="sho-collection_content_rating_au" value="true" {% if
+                        data['libraries']['sho-collection_content_rating_au']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_content_rating_au" value="false">
+                      <label class="form-check-label" for="sho-collection_content_rating_au">Content Rating AU</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_content_rating_de"
+                        name="sho-collection_content_rating_de" value="true" {% if
+                        data['libraries']['sho-collection_content_rating_de']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_content_rating_de" value="false">
+                      <label class="form-check-label" for="sho-collection_content_rating_de">Content Rating DE</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_content_rating_cs"
+                        name="sho-collection_content_rating_cs" value="true" {% if
+                        data['libraries']['sho-collection_content_rating_cs']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_content_rating_cs" value="false">
+                      <label class="form-check-label" for="sho-collection_content_rating_cs">Content Rating
+                        Commonsense</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_content_rating_mal"
+                        name="sho-collection_content_rating_mal" value="true" {% if
+                        data['libraries']['sho-collection_content_rating_mal']|string|lower=='true' %}checked{% endif
+                        %}>
+                      <input type="hidden" name="sho-collection_content_rating_mal" value="false">
+                      <label class="form-check-label" for="sho-collection_content_rating_mal">Content Rating MAL</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Location Collections Accordion -->
+            <div class="accordion mt-3" id="sho-locationCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-locationCollections" aria-expanded="false"
+                    aria-controls="sho-locationCollections">
+                    Location Collections
+                  </button>
+                </h2>
+                <div id="sho-locationCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-locationCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Location Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_country"
+                        name="sho-collection_country" value="true" {% if
+                        data['libraries']['sho-collection_country']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_country" value="false">
+                      <label class="form-check-label" for="sho-collection_country">Country</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_region"
+                        name="sho-collection_region" value="true" {% if
+                        data['libraries']['sho-collection_region']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_region" value="false">
+                      <label class="form-check-label" for="sho-collection_region">Region</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_continent"
+                        name="sho-collection_continent" value="true" {% if
+                        data['libraries']['sho-collection_continent']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_continent" value="false">
+                      <label class="form-check-label" for="sho-collection_continent">Continent</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Media Collections Accordion -->
+            <div class="accordion mt-3" id="sho-mediaCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-mediaCollections" aria-expanded="false" aria-controls="sho-mediaCollections">
+                    Media Collections
+                  </button>
+                </h2>
+                <div id="sho-mediaCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-mediaCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Media Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_aspect"
+                        name="sho-collection_aspect" value="true" {% if
+                        data['libraries']['sho-collection_aspect']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_aspect" value="false">
+                      <label class="form-check-label" for="sho-collection_aspect">Aspect</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_resolution"
+                        name="sho-collection_resolution" value="true" {% if
+                        data['libraries']['sho-collection_resolution']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_resolution" value="false">
+                      <label class="form-check-label" for="sho-collection_resolution">Resolution</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_audio_language"
+                        name="sho-collection_audio_language" value="true" {% if
+                        data['libraries']['sho-collection_audio_language']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_audio_language" value="false">
+                      <label class="form-check-label" for="sho-collection_audio_language">Audio
+                        Language</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_subtitle_language"
+                        name="sho-collection_subtitle_language" value="true" {% if
+                        data['libraries']['sho-collection_subtitle_language']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_subtitle_language" value="false">
+                      <label class="form-check-label" for="sho-collection_subtitle_language">Subtitle
+                        Language</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Production Collections Accordion -->
+            <div class="accordion mt-3" id="sho-productionCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-productionCollections" aria-expanded="false"
+                    aria-controls="sho-productionCollections">
+                    Production Collections
+                  </button>
+                </h2>
+                <div id="sho-productionCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-productionCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Production Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_network"
+                        name="sho-collection_network" value="true" {% if
+                        data['libraries']['sho-collection_network']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_network" value="false">
+                      <label class="form-check-label" for="sho-collection_network">Network</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_streaming"
+                        name="sho-collection_streaming" value="true" {% if
+                        data['libraries']['sho-collection_streaming']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_streaming" value="false">
+                      <label class="form-check-label" for="sho-collection_streaming">Streaming</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_studio"
+                        name="sho-collection_studio" value="true" {% if
+                        data['libraries']['sho-collection_studio']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_studio" value="false">
+                      <label class="form-check-label" for="sho-collection_studio">Studio</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- People Collections Accordion -->
+            <div class="accordion mt-3" id="sho-peopleCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-peopleCollections" aria-expanded="false" aria-controls="sho-peopleCollections">
+                    People Collections
+                  </button>
+                </h2>
+                <div id="sho-peopleCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-peopleCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- People Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_actor"
+                        name="sho-collection_actor" value="true" {% if
+                        data['libraries']['sho-collection_actor']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_actor" value="false">
+                      <label class="form-check-label" for="sho-collection_actor">Actor</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Time Collections Accordion -->
+            <div class="accordion mt-3" id="sho-timeCollectionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-timeCollections" aria-expanded="false" aria-controls="sho-timeCollections">
+                    Time Collections
+                  </button>
+                </h2>
+                <div id="sho-timeCollections" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-timeCollectionsAccordion">
+                  <div class="accordion-body">
+                    <!-- Time Collection Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_year"
+                        name="sho-collection_year" value="true" {% if
+                        data['libraries']['sho-collection_year']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_year" value="false">
+                      <label class="form-check-label" for="sho-collection_year">Year</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-collection_decade"
+                        name="sho-collection_decade" value="true" {% if
+                        data['libraries']['sho-collection_decade']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-collection_decade" value="false">
+                      <label class="form-check-label" for="sho-collection_decade">Decade</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Show Overlays -->
+      <!-- Show Overlays Accordion -->
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#showOverlays" aria-expanded="false" aria-controls="showOverlays">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#showOverlays" aria-expanded="false" aria-controls="showOverlays">
             Show Overlays
           </button>
         </h2>
-        <div id="showOverlays" class="accordion-collapse collapse">
+        <div id="showOverlays" class="accordion-collapse collapse" data-bs-parent="#accordionShows">
           <div class="accordion-body">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-overlay_video_format" name="sho-overlay_video_format" value="true" {% if data['libraries']['sho-overlay_video_format']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="sho-overlay_video_format" value="false">
-              <label class="form-check-label" for="sho-overlay_video_format">Video Format</label>
+            <!-- Chart Overlays Accordion -->
+            <div class="accordion mt-3" id="sho-chartOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-chartOverlays" aria-expanded="false" aria-controls="sho-chartOverlays">
+                    Chart Overlays
+                  </button>
+                </h2>
+                <div id="sho-chartOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-chartOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Chart Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_ribbon" name="sho-overlay_ribbon"
+                        value="true" {% if data['libraries']['sho-overlay_ribbon']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="sho-overlay_ribbon" value="false">
+                      <label class="form-check-label" for="sho-overlay_ribbon">Ribbon</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-overlay_audio_codec" name="sho-overlay_audio_codec" value="true" {% if data['libraries']['sho-overlay_audio_codec']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="sho-overlay_audio_codec" value="false">
-              <label class="form-check-label" for="sho-overlay_audio_codec">Audio Codec</label>
+            <!-- Content Overlays Accordion -->
+            <div class="accordion mt-3" id="sho-contentOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-contentOverlays" aria-expanded="false" aria-controls="sho-contentOverlays">
+                    Content Overlays
+                  </button>
+                </h2>
+                <div id="sho-contentOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-contentOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_mediastinger"
+                        name="sho-overlay_mediastinger" value="true" {% if
+                        data['libraries']['sho-overlay_mediastinger']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_mediastinger" value="false">
+                      <label class="form-check-label" for="sho-overlay_mediastinger">Media Stinger</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_ratings"
+                        name="sho-overlay_ratings" value="true" {% if
+                        data['libraries']['sho-overlay_ratings']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_ratings" value="false">
+                      <label class="form-check-label" for="sho-overlay_ratings">Ratings</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_status" name="sho-overlay_status"
+                        value="true" {% if data['libraries']['sho-overlay_status']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="sho-overlay_status" value="false">
+                      <label class="form-check-label" for="sho-overlay_status">Status</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Content Rating Overlays Accordion -->
+            <div class="accordion mt-3" id="sho-contentRatingOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-contentRatingOverlays" aria-expanded="false"
+                    aria-controls="sho-contentRatingOverlays">
+                    Content Rating Overlays
+                  </button>
+                </h2>
+                <div id="sho-contentRatingOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-contentRatingOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Content Rating Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_content_rating_us_show"
+                        name="sho-overlay_content_rating_us_show" value="true" {% if
+                        data['libraries']['sho-overlay_content_rating_us_show']|string|lower=='true' %}checked{% endif
+                        %}>
+                      <input type="hidden" name="sho-overlay_content_rating_us_show" value="false">
+                      <label class="form-check-label" for="sho-overlay_content_rating_us_show">Content Rating US</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_content_rating_uk"
+                        name="sho-overlay_content_rating_uk" value="true" {% if
+                        data['libraries']['sho-overlay_content_rating_uk']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_content_rating_uk" value="false">
+                      <label class="form-check-label" for="sho-overlay_content_rating_uk">Content Rating UK</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_content_rating_nz"
+                        name="sho-overlay_content_rating_nz" value="true" {% if
+                        data['libraries']['sho-overlay_content_rating_nz']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_content_rating_nz" value="false">
+                      <label class="form-check-label" for="sho-overlay_content_rating_nz">Content Rating NZ</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_content_rating_au"
+                        name="sho-overlay_content_rating_au" value="true" {% if
+                        data['libraries']['sho-overlay_content_rating_au']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_content_rating_au" value="false">
+                      <label class="form-check-label" for="sho-overlay_content_rating_au">Content Rating AU</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_content_rating_de"
+                        name="sho-overlay_content_rating_de" value="true" {% if
+                        data['libraries']['sho-overlay_content_rating_de']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_content_rating_de" value="false">
+                      <label class="form-check-label" for="sho-overlay_content_rating_de">Content Rating DE</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_commonsense"
+                        name="sho-overlay_commonsense" value="true" {% if
+                        data['libraries']['sho-overlay_content_rating_au']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_commonsense" value="false">
+                      <label class="form-check-label" for="sho-overlay_commonsense">Content Rating Commonsense</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Media Overlays Accordion -->
+            <div class="accordion mt-3" id="sho-mediaOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-mediaOverlays" aria-expanded="false" aria-controls="sho-mediaOverlays">
+                    Media Overlays
+                  </button>
+                </h2>
+                <div id="sho-mediaOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-mediaOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Media Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_aspect" name="sho-overlay_aspect"
+                        value="true" {% if data['libraries']['sho-overlay_aspect']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="sho-overlay_aspect" value="false">
+                      <label class="form-check-label" for="sho-overlay_aspect">Aspect</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_audio_codec"
+                        name="sho-overlay_audio_codec" value="true" {% if
+                        data['libraries']['sho-overlay_audio_codec']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_audio_codec" value="false">
+                      <label class="form-check-label" for="sho-overlay_audio_codec">Audio Codec</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_language_count"
+                        name="sho-overlay_language_count" value="true" {% if
+                        data['libraries']['sho-overlay_language_count']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_language_count" value="false">
+                      <label class="form-check-label" for="sho-overlay_language_count">Language Count</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_languages"
+                        name="sho-overlay_languages" value="true" {% if
+                        data['libraries']['sho-overlay_languages']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_languages" value="false">
+                      <label class="form-check-label" for="sho-overlay_languages">Languages</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_resolution"
+                        name="sho-overlay_resolution" value="true" {% if
+                        data['libraries']['sho-overlay_resolution']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_resolution" value="false">
+                      <label class="form-check-label" for="sho-overlay_resolution">Resolution</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_runtimes"
+                        name="sho-overlay_runtimes" value="true" {% if
+                        data['libraries']['sho-overlay_runtimes']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_runtimes" value="false">
+                      <label class="form-check-label" for="sho-overlay_runtimes">Runtimes</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_versions"
+                        name="sho-overlay_versions" value="true" {% if
+                        data['libraries']['sho-overlay_versions']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_versions" value="false">
+                      <label class="form-check-label" for="sho-overlay_versions">Versions</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_video_format"
+                        name="sho-overlay_video_format" value="true" {% if
+                        data['libraries']['sho-overlay_video_format']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_video_format" value="false">
+                      <label class="form-check-label" for="sho-overlay_video_format">Video Format</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Production Overlays Accordion -->
+            <div class="accordion mt-3" id="sho-productionOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-productionOverlays" aria-expanded="false"
+                    aria-controls="sho-productionOverlays">
+                    Production Overlays
+                  </button>
+                </h2>
+                <div id="sho-productionOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-productionOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Production Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_network"
+                        name="sho-overlay_network" value="true" {% if
+                        data['libraries']['sho-overlay_network']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_network" value="false">
+                      <label class="form-check-label" for="sho-overlay_network">Network</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_streaming"
+                        name="sho-overlay_streaming" value="true" {% if
+                        data['libraries']['sho-overlay_streaming']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_streaming" value="false">
+                      <label class="form-check-label" for="sho-overlay_streaming">Streaming</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_studio" name="sho-overlay_studio"
+                        value="true" {% if data['libraries']['sho-overlay_studio']|string|lower=='true' %}checked{%
+                        endif %}>
+                      <input type="hidden" name="sho-overlay_studio" value="false">
+                      <label class="form-check-label" for="sho-overlay_studio">Studio</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Utility Overlays Accordion -->
+            <div class="accordion mt-3" id="sho-utilityOverlaysAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sho-utilityOverlays" aria-expanded="false" aria-controls="sho-utilityOverlays">
+                    Utility Overlays
+                  </button>
+                </h2>
+                <div id="sho-utilityOverlays" class="accordion-collapse collapse"
+                  data-bs-parent="#sho-utilityOverlaysAccordion">
+                  <div class="accordion-body">
+                    <!-- Utility Overlay Toggles -->
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="sho-overlay_direct_play"
+                        name="sho-overlay_direct_play" value="true" {% if
+                        data['libraries']['sho-overlay_direct_play']|string|lower=='true' %}checked{% endif %}>
+                      <input type="hidden" name="sho-overlay_direct_play" value="false">
+                      <label class="form-check-label" for="sho-overlay_direct_play">Direct Play</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Show Attributes -->
+      <!-- Show Attributes Accordion-->
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#showAttributes" aria-expanded="false" aria-controls="showAttributes">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#showAttributes" aria-expanded="false" aria-controls="showAttributes">
             Show Attributes
           </button>
         </h2>
@@ -599,19 +1699,26 @@
           <div class="accordion-body">
             <div class="form-floating mb-3">
               <select class="form-select" id="sho-attribute_reset_overlays" name="sho-attribute_reset_overlays">
-                <option value="" {% if data['libraries'].get('sho-attribute_reset_overlays') == "" %}selected{% endif %}>None</option>
-                <option value="tmdb" {% if data['libraries'].get('sho-attribute_reset_overlays') == "tmdb" %}selected{% endif %}>TMDb</option>
-                <option value="plex" {% if data['libraries'].get('sho-attribute_reset_overlays') == "plex" %}selected{% endif %}>Plex</option>
+                <option value="" {% if data['libraries'].get('sho-attribute_reset_overlays')=="" %}selected{% endif %}>
+                  None</option>
+                <option value="tmdb" {% if data['libraries'].get('sho-attribute_reset_overlays')=="tmdb" %}selected{%
+                  endif %}>TMDb</option>
+                <option value="plex" {% if data['libraries'].get('sho-attribute_reset_overlays')=="plex" %}selected{%
+                  endif %}>Plex</option>
               </select>
               <label for="sho-attribute_reset_overlays">Reset Overlays</label>
             </div>
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-attribute_reapply_overlays" name="sho-attribute_reapply_overlays" value="true" {% if data['libraries']['sho-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input class="form-check-input" type="checkbox" id="sho-attribute_reapply_overlays"
+                name="sho-attribute_reapply_overlays" value="true" {% if
+                data['libraries']['sho-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
               <input type="hidden" name="sho-attribute_reapply_overlays" value="false">
               <label class="form-check-label" for="sho-attribute_reapply_overlays">Reapply Overlays</label>
             </div>
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-attribute_remove_overlays" name="sho-attribute_remove_overlays" value="true" {% if data['libraries']['sho-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input class="form-check-input" type="checkbox" id="sho-attribute_remove_overlays"
+                name="sho-attribute_remove_overlays" value="true" {% if
+                data['libraries']['sho-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
               <input type="hidden" name="sho-attribute_remove_overlays" value="false">
               <label class="form-check-label" for="sho-attribute_remove_overlays">Remove Overlays</label>
             </div>
@@ -619,14 +1726,15 @@
         </div>
       </div>
     </div>
-
     <div class="form-floating" style="display:none;">
-      <input type="text" class="form-control" id="libraries" name="libraries" value="{{ data['libraries']['libraries'] }}" readonly>
+      <input type="text" class="form-control" id="libraries" name="libraries"
+        value="{{ data['libraries']['libraries'] }}" readonly>
       <label for="libraries">Selected Libraries</label>
     </div>
     <div class="input-group input-group-lg form-floating"></div>
     <div class="form-floating" style="display:none;">
-      <input type="text" class="form-control" id="libraries_validated" name="libraries_validated" value="{{ data['validated'] }}">
+      <input type="text" class="form-control" id="libraries_validated" name="libraries_validated"
+        value="{{ data['validated'] }}">
       <label for="libraries_validated">Libraries Validated</label>
     </div>
     <div id="statusMessage" class="status-message"></div><br>
