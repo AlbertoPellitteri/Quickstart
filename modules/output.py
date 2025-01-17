@@ -275,9 +275,50 @@ def build_config(header_style="ascii"):
 
     # Function to dump YAML sections
     def dump_section(title, name, data):
-        data = {k: v for k, v in data.items() if k != "valid"}  # Remove 'valid' key
+        import ruamel.yaml
+
+        yaml = ruamel.yaml.YAML()
+        yaml.default_flow_style = False
+        yaml.sort_keys = False
+
+        # Custom representation for `None` values
+        yaml.representer.add_representer(
+            type(None),
+            lambda self, _: self.represent_scalar("tag:yaml.org,2002:null", ""),
+        )
+
+        def clean_data(obj):
+            if isinstance(obj, dict):
+                # Sort specific sections alphabetically
+                if name in [
+                    "settings",
+                    "webhooks",
+                    "plex",
+                    "tmdb",
+                    "tautulli",
+                    "github",
+                    "omdb",
+                    "mdblist",
+                    "notifiarr",
+                    "anidb",
+                    "radarr",
+                    "sonarr",
+                    "trakt",
+                    "mal",
+                ]:
+                    obj = dict(sorted(obj.items()))  # Alphabetically sort `settings`
+                return {k: clean_data(v) for k, v in obj.items() if k != "valid"}
+            elif isinstance(obj, list):
+                return [clean_data(v) for v in obj]
+            else:
+                return obj
+
+        # Clean the data
+        cleaned_data = clean_data(data)
+
+        # Dump the cleaned data to YAML
         with io.StringIO() as stream:
-            yaml.dump(data, stream)
+            yaml.dump(cleaned_data, stream)
             return f"{title}\n{stream.getvalue().strip()}\n\n"
 
     ordered_sections = [
