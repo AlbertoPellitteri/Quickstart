@@ -75,9 +75,12 @@ def belongs_in_template_list(file):
 
 
 def user_visible_name(raw_name):
-    if raw_name == "tmdb" or raw_name == "omdb":
-        # Capitalize the whole thing
-        formatted_name = raw_name.upper()
+    if raw_name == "tmdb":
+        formatted_name = "TMDb"
+    elif raw_name == "omdb":
+        formatted_name = "OMDb"
+    elif raw_name == "github":
+        formatted_name = "GitHub"
     elif raw_name == "mal":
         formatted_name = "MyAnimeList"
     elif raw_name == "mdblist":

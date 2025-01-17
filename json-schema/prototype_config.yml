@@ -467,16 +467,16 @@ plex:                            # Can be individually specified per library as 
   optimize: false
   verify_ssl: true
 tmdb:                            # REQUIRED for the script to run
-  apikey: Enter TMDB API Key
+  apikey: Enter TMDb API Key
   language: en
   cache_expiration: 60
 tautulli:                        # Can be individually specified per library as well
   url: http://192.168.1.12:8181
   apikey: Enter Tautulli API Key
 github:
-  token: Enter Github personal access token
+  token: Enter GitHub personal access token
 omdb:
-  apikey: Enter OMDB API Key
+  apikey: Enter OMDb API Key
   cache_expiration: 60
 mdblist:
   apikey: Enter MDBList API Key
