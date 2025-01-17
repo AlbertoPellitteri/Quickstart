@@ -146,13 +146,13 @@
             "title": "plex"
         },
         "tmdb-api": {
-            "description": "API Information to connect to TMDB; REQUIRED for the script to run",
+            "description": "API Information to connect to TMDb; REQUIRED for the script to run",
             "type": "object",
             "additionalProperties": false,
             "properties": {
                 "apikey": {
                     "type": "string",
-                    "description": "API Key to connect to TMDB; REQUIRED for the script to run"
+                    "description": "API Key to connect to TMDb; REQUIRED for the script to run"
                 },
                 "language": {
                     "type": ["string", "null"],

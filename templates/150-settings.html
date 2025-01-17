@@ -58,6 +58,8 @@
     </div>
     <hr class="hr">
     {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
+    <div id="validation-messages" class="alert alert-danger" role="alert" style="display: none;">
+    </div>
     <div class="form-floating">
       <div class="accordion" id="accordionExample">
         <div class="accordion-item">

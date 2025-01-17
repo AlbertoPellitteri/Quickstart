@@ -4,6 +4,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const saveSyncChangesButton = document.getElementById('saveSyncChangesButton')
   const saveExcludeChangesButton = document.getElementById('saveExcludeChangesButton')
   const validateSettingsButton = document.getElementById('validateSettingsButton')
+  const validationMessages = $('#validation-messages')
+
+  function showValidationMessage (type, message) {
+    validationMessages
+      .removeClass('alert-success alert-danger')
+      .addClass(type === 'success' ? 'alert-success' : 'alert-danger')
+      .html(message)
+      .show()
+  }
 
   saveSyncChangesButton.addEventListener('click', function () {
     const selectedUsers = []
@@ -45,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (validateForm()) {
       setSettingsValidated(true)
       this.disabled = true
+      showValidationMessage('success', 'Settings validated successfully!')
+    } else {
+      showValidationMessage('danger', 'Please correct the errors in the form.')
     }
   })
 
