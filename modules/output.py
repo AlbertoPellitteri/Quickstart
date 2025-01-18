@@ -322,7 +322,7 @@ def build_config(header_style="ascii"):
             return f"{title}\n{stream.getvalue().strip()}\n\n"
 
     ordered_sections = [
-        ("libraries", "015-libraries"),
+        ("libraries", "025-libraries"),
         ("playlist_files", "160-playlist_files"),
         ("settings", "150-settings"),
         ("webhooks", "140-webhooks"),

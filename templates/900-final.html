@@ -75,8 +75,8 @@
       <div class="form-text" id="yaml-content">
         <br><h5>Here is the YAML that was generated as a result of your inputs.</h5><br>
 
-      <div class="alert alert-info" role="alert" id="no-validation-warning">
-        As a reminder, this will most likely not work with Kometa as it has not passed validation.
+      <div class="alert alert-warning" role="alert" id="no-validation-warning">
+        As a reminder, this will most likely <b>NOT</b> work with Kometa as it has not passed validation.
       </div>
       </div>
       <textarea readonly id="final-yaml" class="form-control" rows="20">{{ yaml_content }}</textarea>
@@ -84,6 +84,7 @@
     {% if yaml_content %}
       <br>
       <a href="{{ url_for('download') }}" id="download-btn" class="btn btn-success d-none">Download Config</a>
+      <a href="{{ url_for('download_redacted') }}" id="download-redacted-btn" class="btn btn-warning d-none">Download Redacted Config</a>
     {% endif %}
     <div class="form-floating">
       <div class="form-text">

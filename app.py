@@ -46,7 +46,12 @@ from modules.validations import (
     validate_notifiarr_server,
 )
 from modules.output import build_config
-from modules.helpers import get_template_list, get_bits, get_menu_list
+from modules.helpers import (
+    get_template_list,
+    get_bits,
+    get_menu_list,
+    redact_sensitive_data,
+)
 from modules.persistence import (
     save_settings,
     retrieve_settings,
@@ -223,6 +228,24 @@ def download():
             mimetype="text/yaml",
             as_attachment=True,
             download_name="config.yml",
+        )
+    flash("No configuration to download", "danger")
+    return redirect(request.referrer or url_for("step", page="900-final"))
+
+
+@app.route("/download_redacted")
+def download_redacted():
+    yaml_content = session.get("yaml_content", "")
+    if yaml_content:
+        # Redact sensitive information
+        redacted_content = redact_sensitive_data(yaml_content)
+
+        # Serve the redacted YAML as a file download
+        return send_file(
+            io.BytesIO(redacted_content.encode("utf-8")),
+            mimetype="text/yaml",
+            as_attachment=True,
+            download_name="config_redacted.yml",
         )
     flash("No configuration to download", "danger")
     return redirect(request.referrer or url_for("step", page="900-final"))

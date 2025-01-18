@@ -40,9 +40,10 @@ $(document).ready(function () {
     $('#no-validation-warning, #yaml-warnings, #yaml-warning-msg, #validation-error').removeClass('d-none')
     // Hide the download button
     $('#download-btn').addClass('d-none')
+    $('#download-redacted-btn').addClass('d-none')
   } else {
     $('#no-validation-warning, #yaml-warnings, #yaml-warning-msg, #validation-error').addClass('d-none')
-    $('#yaml-content, #final-yaml, #download-btn').removeClass('d-none')
+    $('#yaml-content, #final-yaml, #download-btn, #download-redacted-btn').removeClass('d-none')
   }
 
   // Debugging: Confirm if validation messages div is updated
