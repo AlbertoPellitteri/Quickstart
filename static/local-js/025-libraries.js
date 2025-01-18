@@ -118,11 +118,16 @@ $(document).ready(function () {
   }
 
   function disableNavigation (lockAccordions = true) {
-    $('#configForm button').prop('disabled', true)
-    $('#configForm .dropdown-toggle').prop('disabled', true)
+    // Disable the Jump To and Next buttons
+    $('#configForm .dropdown-toggle').prop('disabled', true) // Jump To dropdown
+    $('#configForm button[onclick*="next"]').prop('disabled', true) // Next button
 
+    // Enable other buttons like Previous
+    $('#configForm button[onclick*="prev"]').prop('disabled', false) // Previous button
+
+    // Handle accordions based on the lockAccordions flag
     if (!lockAccordions) {
-      $('.accordion-button').prop('disabled', false)
+      $('.accordion-button').prop('disabled', false) // Keep accordions interactive
     }
   }
 

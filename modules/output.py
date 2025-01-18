@@ -323,7 +323,7 @@ def build_config(header_style="ascii"):
 
     ordered_sections = [
         ("libraries", "025-libraries"),
-        ("playlist_files", "160-playlist_files"),
+        ("playlist_files", "027-playlist_files"),
         ("settings", "150-settings"),
         ("webhooks", "140-webhooks"),
         ("plex", "010-plex"),
