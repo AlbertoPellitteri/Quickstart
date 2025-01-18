@@ -100,7 +100,7 @@ document.getElementById('validate_mal_url').addEventListener('click', function (
         hideSpinner('validate')
         document.getElementById('mal_validated').value = 'true'
         statusMessage.textContent = 'MyAnimeList credentials validated successfully!'
-        statusMessage.style.color = 'green'
+        statusMessage.style.color = '#75b798'
         document.getElementById('access_token').value = data.mal_authorization_access_token
         document.getElementById('token_type').value = data.mal_authorization_token_type
         document.getElementById('expires_in').value = data.mal_authorization_expires_in
@@ -111,7 +111,7 @@ document.getElementById('validate_mal_url').addEventListener('click', function (
         hideSpinner('validate')
         document.getElementById('mal_validated').value = 'false'
         statusMessage.textContent = data.error
-        statusMessage.style.color = 'red'
+        statusMessage.style.color = '#ea868f'
       }
       statusMessage.style.display = 'block'
     })
@@ -119,7 +119,7 @@ document.getElementById('validate_mal_url').addEventListener('click', function (
       hideSpinner('validate')
       console.error('Error validating MAL credentials:', error)
       statusMessage.textContent = 'An error occurred while validating MAL credentials.'
-      statusMessage.style.color = 'red'
+      statusMessage.style.color = '#ea868f'
       statusMessage.style.display = 'block'
     })
 })
