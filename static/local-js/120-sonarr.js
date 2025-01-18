@@ -60,16 +60,16 @@ function validateSonarrApi () {
       } else {
         hideSpinner('validate')
         document.getElementById('sonarr_validated').value = 'false'
-        console.log('Invalid Sonarr API key. Error:', data.message)
-        statusMessage.textContent = 'Sonarr API key is invalid.'
+        console.log('Error validating Sonarr', data.message)
+        statusMessage.textContent = 'Failed to validate Sonarr server. Please check your URL and Token.'
         statusMessage.style.color = '#ea868f'
         statusMessage.style.display = 'block'
       }
     })
     .catch(error => {
       hideSpinner('validate')
-      console.error('Error validating Sonarr API key:', error)
-      statusMessage.textContent = 'Error validating Sonarr API key.'
+      console.error('Error validating Sonarr:', error)
+      statusMessage.textContent = 'Error validating Sonarr'
       statusMessage.style.color = '#ea868f'
       statusMessage.style.display = 'block'
       document.getElementById('sonarr_validated').value = 'false'
