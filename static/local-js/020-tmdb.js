@@ -48,7 +48,7 @@ $(document).ready(function () {
         } else {
           console.log('NOT valid')
           document.getElementById('tmdb_validated').value = 'false'
-          statusMessage.textContent = 'Failed to validate Tautulli server. Please check your URL and API Key.'
+          statusMessage.textContent = 'Failed to validate TMDb. Please check your API Key.'
           statusMessage.style.color = '#ea868f'
         }
         statusMessage.style.display = 'block'

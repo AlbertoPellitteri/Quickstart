@@ -84,12 +84,12 @@ document.getElementById('validateButton').addEventListener('click', function () 
         hideSpinner('validate')
         document.getElementById('gotify_validated').value = 'true'
         statusMessage.textContent = 'Gotify credentials validated successfully!'
-        statusMessage.style.color = 'green'
+        statusMessage.style.color = '#75b798'
       } else {
         hideSpinner('validate')
         document.getElementById('gotify_validated').value = 'false'
         statusMessage.textContent = data.error
-        statusMessage.style.color = 'red'
+        statusMessage.style.color = '#ea868f'
       }
       document.getElementById('validateButton').disabled = data.valid
       statusMessage.style.display = 'block'
@@ -98,7 +98,7 @@ document.getElementById('validateButton').addEventListener('click', function () 
       hideSpinner('validate')
       console.error('Error validating Gotify credentials:', error)
       statusMessage.textContent = 'An error occurred while validating Gotify credentials.'
-      statusMessage.style.color = 'red'
+      statusMessage.style.color = '#ea868f'
       statusMessage.style.display = 'block'
     })
 })

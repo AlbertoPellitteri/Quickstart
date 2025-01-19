@@ -48,7 +48,7 @@ $(document).ready(function () {
         } else {
           console.log('NOT valid')
           document.getElementById('mdblist_validated').value = 'false'
-          statusMessage.textContent = 'Failed to validate MDBList server. Please check your URL and API Key.'
+          statusMessage.textContent = 'Failed to validate MDBList server. Please check your API Key.'
           statusMessage.style.color = '#ea868f'
         }
         statusMessage.style.display = 'block'

@@ -690,7 +690,7 @@
                       <input type="hidden" name="mov-overlay_mediastinger" value="false">
                       <label class="form-check-label" for="mov-overlay_mediastinger">Media Stinger</label>
                     </div>
-                    <div class="form-check form-switch">
+                    <div class="form-check form-switch" style="display:none;">
                       <input class="form-check-input" type="checkbox" id="mov-overlay_ratings"
                         name="mov-overlay_ratings" value="true" {% if
                         data['libraries']['mov-overlay_ratings']|string|lower=='true' %}checked{% endif %}>
@@ -1469,7 +1469,7 @@
                       <input type="hidden" name="sho-overlay_mediastinger" value="false">
                       <label class="form-check-label" for="sho-overlay_mediastinger">Media Stinger</label>
                     </div>
-                    <div class="form-check form-switch">
+                    <div class="form-check form-switch" style="display:none;">
                       <input class="form-check-input" type="checkbox" id="sho-overlay_ratings"
                         name="sho-overlay_ratings" value="true" {% if
                         data['libraries']['sho-overlay_ratings']|string|lower=='true' %}checked{% endif %}>

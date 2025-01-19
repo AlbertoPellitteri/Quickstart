@@ -192,3 +192,13 @@ def get_template_list():
             prev_item = rec["stem"]
 
     return templates
+
+
+def redact_sensitive_data(yaml_content):
+    import re
+
+    # Replace sensitive fields with "(redacted)"
+    redacted_content = re.sub(
+        r"(?i)(token|password|apikey|secret):\s*.*", r"\1: (redacted)", yaml_content
+    )
+    return redacted_content

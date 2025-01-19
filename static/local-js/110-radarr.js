@@ -59,16 +59,16 @@ function validateRadarrApi () {
       } else {
         hideSpinner('validate')
         document.getElementById('radarr_validated').value = 'false'
-        console.log('Invalid Radarr API key. Error:', data.message)
-        statusMessage.textContent = 'Radarr API key is invalid.'
+        console.log('Error validating Radarr', data.message)
+        statusMessage.textContent = 'Failed to validate Radarr server. Please check your URL and Token.'
         statusMessage.style.color = '#ea868f'
         statusMessage.style.display = 'block'
       }
     })
     .catch(error => {
       hideSpinner('validate')
-      console.error('Error validating Radarr API key:', error)
-      statusMessage.textContent = 'Error validating Radarr API key.'
+      console.error('Error validating Radarr:', error)
+      statusMessage.textContent = 'Error validating Radarr'
       statusMessage.style.color = '#ea868f'
       statusMessage.style.display = 'block'
       document.getElementById('radarr_validated').value = 'false'
