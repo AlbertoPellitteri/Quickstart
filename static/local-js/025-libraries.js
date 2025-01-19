@@ -39,13 +39,6 @@ $(document).ready(function () {
     updateValidationState()
   })
 
-  // Validate form on submission
-  $('#configForm').on('submit', function (e) {
-    if (!validateForm()) {
-      e.preventDefault() // Prevent form submission if validation fails
-    }
-  })
-
   // Initial validation check
   updateValidationState()
 
@@ -122,8 +115,8 @@ $(document).ready(function () {
     $('#configForm .dropdown-toggle').prop('disabled', true) // Jump To dropdown
     $('#configForm button[onclick*="next"]').prop('disabled', true) // Next button
 
-    // Enable other buttons like Previous
-    $('#configForm button[onclick*="prev"]').prop('disabled', false) // Previous button
+    // Keep the Previous button enabled at all times
+    $('#configForm button[onclick*="prev"]').prop('disabled', false) // Enable Previous button
 
     // Handle accordions based on the lockAccordions flag
     if (!lockAccordions) {
