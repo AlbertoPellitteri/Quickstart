@@ -9,6 +9,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const languageStatusMessage = document.getElementById('languageStatusMessage')
   const statusMessage = document.getElementById('statusMessage')
   const apiKeyInput = document.getElementById('tmdb_apikey')
+  const isValidated = document.getElementById('tmdb_validated').value.toLowerCase()
+
+  console.log('Validated: ' + isValidated)
+
+  if (isValidated === 'true') {
+    validateButton.disabled = true
+  } else {
+    validateButton.disabled = false
+  }
 
   // Function to validate a dropdown and show a message
   function validateDropdown (dropdown, statusMessage, fieldName) {
