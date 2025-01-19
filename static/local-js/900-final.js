@@ -7,14 +7,16 @@ $(document).ready(function () {
   // Fetch the validation status
   const plexValid = $('#plex_valid').data('plex-valid') === 'True'
   const tmdbValid = $('#tmdb_valid').data('tmdb-valid') === 'True'
+  const libsValid = $('#libs_valid').data('libs-valid') === 'True'
   const yamlValid = $('#yaml_valid').data('yaml-valid') === 'True'
   // const validationError = $('#validation-error').val().trim()
   // Debugging: Check the values of the meta tags
 
-  const showYAML = plexValid && tmdbValid && yamlValid
+  const showYAML = plexValid && tmdbValid && libsValid && yamlValid
 
   console.log('Plex Valid:', plexValid)
   console.log('TMDb Valid:', tmdbValid)
+  console.log('LIBS Valid:', libsValid)
   console.log('YAML Valid:', yamlValid)
   console.log('Show YAML:', showYAML)
 
@@ -27,6 +29,9 @@ $(document).ready(function () {
   }
   if (!tmdbValid) {
     validationMessages.push('TMDb settings have not been validated successfully. Please return to that page and hit the validate button and ensure success before returning here.')
+  }
+  if (!libsValid) {
+    validationMessages.push('Libraries page settings have not been validated successfully. Please return to that page and ensure you make appropriate selections before returning here.')
   }
 
   // If there are validation messages, display them
