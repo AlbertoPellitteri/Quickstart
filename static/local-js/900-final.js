@@ -25,13 +25,19 @@ $(document).ready(function () {
 
   // Add messages based on validation status
   if (!plexValid) {
-    validationMessages.push('Plex settings have not been validated successfully. Please return to that page and hit the validate button and ensure success before returning here.')
+    validationMessages.push(
+      'Plex settings have not been validated successfully. Please <a href="javascript:void(0);" onclick="jumpTo(\'010-plex\');">return to the Plex page</a> and hit the validate button and ensure success before returning here.<br>'
+    )
   }
   if (!tmdbValid) {
-    validationMessages.push('TMDb settings have not been validated successfully. Please return to that page and hit the validate button and ensure success before returning here.')
+    validationMessages.push(
+      'TMDb settings have not been validated successfully. Please <a href="javascript:void(0);" onclick="jumpTo(\'020-tmdb\');">return to the TMDb page</a> and hit the validate button and ensure success before returning here.<br>'
+    )
   }
   if (!libsValid) {
-    validationMessages.push('Libraries page settings have not been validated successfully. Please return to that page and ensure you make appropriate selections before returning here.')
+    validationMessages.push(
+      'Libraries page settings have not been validated successfully. Please <a href="javascript:void(0);" onclick="jumpTo(\'025-libraries\');">return to the Libraries page</a> and ensure you make appropriate selections before returning here.<br>'
+    )
   }
 
   // If there are validation messages, display them
