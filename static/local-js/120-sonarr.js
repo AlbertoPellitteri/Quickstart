@@ -7,26 +7,32 @@ $(document).ready(function () {
 
   if (isValidated === 'true') {
     document.getElementById('validateButton').disabled = true
-    // Populate the dropdowns with the stored data if they are available
-    fetchDropdownData()
+    fetchDropdownData() // Populate dropdowns if already validated
   } else {
     document.getElementById('validateButton').disabled = false
   }
-})
 
-document.addEventListener('DOMContentLoaded', function () {
+  // Attach event listeners for input changes
+  document.getElementById('sonarr_token').addEventListener('input', function () {
+    document.getElementById('sonarr_validated').value = 'false'
+    document.getElementById('validateButton').disabled = false
+  })
+
+  document.getElementById('sonarr_url').addEventListener('input', function () {
+    document.getElementById('sonarr_validated').value = 'false'
+    document.getElementById('validateButton').disabled = false
+  })
+
+  // Attach event listeners for validation and toggle functionality
   document.getElementById('validateButton').addEventListener('click', validateSonarrApi)
   document.getElementById('toggleApikeyVisibility').addEventListener('click', toggleApiKeyVisibility)
-})
 
-document.getElementById('sonarr_token').addEventListener('input', function () {
-  document.getElementById('sonarr_validated').value = 'false'
-  document.getElementById('validateButton').disabled = false
-})
-
-document.getElementById('sonarr_url').addEventListener('input', function () {
-  document.getElementById('sonarr_validated').value = 'false'
-  document.getElementById('validateButton').disabled = false
+  // Add an event listener for form submission
+  document.getElementById('configForm').addEventListener('submit', function (event) {
+    if (!validateSonarrPage()) {
+      event.preventDefault() // Prevent form submission if validation fails
+    }
+  })
 })
 
 /* eslint-disable camelcase */
@@ -60,7 +66,7 @@ function validateSonarrApi () {
       } else {
         hideSpinner('validate')
         document.getElementById('sonarr_validated').value = 'false'
-        console.log('Error validating Sonarr', data.message)
+        console.error('Error validating Sonarr', data.message)
         statusMessage.textContent = 'Failed to validate Sonarr server. Please check your URL and Token.'
         statusMessage.style.color = '#ea868f'
         statusMessage.style.display = 'block'
@@ -69,12 +75,13 @@ function validateSonarrApi () {
     .catch(error => {
       hideSpinner('validate')
       console.error('Error validating Sonarr:', error)
-      statusMessage.textContent = 'Error validating Sonarr'
+      statusMessage.textContent = 'Error validating Sonarr.'
       statusMessage.style.color = '#ea868f'
       statusMessage.style.display = 'block'
       document.getElementById('sonarr_validated').value = 'false'
     })
 }
+
 function fetchDropdownData () {
   // Fetch the stored dropdown data and populate the dropdowns
   const sonarr_url = document.getElementById('sonarr_url').value
@@ -112,6 +119,40 @@ function populateDropdown (elementId, data, valueField, textField, selectedValue
   if (selectedValue) {
     dropdown.value = selectedValue
   }
+}
+
+function validateSonarrPage () {
+  const rootFolderPath = document.getElementById('sonarr_root_folder_path').value
+  const qualityProfile = document.getElementById('sonarr_quality_profile').value
+  const languageProfile = document.getElementById('sonarr_language_profile').value
+  const statusMessage = document.getElementById('statusMessage')
+  let isValid = true
+  const validationMessages = []
+
+  if (!rootFolderPath) {
+    validationMessages.push('Please select a valid Root Folder Path.')
+    isValid = false
+  }
+
+  if (!qualityProfile) {
+    validationMessages.push('Please select a valid Quality Profile.')
+    isValid = false
+  }
+
+  if (!languageProfile) {
+    validationMessages.push('Please select a valid Language Profile.')
+    isValid = false
+  }
+
+  if (!isValid) {
+    statusMessage.innerHTML = validationMessages.join('<br>')
+    statusMessage.style.color = '#ea868f'
+    statusMessage.style.display = 'block'
+  } else {
+    statusMessage.style.display = 'none'
+  }
+
+  return isValid
 }
 
 function toggleApiKeyVisibility () {
