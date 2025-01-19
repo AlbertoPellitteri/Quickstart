@@ -185,7 +185,9 @@ def step(name):
 
     print(f"data retrieved for {name}")
 
-    page_info["plex_valid"], page_info["tmdb_valid"] = check_minimum_settings()
+    page_info["plex_valid"], page_info["tmdb_valid"], page_info["libs_valid"] = (
+        check_minimum_settings()
+    )
 
     page_info["notifiarr_available"], page_info["gotify_available"] = (
         notification_systems_available()

@@ -1,3 +1,16 @@
+document.addEventListener('DOMContentLoaded', function () {
+  // Prevent form submission on "Enter" key press, except for textarea
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+      const form = event.target.closest('form')
+      if (form) {
+        event.preventDefault() // Prevent form submission
+      }
+    }
+  })
+})
+
+// Loading spinner functionality
 function loading (action) {
   console.log('action:', action)
 

@@ -81,6 +81,7 @@
         {% endfor %}
       </select>
       <label for="tmdb_language">Language</label>
+      <span id="languageStatusMessage" class="status-message"></span>
     </div>
     <div class="form-floating">
       <select class="form-select" id="tmdb_region" name="tmdb_region">
@@ -90,6 +91,7 @@
         {% endfor %}
       </select>
       <label for="tmdb_region">Region</label>
+      <span id="regionStatusMessage" class="status-message"></span>
     </div>
     <div class="form-floating">
       <input type="number" class="form-control" id="tmdb_cache_expiration" name="tmdb_cache_expiration" value="{{ data['tmdb']['cache_expiration'] }}" min="0"><label for="tmdb_cache_expiration">Cache Expiration (in days)</label>

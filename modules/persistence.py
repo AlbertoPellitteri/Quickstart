@@ -155,8 +155,9 @@ def get_dummy_data(target):
 def check_minimum_settings():
     plex_valid, plex_user_entered = retrieve_status("plex")
     tmdb_valid, tmdb_user_entered = retrieve_status("tmdb")
+    libs_valid, libs_user_entered = retrieve_status("libraries")
 
-    return plex_valid, tmdb_valid
+    return plex_valid, tmdb_valid, libs_valid
 
 
 def flush_session_storage():
