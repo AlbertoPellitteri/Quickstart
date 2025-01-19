@@ -81,7 +81,7 @@ function validateWebhook (webhookType) {
   const validateButton = inputGroup.find('.validate-button')
   const webhookTypeFormatted = webhookType.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase() })
 
-  showSpinner2(webhookType)
+  showSpinner(webhookType)
   validationMessage.html('<div class="alert alert-info" role="alert">Validating...</div>')
   validationMessage.show()
 
@@ -98,19 +98,19 @@ function validateWebhook (webhookType) {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-        hideSpinner2(webhookType)
+        hideSpinner(webhookType)
         validationMessage.html('<div class="alert alert-success" role="alert">' + data.success + '</div>')
         validateButton.prop('disabled', true)
         validatedWebhooks['webhooks_' + webhookType] = true
       } else {
-        hideSpinner2(webhookType)
+        hideSpinner(webhookType)
         validationMessage.html('<div class="alert alert-danger" role="alert">' + data.error + '</div>')
         validatedWebhooks['webhooks_' + webhookType] = false
       }
       updateValidationState()
     })
     .catch((error) => {
-      hideSpinner2(webhookType)
+      hideSpinner(webhookType)
       console.error('Error:', error)
       validationMessage.html('<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>')
       validatedWebhooks['webhooks_' + webhookType] = false
