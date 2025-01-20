@@ -76,9 +76,26 @@
     <input type="text" class="form-control" id="config_name" name="config_name" value="{{ page_info['config_name'] }}" title="enter a config name if you wish" required="" onkeyup="validate_name(this)">
     <label for="config_name">config name</label>
   </div>
-<form action="/clear_session" method="post" id="clearSessionForm" name="clearSessionForm" style="margin-top: 10px;">
+<script type=text/javascript>
+  $(function() {
+    $('a#reset').on('click', function(e) {
+      e.preventDefault()
+      foo = $("input[name=config_name]").val();
+      console.log(foo)
+      $.post('/clear_session', { name: foo },
+          function(data) {
+        //do nothing
+      });
+      return false;
+    });
+  });
+</script>
+<form>
   <div class="d-grid gap-2">
-    <button class="btn btn-danger" type="submit" id="clearSessionButton">Clear Session Data</button>
+    <a href=# id=reset>
+      <button class="btn btn-danger" type="submit" id="clearSessionButton">Clear Session Data</button>
+    </a>
   </div>
 </form>
+
 {% endblock %}
