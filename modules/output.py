@@ -77,6 +77,12 @@ def build_libraries_section(
         if collection_files:
             entry["collection_files"] = collection_files
 
+        # Process attributes
+        for attr_key, attr_value in attributes.items():
+            clean_key = attr_key.replace(f"{library_type}-attribute_", "")
+            if attr_value not in [None, False, [], {}, ""]:
+                entry[clean_key] = attr_value
+
         # Process overlays
         overlay_files = [
             {"default": overlay.replace(f"{library_type}-overlay_", "")}
@@ -85,12 +91,6 @@ def build_libraries_section(
         ]
         if overlay_files:
             entry["overlay_files"] = overlay_files
-
-        # Process attributes
-        for attr_key, attr_value in attributes.items():
-            clean_key = attr_key.replace(f"{library_type}-attribute_", "")
-            if attr_value not in [None, False, [], {}, ""]:
-                entry[clean_key] = attr_value
 
         # Add only non-empty entries
         if entry:
