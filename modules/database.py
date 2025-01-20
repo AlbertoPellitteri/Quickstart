@@ -138,7 +138,7 @@ def reset_data(name, section=None):
 
             data_tuple = name
 
-        cursor.execute(sqlite_delete_query, data_tuple)
+        cursor.execute(sqlite_delete_query, (data_tuple,))
 
         sqliteConnection.commit()
 

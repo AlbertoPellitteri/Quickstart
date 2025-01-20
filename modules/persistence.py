@@ -160,8 +160,15 @@ def check_minimum_settings():
     return plex_valid, tmdb_valid, libs_valid
 
 
-def flush_session_storage():
-    reset_data(name=session["config_name"])
+def flush_session_storage(name):
+    if not name:
+        name = session["config_name"]
+    [
+        session.pop(key)
+        for key in list(session.keys())
+        if not key.startswith("config_name")
+    ]
+    reset_data(name)
 
 
 def notification_systems_available():

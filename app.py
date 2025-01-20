@@ -114,7 +114,16 @@ def start():
 
 @app.route("/clear_session", methods=["POST"])
 def clear_session():
-    flush_session_storage()
+    data = request.values
+    try:
+        config_name = data["name"]
+
+        if config_name != session["config_name"]:
+            session["config_name"] = config_name
+    except:
+        config_name = session["config_name"]
+
+    flush_session_storage(config_name)
     flash("Session storage cleared successfully.", "success")
     return redirect(url_for("start"))
 
