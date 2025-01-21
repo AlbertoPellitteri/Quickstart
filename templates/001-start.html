@@ -58,44 +58,49 @@
     </div>
     <hr class="hr">
     {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
-  <div class="form-text" id="pin-info">
-    <center>
-      <img src="{{ url_for('static', filename='images/wizard.webp') }}" alt="Header Image" class="header-image"/>
-    </center>
-    <p class="fs-5">This wizard will step you through creating a config file for Kometa.</p>
-    <p class="fs-5">Minimally, you will need information about your media server (URL and Token) and your TMDb information (API Key) before downloading the final config.yml file.</p>
-    <p class="fs-5">Once you have gathered that stuff, click next "Arrow" above.</p>
-  </div>
-  <div class="form-text" id="name-info">
-    <p class="fs-6">The config name below is used for saving your config and progress on the server. You can change it if you wish before getting started.</p>
-    <div class="alert alert-warning" role="alert">
-      <strong>Note:</strong> Please write down the config name for future reference. This will help you to retrieve and modify your configuration later.
+    <div class="form-text" id="pin-info">
+      <center>
+        <img src="{{ url_for('static', filename='images/wizard.webp') }}" alt="Header Image" class="header-image" />
+      </center>
+      <p class="fs-5">This wizard will step you through creating a config file for Kometa.</p>
+      <p class="fs-5">Minimally, you will need information about your media server (URL and Token) and your TMDb information (API Key) before downloading the final config.yml file.</p>
+      <p class="fs-5">Once you have gathered that stuff, click the next "Arrow" above.</p>
+    </div>
+    <div class="form-text" id="name-info">
+      <p class="fs-6">The config name below is used for saving your config and progress on the server. You can change it if you wish before getting started.</p>
+      <div class="alert alert-warning" role="alert">
+        <strong>Note:</strong> Please write down the config name for future reference. This will help you to retrieve and modify your configuration later.
+      </div>
+    </div>
+    <div class="form-floating">
+      <input type="text" class="form-control" id="config_name" name="config_name" value="{{ page_info['config_name'] }}" title="Enter a config name if you wish" required="" onkeyup="validate_name(this)">
+      <label for="config_name">Config Name</label>
     </div>
   </div>
-  <div class="form-floating">
-    <input type="text" class="form-control" id="config_name" name="config_name" value="{{ page_info['config_name'] }}" title="enter a config name if you wish" required="" onkeyup="validate_name(this)">
-    <label for="config_name">config name</label>
-  </div>
-<script type=text/javascript>
-  $(function() {
-    $('a#reset').on('click', function(e) {
-      e.preventDefault()
-      foo = $("input[name=config_name]").val();
-      console.log(foo)
-      $.post('/clear_session', { name: foo },
-          function(data) {
-        //do nothing
-      });
-      return false;
-    });
-  });
-</script>
-<form>
-  <div class="d-grid gap-2">
-    <a href=# id=reset>
-      <button class="btn btn-danger" type="submit" id="clearSessionButton">Clear Session Data</button>
-    </a>
-  </div>
+  <form>
+    <div class="d-grid gap-2">
+      <a href="#" id="reset">
+        <button class="btn btn-danger" type="submit" id="clearSessionButton">Clear Session Data</button>
+      </a>
+    </div>
+  </form>
 </form>
-
+<!-- Modal for confirmation -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="confirmationModalLabel">Confirm Clear Session</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="confirmationModalBody">
+        <!-- Dynamic content added via JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmClearSession">Clear Session</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
