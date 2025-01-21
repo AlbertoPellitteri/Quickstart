@@ -1,3 +1,4 @@
+/* global $ */
 document.addEventListener('DOMContentLoaded', function () {
   // Prevent form submission on "Enter" key press, except for textarea
   document.addEventListener('keydown', function (event) {
@@ -52,6 +53,8 @@ function hideSpinner (webhookType) {
 
 // Function to handle jump to action
 function jumpTo (targetPage) {
+  console.log('JumpTo initiated for target page:', targetPage)
+
   const form = document.getElementById('configForm') || document.getElementById('final-form')
 
   if (!form) {
@@ -61,12 +64,34 @@ function jumpTo (targetPage) {
 
   // Check form validity
   if (!form.checkValidity()) {
+    console.warn('Form is invalid. Reporting validity.')
     form.reportValidity()
     return
   }
 
+  console.log('Form is valid. Preparing to submit.')
+
+  // Append custom webhook URLs to select elements if needed
+  $('select.form-select').each(function () {
+    if ($(this).val() === 'custom') {
+      const customInputId = $(this).attr('id') + '_custom'
+      const customUrl = $('#' + customInputId).find('input.custom-webhook-url').val()
+      if (customUrl) {
+        console.log(`Appending custom URL for ${$(this).attr('id')}:`, customUrl)
+        $(this).append('<option value="' + customUrl + '" selected="selected">' + customUrl + '</option>')
+        $(this).val(customUrl)
+      }
+    }
+  })
+
   // Create FormData object from the form
   const formData = new FormData(form)
+
+  // Debugging FormData content
+  console.log('FormData before fetch:')
+  formData.forEach((value, key) => {
+    console.log(`${key}: ${value}`)
+  })
 
   // Show loading spinner
   loading('jump')
@@ -76,7 +101,10 @@ function jumpTo (targetPage) {
     method: 'POST',
     body: formData
   }).then(response => {
+    console.log('Fetch response received:', response.status)
+
     if (response.ok) {
+      console.log('Redirecting to target page:', targetPage)
       // Redirect to the target page after successful form submission
       window.location.href = '/step/' + targetPage
     } else {
@@ -85,5 +113,4 @@ function jumpTo (targetPage) {
   }).catch(error => {
     console.error('Error during form submission:', error)
   })
-}
-/* eslint-enable no-unused-vars */
+}/* eslint-enable no-unused-vars */
