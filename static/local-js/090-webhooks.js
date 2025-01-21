@@ -16,6 +16,7 @@ function setWebhookValidated (state, webhookType = null) {
 
 function showCustomInput (selectElement, isValidated) {
   const customInputId = selectElement.id + '_custom'
+  console.log(`showCustomInput called for: ${selectElement.id}, isValidated: ${isValidated}`)
   if (selectElement.value === 'custom') {
     document.getElementById(customInputId).style.display = 'block'
     if (isValidated === true) {
@@ -32,12 +33,13 @@ function showCustomInput (selectElement, isValidated) {
 
 function updateValidationState () {
   const allValid = Object.values(validatedWebhooks).every(state => state === true)
+  console.log('Validation State Updated:', validatedWebhooks, `All Valid: ${allValid}`)
   setWebhookValidated(allValid)
 }
 
 $(document).ready(function () {
   const isValidated = document.getElementById('webhooks_validated').value.toLowerCase() === 'true'
-  console.log('Validated: ' + isValidated)
+  console.log('Page Load - Is Validated:', isValidated)
 
   $('select.form-select').each(function () {
     const selectElement = this
@@ -48,6 +50,7 @@ $(document).ready(function () {
 
     if (selectElement.value === 'custom' && customUrl) {
       validatedWebhooks[selectElement.id] = isValidated
+      console.log(`Custom webhook found: ${selectElement.id}, URL: ${customUrl}`)
     } else {
       validatedWebhooks[selectElement.id] = true
     }
@@ -59,14 +62,21 @@ $(document).ready(function () {
     $('.validate-button').prop('disabled', false)
   }
 
+  // Debugging for navigation actions
   document.getElementById('configForm').addEventListener('submit', function (event) {
+    const actionType = event.submitter?.getAttribute('onclick')?.includes('loading') ? event.submitter.innerText.trim() : 'unknown'
+    console.log(`Form Submitted - Action: ${actionType}`)
+
     $('select.form-select').each(function () {
       if ($(this).val() === 'custom') {
         const customInputId = $(this).attr('id') + '_custom'
         const customUrl = $('#' + customInputId).find('input.custom-webhook-url').val()
         if (customUrl) {
+          console.log(`Serializing custom webhook for dropdown: ${$(this).attr('id')}, URL: ${customUrl}`)
           $(this).append('<option value="' + customUrl + '" selected="selected">' + customUrl + '</option>')
           $(this).val(customUrl)
+        } else {
+          console.log(`Custom webhook dropdown ${$(this).attr('id')} has no URL to serialize.`)
         }
       }
     })
@@ -80,6 +90,8 @@ function validateWebhook (webhookType) {
   const validationMessage = inputGroup.siblings('.validation-message')
   const validateButton = inputGroup.find('.validate-button')
   const webhookTypeFormatted = webhookType.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase() })
+
+  console.log(`Validating webhook: ${webhookType}, URL: ${webhookUrl}`)
 
   showSpinner(webhookType)
   validationMessage.html('<div class="alert alert-info" role="alert">Validating...</div>')
@@ -98,11 +110,13 @@ function validateWebhook (webhookType) {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
+        console.log(`Webhook validation successful for: ${webhookType}`)
         hideSpinner(webhookType)
         validationMessage.html('<div class="alert alert-success" role="alert">' + data.success + '</div>')
         validateButton.prop('disabled', true)
         validatedWebhooks['webhooks_' + webhookType] = true
       } else {
+        console.error(`Webhook validation failed for: ${webhookType}, Error: ${data.error}`)
         hideSpinner(webhookType)
         validationMessage.html('<div class="alert alert-danger" role="alert">' + data.error + '</div>')
         validatedWebhooks['webhooks_' + webhookType] = false
@@ -110,8 +124,8 @@ function validateWebhook (webhookType) {
       updateValidationState()
     })
     .catch((error) => {
+      console.error(`Error during webhook validation for: ${webhookType}`, error)
       hideSpinner(webhookType)
-      console.error('Error:', error)
       validationMessage.html('<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>')
       validatedWebhooks['webhooks_' + webhookType] = false
       updateValidationState()
