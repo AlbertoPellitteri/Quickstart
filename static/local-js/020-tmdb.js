@@ -1,79 +1,57 @@
-/* global $, showSpinner, hideSpinner */
+/* global showSpinner, hideSpinner */
 
 document.addEventListener('DOMContentLoaded', function () {
   const validateButton = document.getElementById('validateButton')
-  const tmdbValidatedInput = document.getElementById('tmdb_validated')
-  const regionDropdown = document.getElementById('tmdb_region')
-  const languageDropdown = document.getElementById('tmdb_language')
-  const regionStatusMessage = document.getElementById('regionStatusMessage')
-  const languageStatusMessage = document.getElementById('languageStatusMessage')
-  const statusMessage = document.getElementById('statusMessage')
   const apiKeyInput = document.getElementById('tmdb_apikey')
-  const isValidated = document.getElementById('tmdb_validated').value.toLowerCase()
+  const tmdbValidatedInput = document.getElementById('tmdb_validated')
+  const statusMessage = document.getElementById('statusMessage')
+  const languageDropdown = document.getElementById('tmdb_language')
+  const languageStatusMessage = document.getElementById('languageStatusMessage')
+  const regionDropdown = document.getElementById('tmdb_region')
+  const regionStatusMessage = document.getElementById('regionStatusMessage')
+  const nextButton = document.querySelector('button[onclick*="next"]')
+  const jumpToButton = document.querySelector('.dropdown-toggle')
 
-  console.log('Validated: ' + isValidated)
+  // Check if API key is validated
+  const isApiKeyValidated = () => tmdbValidatedInput.value.toLowerCase() === 'true'
 
-  if (isValidated === 'true') {
-    validateButton.disabled = true
-  } else {
-    validateButton.disabled = false
-  }
-
-  // Function to validate a dropdown and show a message
-  function validateDropdown (dropdown, statusMessage, fieldName) {
-    if (!dropdown.value) {
-      statusMessage.textContent = `${fieldName} is required.`
-      statusMessage.style.color = '#ea868f' // Red for error
-      statusMessage.style.display = 'block'
-      return false
-    } else {
-      statusMessage.textContent = `${fieldName} is valid!`
-      statusMessage.style.color = '#75b798' // Green for success
-      statusMessage.style.display = 'block'
-      return true
-    }
-  }
-
-  // Function to check overall validation state and update navigation buttons
-  function updateNavigationState () {
-    const isApiValidated = tmdbValidatedInput && tmdbValidatedInput.value.toLowerCase() === 'true'
-    const isRegionValid = validateDropdown(regionDropdown, regionStatusMessage, 'Region')
-    const isLanguageValid = validateDropdown(languageDropdown, languageStatusMessage, 'Language')
-
-    const isFormValid = isApiValidated && isRegionValid && isLanguageValid
-
-    // Update tmdb_validated value
-    tmdbValidatedInput.value = isFormValid ? 'true' : 'false'
-
-    // Enable or disable navigation buttons
-    $('#configForm button[onclick*="next"]').prop('disabled', !isFormValid)
-    $('.dropdown-toggle').prop('disabled', !isFormValid)
-  }
-
-  // Initial validation on page load
-  function handleInitialValidation () {
-    const isApiPreviouslyValidated = tmdbValidatedInput && tmdbValidatedInput.value.toLowerCase() === 'true'
-
-    // Display API validation status if previously validated
-    if (isApiPreviouslyValidated) {
+  // Update API key validation message
+  function updateApiKeyStatusMessage () {
+    if (isApiKeyValidated()) {
       statusMessage.textContent = 'API key is valid!'
-      statusMessage.style.color = '#75b798' // Green for success
-      statusMessage.style.display = 'block'
+      statusMessage.style.color = '#75b798' // Green
+    } else {
+      statusMessage.textContent = 'API key is invalid or not validated.'
+      statusMessage.style.color = '#ea868f' // Red
     }
-
-    // Validate region and language dropdowns
-    validateDropdown(regionDropdown, regionStatusMessage, 'Region')
-    validateDropdown(languageDropdown, languageStatusMessage, 'Language')
-
-    // Update navigation state based on the current validation
-    updateNavigationState()
+    statusMessage.style.display = 'block'
   }
 
-  // Call the validation check initially
-  handleInitialValidation()
+  // Update navigation buttons (Next and JumpTo)
+  function updateNavigationState () {
+    const isLanguageValid = !!languageDropdown.value
+    const isRegionValid = !!regionDropdown.value
+    const isFormValid = isApiKeyValidated() && isLanguageValid && isRegionValid
+
+    nextButton.disabled = !isFormValid
+    jumpToButton.disabled = !isFormValid
+
+    // Update status messages for language and region
+    languageStatusMessage.textContent = isLanguageValid
+      ? 'Language is valid.'
+      : 'Please select a valid language.'
+    languageStatusMessage.style.color = isLanguageValid ? '#75b798' : '#ea868f'
+    languageStatusMessage.style.display = 'block'
+
+    regionStatusMessage.textContent = isRegionValid
+      ? 'Region is valid.'
+      : 'Please select a valid region.'
+    regionStatusMessage.style.color = isRegionValid ? '#75b798' : '#ea868f'
+    regionStatusMessage.style.display = 'block'
+  }
 
   // Validate TMDb API key
-  validateButton.addEventListener('click', function () {
+  function validateApiKey () {
     const apiKey = apiKeyInput.value.trim()
 
     if (!apiKey) {
@@ -83,64 +61,67 @@ document.addEventListener('DOMContentLoaded', function () {
       return
     }
 
-    // Show spinner and disable validate button while validating
+    // Show spinner and disable the validate button
     showSpinner('validate')
     validateButton.disabled = true
 
     fetch('/validate_tmdb', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tmdb_apikey: apiKey })
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.valid) {
-          tmdbValidatedInput.value = 'true' // Mark as validated
+          tmdbValidatedInput.value = 'true'
           statusMessage.textContent = 'API key is valid!'
-          statusMessage.style.color = '#75b798' // Green for success
-          validateButton.disabled = true // Disable validate button after success
+          statusMessage.style.color = '#75b798' // Green
         } else {
-          tmdbValidatedInput.value = 'false' // Mark as not validated
+          tmdbValidatedInput.value = 'false'
           statusMessage.textContent = 'Failed to validate TMDb. Please check your API Key.'
-          statusMessage.style.color = '#ea868f' // Red for error
+          statusMessage.style.color = '#ea868f' // Red
         }
+        updateNavigationState()
       })
       .catch((error) => {
-        console.error('Error validating TMDb server:', error)
+        console.error('Error validating TMDb API:', error)
         statusMessage.textContent = 'An error occurred. Please try again.'
-        statusMessage.style.color = '#ea868f' // Red for error
+        statusMessage.style.color = '#ea868f' // Red
       })
       .finally(() => {
         hideSpinner('validate')
         statusMessage.style.display = 'block'
-        updateNavigationState() // Recheck navigation state after validation
       })
+  }
+
+  // Toggle visibility of the API key input
+  document.getElementById('toggleApikeyVisibility').addEventListener('click', function () {
+    const currentType = apiKeyInput.getAttribute('type')
+    apiKeyInput.setAttribute('type', currentType === 'password' ? 'text' : 'password')
+    this.innerHTML = currentType === 'password'
+      ? '<i class="fas fa-eye-slash"></i>'
+      : '<i class="fas fa-eye"></i>'
+  })
+
+  // Event listener for API key input changes
+  apiKeyInput.addEventListener('input', function () {
+    tmdbValidatedInput.value = 'false' // Mark API key as invalid
+    validateButton.disabled = false // Re-enable the validate button
+    statusMessage.style.display = 'none' // Hide validation message
+    updateNavigationState() // Disable Next and JumpTo
   })
 
   // Event listeners for dropdown changes
-  regionDropdown.addEventListener('change', updateNavigationState)
   languageDropdown.addEventListener('change', updateNavigationState)
+  regionDropdown.addEventListener('change', updateNavigationState)
 
-  // Reset validation when the API key changes
-  if (apiKeyInput) {
-    apiKeyInput.addEventListener('input', function () {
-      tmdbValidatedInput.value = 'false' // Reset validation
-      validateButton.disabled = false // Allow re-validation
-      updateNavigationState() // Recheck navigation state
-    })
+  // Initialize navigation state on page load
+  if (isApiKeyValidated()) {
+    validateButton.disabled = true // Disable validate button if already validated
   }
+  updateApiKeyStatusMessage()
+  updateNavigationState()
 
-  // Toggle API key visibility
-  document
-    .getElementById('toggleApikeyVisibility')
-    .addEventListener('click', function () {
-      const currentType = apiKeyInput.getAttribute('type')
-      apiKeyInput.setAttribute('type', currentType === 'password' ? 'text' : 'password')
-      this.innerHTML =
-        currentType === 'password'
-          ? '<i class="fas fa-eye-slash"></i>'
-          : '<i class="fas fa-eye"></i>'
-    })
+  // Attach validation function to the validate button
+  validateButton.addEventListener('click', validateApiKey)
 })
