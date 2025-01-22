@@ -8,15 +8,17 @@ $(document).ready(function () {
   const plexValid = $('#plex_valid').data('plex-valid') === 'True'
   const tmdbValid = $('#tmdb_valid').data('tmdb-valid') === 'True'
   const libsValid = $('#libs_valid').data('libs-valid') === 'True'
+  const settValid = $('#sett_valid').data('sett-valid') === 'True'
   const yamlValid = $('#yaml_valid').data('yaml-valid') === 'True'
   // const validationError = $('#validation-error').val().trim()
   // Debugging: Check the values of the meta tags
 
-  const showYAML = plexValid && tmdbValid && libsValid && yamlValid
+  const showYAML = plexValid && tmdbValid && libsValid && settValid && yamlValid
 
   console.log('Plex Valid:', plexValid)
   console.log('TMDb Valid:', tmdbValid)
   console.log('LIBS Valid:', libsValid)
+  console.log('Settings Valid:', settValid)
   console.log('YAML Valid:', yamlValid)
   console.log('Show YAML:', showYAML)
 
@@ -37,6 +39,12 @@ $(document).ready(function () {
   if (!libsValid) {
     validationMessages.push(
       'Libraries page settings have not been validated successfully. Please <a href="javascript:void(0);" onclick="jumpTo(\'025-libraries\');">return to the Libraries page</a> and ensure you make appropriate selections before returning here.<br>'
+    )
+  }
+
+  if (!settValid) {
+    validationMessages.push(
+      'Settings page values have likely been skipped. Please <a href="javascript:void(0);" onclick="jumpTo(\'150-settings\');">return to the Settings page</a> and ensure you make appropriate selections before returning here.<br>'
     )
   }
 
