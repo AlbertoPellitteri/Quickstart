@@ -392,6 +392,7 @@ libraries:
         managed: false
         configured: true
         less: 123
+        ignore_empty_smart_collections: true
 
   Anime:
     collection_files:
@@ -439,13 +440,13 @@ settings:
   ignore_ids:
   ignore_imdb_ids:
   item_refresh_delay: 0
-  playlist_sync_to_users: all
+  playlist_sync_to_users:
   playlist_exclude_users:
   playlist_report: false
   verify_ssl: true
   custom_repo:
-  overlay_artwork_filetype: jpg
-  overlay_artwork_quality: 72
+  overlay_artwork_filetype: webp_lossy
+  overlay_artwork_quality: 90
   run_order:
   - operations
   - metadata
