@@ -3,21 +3,40 @@
 document.addEventListener('DOMContentLoaded', function () {
   const saveSyncChangesButton = document.getElementById('saveSyncChangesButton')
   const saveExcludeChangesButton = document.getElementById('saveExcludeChangesButton')
-  const validateSettingsButton = document.getElementById('validateSettingsButton')
-  const validationMessages = $('#validation-messages')
+  const configForm = document.getElementById('configForm')
 
-  function showValidationMessage (type, message) {
-    validationMessages
-      .removeClass('alert-success alert-danger')
-      .addClass(type === 'success' ? 'alert-success' : 'alert-danger')
-      .html(message)
-      .show()
+  function setSettingsValidated (isValid) {
+    const settingsValidatedInput = document.getElementById('settings_validated')
+    settingsValidatedInput.value = isValid ? 'true' : 'false'
   }
+
+  function submitFormData () {
+    if (configForm.checkValidity()) {
+      const formData = new FormData(configForm)
+      fetch(configForm.action, {
+        method: 'POST',
+        body: formData
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log('Settings saved successfully.')
+          } else {
+            console.error('Error saving settings:', response.statusText)
+          }
+        })
+        .catch((error) => {
+          console.error('Error saving settings:', error)
+        })
+    } else {
+      console.warn('Form validation failed. Data not saved.')
+    }
+  }
+
+  setSettingsValidated(true)
 
   saveSyncChangesButton.addEventListener('click', function () {
     const selectedUsers = []
     const checkboxes = document.querySelectorAll('#syncUserListForm input[type="checkbox"]:checked')
-
     const allSelected = document.getElementById('sync_all_users').checked
 
     if (allSelected) {
@@ -33,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const csvUsers = selectedUsers.join(', ')
     document.getElementById('playlist_sync_to_users').value = csvUsers
     $('#syncUsersModal').modal('hide')
-    setSettingsValidated(false)
+    setSettingsValidated(true)
   })
 
   saveExcludeChangesButton.addEventListener('click', function () {
@@ -47,24 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const csvUsers = selectedUsers.join(', ')
     document.getElementById('playlist_exclude_users').value = csvUsers
     $('#excludeUsersModal').modal('hide')
-    setSettingsValidated(false)
+    setSettingsValidated(true)
   })
-
-  validateSettingsButton.addEventListener('click', function () {
-    if (validateForm()) {
-      setSettingsValidated(true)
-      this.disabled = true
-      showValidationMessage('success', 'Settings validated successfully!')
-    } else {
-      showValidationMessage('danger', 'Please correct the errors in the form.')
-    }
-  })
-
-  function setSettingsValidated (isValid) {
-    const settingsValidatedInput = document.getElementById('settings_validated')
-    settingsValidatedInput.value = isValid ? 'true' : 'false'
-    validateSettingsButton.disabled = isValid
-  }
 
   const syncAllUsersCheckbox = document.getElementById('sync_all_users')
   syncAllUsersCheckbox.addEventListener('change', function () {
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.checked = false
       })
     }
-    setSettingsValidated(false)
+    setSettingsValidated(true)
   })
 
   const syncUserCheckboxes = document.querySelectorAll('#syncUserListForm input[type="checkbox"]:not(#sync_all_users)')
@@ -83,14 +86,19 @@ document.addEventListener('DOMContentLoaded', function () {
       if (this.checked) {
         syncAllUsersCheckbox.checked = false
       }
-      setSettingsValidated(false)
+      setSettingsValidated(true)
     })
   })
 
-  // Add change event listeners to all inputs and selects to detect changes
-  document.querySelectorAll('input, select, textarea').forEach(element => {
+  document.querySelectorAll('input, select, textarea').forEach((element) => {
     element.addEventListener('change', function () {
-      setSettingsValidated(false)
+      setSettingsValidated(true)
+    })
+  })
+
+  document.querySelectorAll('button[onclick], .dropdown-menu a').forEach((element) => {
+    element.addEventListener('click', function () {
+      submitFormData()
     })
   })
 })
@@ -98,34 +106,17 @@ document.addEventListener('DOMContentLoaded', function () {
 $(document).ready(function () {
   const isValidated = document.getElementById('settings_validated').value.toLowerCase()
   console.log('Validated: ' + isValidated)
-
-  if (isValidated === 'true') {
-    document.getElementById('validateSettingsButton').disabled = true
-  } else {
-    document.getElementById('validateSettingsButton').disabled = false
-  }
 })
 
 function validatePath (input) {
-  // Regular expression for validating paths
-  // Accepts paths like:
-  // Windows absolute: C:\Folder\file.txt, \\server\share\file.txt
-  // Windows relative: folder\subfolder\file.txt
-  // Unix absolute: /path/to/file.txt
-  // Unix relative: ./relative/path/file.txt, config/assets
-  const pathRegex = /^(?:[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*|\\{2}[^\\/:*?"<>|\r\n]+(?:\\[^\\/:*?"<>|\r\n]+)*|(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]+|\/(?:[^\/]+\/)*[^\/]*|\.{1,2}(?:\/[^\/]*)*|(?:[^\/]+\/)*[^\/]*)$/  // eslint-disable-line
+  const pathRegex = /^(?:[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*|\\{2}[^\\/:*?"<>|\r\n]+(?:\\[^\\/:*?"<>|\r\n]+)*|(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]+|\/(?:[^\/]+\/)*[^\/]*|\.{1,2}(?:\/[^\/]*)*|(?:[^\/]+\/)*[^\/]*)$/ // eslint-disable-line
   return pathRegex.test(input)
 }
 
 function validateCSVList (input) {
-  // If the input is null or empty, return true (consider it valid)
   if (!input) {
     return true
   }
-
-  // Regular expression for validating CSV lists
-  // Accepts lists like: item1, item2, item3
-  // Each item can be alphanumeric and can include spaces, hyphens, underscores, and dots
   const csvRegex = /^(\s*[a-zA-Z0-9-_.]+\s*)(,\s*[a-zA-Z0-9-_.]+\s*)*$/
   return csvRegex.test(input)
 }
@@ -158,43 +149,37 @@ function validateURL (input) {
 function validateForm () {
   const assetDirectoryInput = document.getElementById('asset_directory').value.trim()
 
-  // Check if assetDirectoryInput is null or empty
   if (!assetDirectoryInput || assetDirectoryInput.toLowerCase() === 'none' || !validatePath(assetDirectoryInput)) {
     alert('Please enter a valid asset directory path.')
-    return false // Prevent form submission
+    return false
   }
 
-  // Validate CSV list fields
   const csvFields = ['playlist_sync_to_users', 'playlist_exclude_users']
   for (const fieldId of csvFields) {
     const fieldValue = document.getElementById(fieldId).value.trim()
     if (!validateCSVList(fieldValue)) {
       alert(`Please enter a valid CSV list for ${fieldId.replace('_', ' ')}.`)
-      return false // Prevent form submission
+      return false
     }
   }
 
-  // Validate ignore_ids to be numeric
   const ignoreIds = document.getElementById('ignore_ids').value.trim()
   if (ignoreIds && ignoreIds.toLower !== 'none' && !validateNumericCSV(ignoreIds)) {
     alert('Please enter a valid CSV list of numeric IDs for ignore_ids.')
-    return false // Prevent form submission
+    return false
   }
 
-  // Validate ignore_imdb_ids to start with tt followed by numbers
   const ignoreImdbIds = document.getElementById('ignore_imdb_ids').value.trim()
   if (ignoreImdbIds && ignoreImdbIds.toLower !== 'none' && !validateIMDBCSV(ignoreImdbIds)) {
     alert('Please enter a valid CSV list of IMDb IDs for ignore_imdb_ids (starting with tt followed by at least 7 digits).')
-    return false // Prevent form submission
+    return false
   }
 
-  // Validate custom_repo to be a valid URL
   const customRepo = document.getElementById('custom_repo').value.trim()
   if (customRepo && customRepo.toLower !== 'none' && !validateURL(customRepo)) {
     alert('Please enter a valid URL for custom_repo.')
-    return false // Prevent form submission
+    return false
   }
 
-  // Additional form validation logic can go here if needed
-  return true // Allow form submission
+  return true
 }
