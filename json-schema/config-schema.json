@@ -304,7 +304,6 @@
             "required": [
                 "url",
                 "token"
-
             ],
             "title": "gotify"
         },
@@ -745,6 +744,10 @@
                 },
                 "show_filtered": {
                     "description": "Used to show filtered items.\nList all items which have been filtered out of a collection or playlist (i.e. if it doesn't meet the filter criteria)",
+                    "type": "boolean"
+                },
+                "show_unfiltered": {
+                    "description": "Used to show unfiltered items.\nList all items which make it through a filter into a collection or playlist (i.e. if it MEETS the filter criteria)",
                     "type": "boolean"
                 },
                 "show_options": {
@@ -2080,7 +2083,8 @@
                     "properties": {
                         "configured": { "type": "boolean" },
                         "managed": { "type": "boolean" },
-                        "less": { "type": "integer" }
+                        "less": { "type": "integer" },
+                        "ignore_empty_smart_collections": { "type": "boolean" }
                     },
                     "required": []
                 },
