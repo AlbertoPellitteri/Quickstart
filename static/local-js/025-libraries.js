@@ -6,8 +6,7 @@ $(document).ready(function () {
 
   // Show or hide the libraries container based on Plex validation
   if (!plexValid) {
-    $('#movie-libraries-container').hide()
-    $('#show-libraries-container').hide()
+    $('#all-accordions-container').hide()
     showValidationMessage(
       'Plex settings have not been validated successfully. Please return to that page and validate before proceeding.',
       'danger'
@@ -15,8 +14,7 @@ $(document).ready(function () {
     disableNavigation()
     return // Exit early since we cannot proceed without Plex validation
   } else {
-    $('#movie-libraries-container').show()
-    $('#show-libraries-container').show()
+    $('#all-accordions-container').show()
   }
 
   // Restore saved library selections
