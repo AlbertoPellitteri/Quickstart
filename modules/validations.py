@@ -240,10 +240,55 @@ def validate_gotify_server(data):
             }
         )
 
-    json = {"message": "Kometa Test Message", "title": "Kometa Test"}
+    json = {
+        "message": "Kometa QuickStart Test Gotify Message",
+        "title": "Kometa QuickStart Gotify Test",
+    }
 
     response = requests.post(
         f"{gotify_url}/message", headers={"X-Gotify-Key": gotify_token}, json=json
+    )
+
+    if response.status_code != 200:
+        return jsonify(
+            {
+                "valid": False,
+                "error": f"({response.status_code} [{response.reason}]) {response_json['errorDescription']}",
+            }
+        )
+
+    return jsonify({"valid": True})
+
+
+def validate_ntfy_server(data):
+    ntfy_url = data.get("ntfy_url")
+    ntfy_token = data.get("ntfy_token")
+    ntfy_topic = data.get("ntfy_topic")
+    ntfy_url = ntfy_url.rstrip("#")
+    ntfy_url = ntfy_url.rstrip("/")
+
+    response = requests.get(f"{ntfy_url}/version")
+
+    try:
+        response_json = response.json()
+    except JSONDecodeError as e:
+        return jsonify({"valid": False, "error": f"Validation error: {str(e)}"})
+
+    if response.status_code >= 400:
+        return jsonify(
+            {
+                "valid": False,
+                "error": f"({response.status_code} [{response.reason}]) {response_json['errorDescription']}",
+            }
+        )
+
+    json = {
+        "message": "Kometa QuickStart Test ntfy Message",
+        "title": "Kometa QuickStart ntfy Test",
+    }
+
+    response = requests.post(
+        f"{ntfy_url}/message", headers={"X-ntfy-Key": ntfy_token}, json=json
     )
 
     if response.status_code != 200:
