@@ -489,8 +489,8 @@ gotify:
   token: Enter Gotify token
 ntfy:
   url: http://192.168.1.12:80
-  token: Enter ntfy access token
-  topic: Enter ntfy topic
+  token: Enter ntfy Access Token
+  topic: Enter ntfy Topic
 anidb:                           # Not required for AniDB builders unless you want mature content
   username: Enter AniDB Username
   password: Enter AniDB Password
