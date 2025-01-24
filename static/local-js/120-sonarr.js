@@ -121,7 +121,7 @@ function populateDropdown (elementId, data, valueField, textField, selectedValue
   }
 }
 
-function validateSonarrPage () {
+function validateSonarrPage() {
   const rootFolderPath = document.getElementById('sonarr_root_folder_path').value
   const qualityProfile = document.getElementById('sonarr_quality_profile').value
   const languageProfile = document.getElementById('sonarr_language_profile').value
@@ -129,19 +129,23 @@ function validateSonarrPage () {
   let isValid = true
   const validationMessages = []
 
-  if (!rootFolderPath) {
-    validationMessages.push('Please select a valid Root Folder Path.')
-    isValid = false
-  }
+  const isValidated = document.getElementById('sonarr_validated').value.toLowerCase() === 'true'
 
-  if (!qualityProfile) {
-    validationMessages.push('Please select a valid Quality Profile.')
-    isValid = false
-  }
+  if (isValidated) {
+    if (!rootFolderPath) {
+      validationMessages.push('Please select a valid Root Folder Path.')
+      isValid = false
+    }
 
-  if (!languageProfile) {
-    validationMessages.push('Please select a valid Language Profile.')
-    isValid = false
+    if (!qualityProfile) {
+      validationMessages.push('Please select a valid Quality Profile.')
+      isValid = false
+    }
+
+    if (!languageProfile) {
+      validationMessages.push('Please select a valid Language Profile.')
+      isValid = false
+    }
   }
 
   if (!isValid) {
