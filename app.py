@@ -16,6 +16,7 @@ from cachelib.file import FileSystemCache
 import jsonschema
 import requests
 import io
+import sys
 from ruamel.yaml import YAML
 import os
 from dotenv import load_dotenv
@@ -386,4 +387,8 @@ def validate_notifiarr():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    port = 5000  # Default port
+    # Check for a `--port` argument
+    if len(sys.argv) > 1 and sys.argv[1].startswith("--port="):
+        port = int(sys.argv[1].split("=")[1])
+    app.run(host="0.0.0.0", port=port, debug=True)
