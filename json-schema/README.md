@@ -1,3 +1,4 @@
+
 JSON schemas for Kometa YAML files
 
 How to:

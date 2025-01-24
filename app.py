@@ -12,6 +12,7 @@ from flask import (
 from flask_session import Session
 from cachelib.file import FileSystemCache
 
+
 import jsonschema
 import requests
 import io
