@@ -1,5 +1,5 @@
 {% extends "000-base.html" %} {% block content %}
-<form method="post" id="configForm" name="configForm" onsubmit="return validateForm()">
+<form method="post" id="configForm" name="configForm">
   <div id="{{page_info['title']}}Section">
     <div class="row">
       <div class="col align-self-center">
@@ -73,7 +73,7 @@
             <div class="accordion-body">
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="asset_directory" name="asset_directory"
-                  placeholder="config/assets" value="{{ data['settings']['asset_directory'] }}">
+                  minlength="2" required placeholder="config/assets" value="{{ data['settings']['asset_directory'] }}">
                 <label for="asset_directory">Asset Directory</label>
               </div>
 
@@ -151,7 +151,7 @@
               <div class="form-floating mb-3">
                 <select class="form-select" id="overlay_artwork_filetype" name="overlay_artwork_filetype">
                   <option value="jpg" {% if data['settings']['overlay_artwork_filetype']=='jpg' %}selected{% endif %}>
-                    JPG (default)</option>
+                    JPG</option>
                   <option value="png" {% if data['settings']['overlay_artwork_filetype']=='png' %}selected{% endif %}>
                     PNG</option>
                   <option value="webp_lossy" {% if data['settings']['overlay_artwork_filetype']=='webp_lossy'
@@ -187,7 +187,7 @@
               </div>
               <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="cache_expiration" name="cache_expiration" placeholder="60"
-                  min="0" value="{{ data['settings']['cache_expiration'] }}">
+                  min="1" value="{{ data['settings']['cache_expiration'] }}">
                 <label for="cache_expiration">Cache Expiration (days)</label>
               </div>
             </div>
@@ -466,14 +466,14 @@
 
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="ignore_ids" name="ignore_ids" placeholder=""
-                  value="{{ data['settings']['ignore_ids'] }}">
-                <label for="ignore_ids">Ignore IDs (comma-separated)</label>
+                pattern="^\d{1,8}(\s*,\s*\d{1,8})*$" value="{{ data['settings']['ignore_ids'] }}">
+                <label for="ignore_ids">Ignore IDs (comma-separated list of TMDb/TVDb IDs that are between 1 and 8 characters in length)</label>
               </div>
 
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="ignore_imdb_ids" name="ignore_imdb_ids" placeholder=""
-                  value="{{ data['settings']['ignore_imdb_ids'] }}">
-                <label for="ignore_imdb_ids">Ignore IMDb IDs (comma-separated)</label>
+                pattern="^(tt\d{7,8})(,\s*tt\d{7,8})*$" value="{{ data['settings']['ignore_imdb_ids'] }}">
+                <label for="ignore_imdb_ids">Ignore IMDb IDs (e.g., tt1234567, tt12345678)</label>
               </div>
             </div>
           </div>
@@ -518,7 +518,7 @@
 
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="custom_repo" name="custom_repo" placeholder=""
-                  value="{{ data['settings']['custom_repo'] }}">
+                  minlength="2" value="{{ data['settings']['custom_repo'] }}">
                 <label for="custom_repo">Custom Repo</label>
               </div>
             </div>
