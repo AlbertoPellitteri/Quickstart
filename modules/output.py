@@ -347,14 +347,14 @@ def build_config(header_style="ascii"):
         ("mal", "130-mal"),
     ]
 
+    # Apply enforce_string_fields to ensure proper formatting
+    config_data = enforce_string_fields(config_data, STRING_FIELDS)
+
     for section_key, section_stem in ordered_sections:
         if section_key in config_data:
             section_data = config_data[section_key]
             section_art = header_art[section_key]
             yaml_content += dump_section(section_art, section_key, section_data)
-
-    # Apply enforce_string_fields to ensure proper formatting
-    config_data = enforce_string_fields(config_data, STRING_FIELDS)
 
     validated = False
     validation_error = None

@@ -24,10 +24,10 @@ def enforce_string_fields(data, string_fields):
             data[key] = [str(item) if key in string_fields else item for item in value]
         elif key in string_fields:
             original_type = type(value)
-            data[key] = f"'{str(value)}'"
-            print(
-                f"Key '{key}': Original Type: {original_type}, New Type: {type(data[key])}, Value: {repr(data[key])}"
-            )
+            data[key] = str(value)
+            # print(
+            #     f"Key '{key}': Original Type: {original_type}, New Type: {type(data[key])}, Value: {repr(data[key])}"
+            # )
     return data
 
 
