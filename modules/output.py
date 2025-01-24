@@ -10,7 +10,13 @@ from .persistence import (
     flush_session_storage,
     notification_systems_available,
 )
-from .helpers import build_config_dict, get_template_list, get_bits
+from .helpers import (
+    build_config_dict,
+    get_template_list,
+    get_bits,
+    enforce_string_fields,
+    STRING_FIELDS,
+)
 
 
 def add_border_to_ascii_art(art):
@@ -346,6 +352,9 @@ def build_config(header_style="ascii"):
             section_data = config_data[section_key]
             section_art = header_art[section_key]
             yaml_content += dump_section(section_art, section_key, section_data)
+
+    # Apply enforce_string_fields to ensure proper formatting
+    config_data = enforce_string_fields(config_data, STRING_FIELDS)
 
     validated = False
     validation_error = None
