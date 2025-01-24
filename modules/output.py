@@ -10,7 +10,13 @@ from .persistence import (
     flush_session_storage,
     notification_systems_available,
 )
-from .helpers import build_config_dict, get_template_list, get_bits
+from .helpers import (
+    build_config_dict,
+    get_template_list,
+    get_bits,
+    enforce_string_fields,
+    STRING_FIELDS,
+)
 
 
 def add_border_to_ascii_art(art):
@@ -340,6 +346,9 @@ def build_config(header_style="ascii"):
         ("trakt", "120-trakt"),
         ("mal", "130-mal"),
     ]
+
+    # Apply enforce_string_fields to ensure proper formatting
+    config_data = enforce_string_fields(config_data, STRING_FIELDS)
 
     for section_key, section_stem in ordered_sections:
         if section_key in config_data:

@@ -129,19 +129,23 @@ function validateSonarrPage () {
   let isValid = true
   const validationMessages = []
 
-  if (!rootFolderPath) {
-    validationMessages.push('Please select a valid Root Folder Path.')
-    isValid = false
-  }
+  const isValidated = document.getElementById('sonarr_validated').value.toLowerCase() === 'true'
 
-  if (!qualityProfile) {
-    validationMessages.push('Please select a valid Quality Profile.')
-    isValid = false
-  }
+  if (isValidated) {
+    if (!rootFolderPath) {
+      validationMessages.push('Please select a valid Root Folder Path.')
+      isValid = false
+    }
 
-  if (!languageProfile) {
-    validationMessages.push('Please select a valid Language Profile.')
-    isValid = false
+    if (!qualityProfile) {
+      validationMessages.push('Please select a valid Quality Profile.')
+      isValid = false
+    }
+
+    if (!languageProfile) {
+      validationMessages.push('Please select a valid Language Profile.')
+      isValid = false
+    }
   }
 
   if (!isValid) {

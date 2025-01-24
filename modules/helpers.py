@@ -3,6 +3,33 @@ import re
 from flask import current_app as app
 from pathlib import Path
 
+STRING_FIELDS = {
+    "apikey",
+    "token",
+    "username",
+    "password",
+}
+
+
+def enforce_string_fields(data, string_fields):
+    """
+    Ensure specified fields in a dictionary are of type string.
+    """
+    for key, value in data.items():
+        if isinstance(value, dict):
+            # Recursively enforce string fields in nested dictionaries
+            enforce_string_fields(value, string_fields)
+        elif isinstance(value, list):
+            # Process lists and ensure string enforcement within
+            data[key] = [str(item) if key in string_fields else item for item in value]
+        elif key in string_fields:
+            original_type = type(value)
+            data[key] = str(value)
+            # print(
+            #     f"Key '{key}': Original Type: {original_type}, New Type: {type(data[key])}, Value: {repr(data[key])}"
+            # )
+    return data
+
 
 def build_oauth_dict(source, form_data):
     data = {source: {"authorization": {}}}
