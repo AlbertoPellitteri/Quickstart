@@ -76,35 +76,41 @@ function populateDropdown (elementId, data, valueField, textField, selectedValue
 }
 
 // Validate Radarr page fields
-function validateRadarrPage () {
-  const rootFolderPath = document.getElementById('radarr_root_folder_path').value
-  const qualityProfile = document.getElementById('radarr_quality_profile').value
-  const statusMessage = document.getElementById('statusMessage')
-  let isValid = true
-  const validationMessages = []
+function validateRadarrPage() {
+  const isValidated = document.getElementById('radarr_validated').value.toLowerCase();
+  const rootFolderPath = document.getElementById('radarr_root_folder_path').value;
+  const qualityProfile = document.getElementById('radarr_quality_profile').value;
+  const statusMessage = document.getElementById('statusMessage');
+  let isValid = true;
+  const validationMessages = [];
+
+  // Skip validation if Radarr is not validated
+  if (isValidated !== 'true') {
+    return true; // Allow navigation
+  }
 
   // Validate Root Folder Path
   if (!rootFolderPath) {
-    validationMessages.push('Please select a valid Root Folder Path.')
-    isValid = false
+    validationMessages.push('Please select a valid Root Folder Path.');
+    isValid = false;
   }
 
   // Validate Quality Profile
   if (!qualityProfile) {
-    validationMessages.push('Please select a valid Quality Profile.')
-    isValid = false
+    validationMessages.push('Please select a valid Quality Profile.');
+    isValid = false;
   }
 
   // Display validation messages
   if (!isValid) {
-    statusMessage.innerHTML = validationMessages.join('<br>')
-    statusMessage.style.color = '#ea868f' // Warning color
-    statusMessage.style.display = 'block'
+    statusMessage.innerHTML = validationMessages.join('<br>');
+    statusMessage.style.color = '#ea868f'; // Warning color
+    statusMessage.style.display = 'block';
   } else {
-    statusMessage.style.display = 'none'
+    statusMessage.style.display = 'none';
   }
 
-  return isValid
+  return isValid;
 }
 
 function validateRadarrApi () {
