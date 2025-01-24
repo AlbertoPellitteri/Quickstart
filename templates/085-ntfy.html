@@ -58,37 +58,28 @@
     </div>
     <hr class="hr">
     {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
-    {% for webhook in ["error", "run_start", "run_end", "changes", "version", "delete"] %}
     <div class="form-floating">
-      <select class="form-select" id="webhooks_{{ webhook }}" name="webhooks_{{ webhook }}" onchange="showCustomInput(this)">
-        <option value="">None</option>
-        <option value="notifiarr" {% if page_info['notifiarr_available'] %}enabled{% else %}disabled{% endif %} {% if data.webhooks[webhook] == 'notifiarr' %}selected{% endif %}>Notifiarr</option>
-        <option value="gotify" {% if page_info['gotify_available'] %}enabled{% else %}disabled{% endif %} {% if data.webhooks[webhook] == 'gotify' %}selected{% endif %}>Gotify</option>
-        <option value="ntfy" {% if page_info['ntfy_available'] %}enabled{% else %}disabled{% endif %} {% if data.webhooks[webhook] == 'ntfy' %}selected{% endif %}>ntfy</option>
-        <option value="custom" {% if (data and data.webhooks[webhook] and data.webhooks[webhook].startswith('http')) %}selected{% endif %}>Custom</option>
-      </select>
-      <label for="webhooks_{{ webhook }}">{{ webhook|replace("_", " ")|title }} Webhook Details</label>
-      <div class="input-group input-group-lg custom-webhook" id="webhooks_{{ webhook }}_custom" style="display: none;">
-        <div class="input-group input-group-lg">
-          <input type="text" class="form-control custom-webhook-url" placeholder="Enter webhook URL ({{ webhook|replace("_", " ")|title }})"
-            value="{% if (data and data.webhooks[webhook] and data.webhooks[webhook].startswith('http')) %}{{ data.webhooks[webhook] }}{% endif %}"
-            oninput="setWebhookValidated(false, '{{ webhook }}')">
-          <button class="btn btn-success validate-button" type="button" onclick="validateWebhook('{{ webhook }}')">
-            Validate <i id="spinner_{{ webhook }}" class="spinner-border spinner-border-sm" role="status" style="display:none;"></i>
-          </button>
-        </div>
-        <div class="validation-message" id="validation_message_{{ webhook }}" style="display: none; margin-top: 10px;">
-          <div class="alert alert-info" role="alert">
-            Validating...
-          </div>
-        </div>
-      </div>
+      <input type="text" class="form-control" id="ntfy_url" name="ntfy_url" value="{{ data['ntfy']['url'] }}" title="http://192.168.1.12:8181"><label for="ntfy_url">ntfy URL</label>
     </div>
-    {% endfor %}
+    <div class="input-group input-group-lg form-floating">
+      <input type="password" class="form-control" id="ntfy_token" name="ntfy_token" value="{{ data['ntfy']['token'] }}" title="API Key" aria-label="API Key"><label for="ntfy_token">ntfy API Key</label>
+      <button class="btn btn-secondary" id="toggleTokenVisibility" type="button">
+        <i class="fas fa-eye"></i>
+      </button>
+      <button class="btn btn-success" id="validateButton" type="button">
+        Validate <i id="spinner_validate" class="spinner-border spinner-border-sm" style="display:none;"></i>
+      </button>
+    </div>
+    <div class="form-floating">
+      <input type="text" class="form-control" id="ntfy_topic" name="ntfy_topic"
+        value="{{ data['ntfy']['topic'] }}" placeholder="">
+      <label for="ntfy_topic">ntfy Topic</label>
+    </div>
     <div class="form-floating" style="display:none;">
-      <input type="text" class="form-control" id="webhooks_validated" name="webhooks_validated" value="{{ data['validated'] }}" title="">
-      <label for="webhooks_validated">Webhooks Validated</label>
+      <input type="text" class="form-control" id="ntfy_validated" name="ntfy_validated" value="{{ data['validated'] }}" title="">
+      <label for="ntfy_validated">ntfy Validated</label>
     </div>
-    </div>
+    <div id="statusMessage" class="status-message"></div><br>
+  </div>
 </form>
 {% endblock %}

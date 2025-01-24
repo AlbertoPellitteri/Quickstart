@@ -175,5 +175,6 @@ def flush_session_storage(name):
 def notification_systems_available():
     notifiarr_available, notifiarr_user_entered = retrieve_status("notifiarr")
     gotify_available, gotify_user_entered = retrieve_status("gotify")
+    ntfy_available, ntfy_user_entered = retrieve_status("ntfy")
 
-    return notifiarr_available, gotify_available
+    return notifiarr_available, gotify_available, ntfy_available

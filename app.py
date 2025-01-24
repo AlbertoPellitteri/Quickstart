@@ -38,6 +38,7 @@ from modules.validations import (
     validate_mal_server,
     validate_anidb_server,
     validate_gotify_server,
+    validate_ntfy_server,
     validate_webhook_server,
     validate_radarr_server,
     validate_sonarr_server,
@@ -203,9 +204,11 @@ def step(name):
         page_info["sett_valid"],
     ) = check_minimum_settings()
 
-    page_info["notifiarr_available"], page_info["gotify_available"] = (
-        notification_systems_available()
-    )
+    (
+        page_info["notifiarr_available"],
+        page_info["gotify_available"],
+        page_info["ntfy_available"],
+    ) = notification_systems_available()
 
     # This should not be based on name; maybe next being empty
     if name == "900-final":
@@ -271,6 +274,12 @@ def download_redacted():
 def validate_gotify():
     data = request.json
     return validate_gotify_server(data)
+
+
+@app.route("/validate_ntfy", methods=["POST"])
+def validate_ntfy():
+    data = request.json
+    return validate_ntfy_server(data)
 
 
 @app.route("/validate_plex", methods=["POST"])
