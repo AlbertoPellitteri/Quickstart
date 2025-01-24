@@ -121,7 +121,7 @@ function populateDropdown (elementId, data, valueField, textField, selectedValue
   }
 }
 
-function validateSonarrPage() {
+function validateSonarrPage () {
   const rootFolderPath = document.getElementById('sonarr_root_folder_path').value
   const qualityProfile = document.getElementById('sonarr_quality_profile').value
   const languageProfile = document.getElementById('sonarr_language_profile').value

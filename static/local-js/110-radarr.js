@@ -76,7 +76,7 @@ function populateDropdown (elementId, data, valueField, textField, selectedValue
 }
 
 // Validate Radarr page fields
-function validateRadarrPage() {
+function validateRadarrPage () {
   const isValidated = document.getElementById('radarr_validated').value.toLowerCase()
   const rootFolderPath = document.getElementById('radarr_root_folder_path').value
   const qualityProfile = document.getElementById('radarr_quality_profile').value
