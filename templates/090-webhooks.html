@@ -64,6 +64,7 @@
         <option value="">None</option>
         <option value="notifiarr" {% if page_info['notifiarr_available'] %}enabled{% else %}disabled{% endif %} {% if data.webhooks[webhook] == 'notifiarr' %}selected{% endif %}>Notifiarr</option>
         <option value="gotify" {% if page_info['gotify_available'] %}enabled{% else %}disabled{% endif %} {% if data.webhooks[webhook] == 'gotify' %}selected{% endif %}>Gotify</option>
+        <option value="ntfy" {% if page_info['ntfy_available'] %}enabled{% else %}disabled{% endif %} {% if data.webhooks[webhook] == 'ntfy' %}selected{% endif %}>ntfy</option>
         <option value="custom" {% if (data and data.webhooks[webhook] and data.webhooks[webhook].startswith('http')) %}selected{% endif %}>Custom</option>
       </select>
       <label for="webhooks_{{ webhook }}">{{ webhook|replace("_", " ")|title }} Webhook Details</label>
