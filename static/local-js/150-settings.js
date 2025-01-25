@@ -1,185 +1,137 @@
-/* global $, alert */
+/* global */
 
 document.addEventListener('DOMContentLoaded', function () {
-  const saveSyncChangesButton = document.getElementById('saveSyncChangesButton')
-  const saveExcludeChangesButton = document.getElementById('saveExcludeChangesButton')
   const configForm = document.getElementById('configForm')
+  const validationMessages = document.getElementById('validation-messages')
 
   function setSettingsValidated (isValid) {
     const settingsValidatedInput = document.getElementById('settings_validated')
     settingsValidatedInput.value = isValid ? 'true' : 'false'
   }
 
-  function submitFormData () {
-    if (configForm.checkValidity()) {
-      const formData = new FormData(configForm)
-      fetch(configForm.action, {
-        method: 'POST',
-        body: formData
-      })
-        .then((response) => {
-          if (response.ok) {
-            console.log('Settings saved successfully.')
-          } else {
-            console.error('Error saving settings:', response.statusText)
-          }
-        })
-        .catch((error) => {
-          console.error('Error saving settings:', error)
-        })
-    } else {
-      console.warn('Form validation failed. Data not saved.')
+  function showAccordionForField (field) {
+    const accordionItem = field.closest('.accordion-collapse')
+    if (accordionItem && !accordionItem.classList.contains('show')) {
+      const accordionHeader = accordionItem.previousElementSibling.querySelector('button.accordion-button')
+      if (accordionHeader) {
+        accordionHeader.click() // Simulate a click to open the accordion
+      }
     }
   }
 
-  setSettingsValidated(true)
+  function validateField (field, regex, errorMessage) {
+    const value = field.value.trim()
+    const errorDivClass = 'error-message'
+    const successClass = 'is-valid'
 
-  saveSyncChangesButton.addEventListener('click', function () {
-    const selectedUsers = []
-    const checkboxes = document.querySelectorAll('#syncUserListForm input[type="checkbox"]:checked')
-    const allSelected = document.getElementById('sync_all_users').checked
+    // Locate or create the error message element
+    let errorDiv = field.parentNode.querySelector(`.${errorDivClass}`)
+    if (!errorDiv) {
+      errorDiv = document.createElement('div')
+      errorDiv.className = `${errorDivClass} text-danger`
+      field.parentNode.appendChild(errorDiv)
+    }
 
-    if (allSelected) {
-      selectedUsers.push('all')
+    if (!regex.test(value)) {
+      // Invalid: Show error message
+      field.classList.add('is-invalid')
+      field.classList.remove(successClass) // Remove success indicator
+      errorDiv.textContent = errorMessage
+      showAccordionForField(field) // Open accordion containing the invalid field
+      return false
     } else {
-      checkboxes.forEach((checkbox) => {
-        if (checkbox.value !== 'all') {
-          selectedUsers.push(checkbox.value)
+      // Valid: Clear error message and add success indicator
+      field.classList.remove('is-invalid')
+      field.classList.add(successClass)
+      errorDiv.textContent = '' // Clear error message
+      return true
+    }
+  }
+
+  const fieldsToValidate = [
+    {
+      id: 'asset_directory',
+      regex: /^(?:[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*|\\{2}[^\\/:*?"<>|\r\n]+(?:\\[^\\/:*?"<>|\r\n]+)*|(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]+|\/(?:[^/]+\/)*[^/]*|\.{1,2}(?:\/[^/]*)*|(?:[^/]+\/)*[^/]*)$/,
+      errorMessage: 'Please enter a valid asset directory path.'
+    },
+    {
+      id: 'ignore_ids',
+      regex: /^(None|\d{1,8}(,\d{1,8})*)$/,
+      errorMessage: 'Please enter a valid CSV list of numeric IDs (1-8 digits) or "None".'
+    },
+    {
+      id: 'ignore_imdb_ids',
+      regex: /^(None|tt\d{7,8}(,tt\d{7,8})*)$/,
+      errorMessage: 'Please enter a valid CSV list of IMDb IDs (e.g., tt1234567) or "None".'
+    },
+    {
+      id: 'custom_repo',
+      regex: /^(None|https?:\/\/[\da-z.-]+\.[a-z.]{2,6}([/\w.-]*)*\/?)$/,
+      errorMessage: 'Please enter a valid URL or "None".'
+    }
+  ]
+
+  function updateValidationMessages (isValid) {
+    if (isValid) {
+      validationMessages.style.display = 'block'
+      validationMessages.classList.remove('alert-danger')
+      validationMessages.classList.add('alert-success')
+      validationMessages.textContent = 'All fields are valid!'
+    } else {
+      validationMessages.style.display = 'block'
+      validationMessages.classList.remove('alert-success')
+      validationMessages.classList.add('alert-danger')
+      validationMessages.textContent = 'Please fix the highlighted errors before submitting.'
+    }
+  }
+
+  function validateForm () {
+    let isFormValid = true
+
+    fieldsToValidate.forEach(({ id, regex, errorMessage }) => {
+      const field = document.getElementById(id)
+      if (field) {
+        const isValid = validateField(field, regex, errorMessage)
+        if (!isValid) {
+          isFormValid = false
         }
-      })
-    }
-
-    const csvUsers = selectedUsers.join(', ')
-    document.getElementById('playlist_sync_to_users').value = csvUsers
-    $('#syncUsersModal').modal('hide')
-    setSettingsValidated(true)
-  })
-
-  saveExcludeChangesButton.addEventListener('click', function () {
-    const selectedUsers = []
-    const checkboxes = document.querySelectorAll('#excludeUserListForm input[type="checkbox"]:checked')
-
-    checkboxes.forEach((checkbox) => {
-      selectedUsers.push(checkbox.value)
-    })
-
-    const csvUsers = selectedUsers.join(', ')
-    document.getElementById('playlist_exclude_users').value = csvUsers
-    $('#excludeUsersModal').modal('hide')
-    setSettingsValidated(true)
-  })
-
-  const syncAllUsersCheckbox = document.getElementById('sync_all_users')
-  syncAllUsersCheckbox.addEventListener('change', function () {
-    if (this.checked) {
-      const checkboxes = document.querySelectorAll('#syncUserListForm input[type="checkbox"]:not(#sync_all_users)')
-      checkboxes.forEach((checkbox) => {
-        checkbox.checked = false
-      })
-    }
-    setSettingsValidated(true)
-  })
-
-  const syncUserCheckboxes = document.querySelectorAll('#syncUserListForm input[type="checkbox"]:not(#sync_all_users)')
-  syncUserCheckboxes.forEach((checkbox) => {
-    checkbox.addEventListener('change', function () {
-      if (this.checked) {
-        syncAllUsersCheckbox.checked = false
       }
-      setSettingsValidated(true)
     })
-  })
+
+    updateValidationMessages(isFormValid)
+    return isFormValid
+  }
 
   document.querySelectorAll('input, select, textarea').forEach((element) => {
-    element.addEventListener('change', function () {
-      setSettingsValidated(true)
-    })
-  })
-
-  document.querySelectorAll('button[onclick], .dropdown-menu a').forEach((element) => {
-    element.addEventListener('click', function () {
-      submitFormData()
-    })
-  })
-})
-
-$(document).ready(function () {
-  const isValidated = document.getElementById('settings_validated').value.toLowerCase()
-  console.log('Validated: ' + isValidated)
-})
-
-function validatePath (input) {
-  const pathRegex = /^(?:[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*|\\{2}[^\\/:*?"<>|\r\n]+(?:\\[^\\/:*?"<>|\r\n]+)*|(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]+|\/(?:[^\/]+\/)*[^\/]*|\.{1,2}(?:\/[^\/]*)*|(?:[^\/]+\/)*[^\/]*)$/ // eslint-disable-line
-  return pathRegex.test(input)
-}
-
-function validateCSVList (input) {
-  if (!input) {
-    return true
-  }
-  const csvRegex = /^(\s*[a-zA-Z0-9-_.]+\s*)(,\s*[a-zA-Z0-9-_.]+\s*)*$/
-  return csvRegex.test(input)
-}
-
-/* eslint-disable no-unused-vars */
-function validateNumericCSV (input) {
-  if (!input || input.toLowerCase() === 'none') {
-    return true
-  }
-  const numericCSVRegex = /^(\s*\d+\s*)(,\s*\d+\s*)*$/
-  return numericCSVRegex.test(input)
-}
-
-function validateIMDBCSV (input) {
-  if (!input || input.toLowerCase() === 'none') {
-    return true
-  }
-  const imdbCSVRegex = /^(\s*tt\d{7,}\s*)(,\s*tt\d{7,}\s*)*$/
-  return imdbCSVRegex.test(input)
-}
-
-function validateURL (input) {
-  if (!input || input.toLowerCase() === 'none') {
-    return true
-  }
-  const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
-  return urlRegex.test(input)
-}
-
-function validateForm () {
-  const assetDirectoryInput = document.getElementById('asset_directory').value.trim()
-
-  if (!assetDirectoryInput || assetDirectoryInput.toLowerCase() === 'none' || !validatePath(assetDirectoryInput)) {
-    alert('Please enter a valid asset directory path.')
-    return false
-  }
-
-  const csvFields = ['playlist_sync_to_users', 'playlist_exclude_users']
-  for (const fieldId of csvFields) {
-    const fieldValue = document.getElementById(fieldId).value.trim()
-    if (!validateCSVList(fieldValue)) {
-      alert(`Please enter a valid CSV list for ${fieldId.replace('_', ' ')}.`)
-      return false
+    const fieldToValidate = fieldsToValidate.find((field) => field.id === element.id)
+    if (fieldToValidate) {
+      // Add real-time validation
+      element.addEventListener('input', function () {
+        const isValid = validateField(this, fieldToValidate.regex, fieldToValidate.errorMessage)
+        updateValidationMessages(isValid && validateForm())
+      })
     }
-  }
+  })
 
-  const ignoreIds = document.getElementById('ignore_ids').value.trim()
-  if (ignoreIds && ignoreIds.toLower !== 'none' && !validateNumericCSV(ignoreIds)) {
-    alert('Please enter a valid CSV list of numeric IDs for ignore_ids.')
-    return false
-  }
+  // Validate form before submission
+  configForm.addEventListener('submit', function (event) {
+    if (!validateForm()) {
+      event.preventDefault() // Prevent form submission if validation fails
+      setSettingsValidated(false)
+    } else {
+      setSettingsValidated(true)
+    }
+  })
 
-  const ignoreImdbIds = document.getElementById('ignore_imdb_ids').value.trim()
-  if (ignoreImdbIds && ignoreImdbIds.toLower !== 'none' && !validateIMDBCSV(ignoreImdbIds)) {
-    alert('Please enter a valid CSV list of IMDb IDs for ignore_imdb_ids (starting with tt followed by at least 7 digits).')
-    return false
-  }
-
-  const customRepo = document.getElementById('custom_repo').value.trim()
-  if (customRepo && customRepo.toLower !== 'none' && !validateURL(customRepo)) {
-    alert('Please enter a valid URL for custom_repo.')
-    return false
-  }
-
-  return true
-}
+  // Validate form before navigation (Next, Previous, JumpTo)
+  document.querySelectorAll('.next-button, .previous-button, .jump-to-button').forEach((button) => {
+    button.addEventListener('click', function (event) {
+      if (!validateForm()) {
+        event.preventDefault() // Prevent navigation
+        setSettingsValidated(false)
+      } else {
+        setSettingsValidated(true)
+      }
+    })
+  })
+})
