@@ -58,11 +58,14 @@
     </div>
     <hr class="hr">
     {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
+    <center>
+      <img src="{{ url_for('static', filename='images/logo.webp') }}"
+      alt="Quickstart"
+      style="width: 300px; height: auto;" />
+    </center>
+    <br>
     <div class="form-text" id="pin-info">
-      <center>
-        <img src="{{ url_for('static', filename='images/wizard.webp') }}" alt="Header Image" class="header-image" />
-      </center>
-      <p class="fs-5">This wizard will step you through creating a config file for Kometa.</p>
+      <p class="fs-5">This Quickstart will step you through creating a config file for Kometa.</p>
       <p class="fs-5">Minimally, you will need information about your media server (URL and Token) and your TMDb information (API Key) before downloading the final config.yml file.</p>
       <p class="fs-5">Once you have gathered that stuff, click the next "Arrow" above.</p>
     </div>
