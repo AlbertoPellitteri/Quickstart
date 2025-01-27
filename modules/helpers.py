@@ -55,19 +55,29 @@ def build_oauth_dict(source, form_data):
 def build_simple_dict(source, form_data):
     data = {source: {}}
     for key in form_data:
-        final_key = key.replace(source + "_", "", 1)
+        final_key = key.replace(
+            source + "_", "", 1
+        )  # Retain the original key transformation logic
         value = form_data[key]
 
-        if value is not None and not isinstance(value, bool):
-            try:
-                value = int(value)
-            except ValueError:
-                value = value
-
-        if final_key == "validated":
-            data[final_key] = value
+        # Handle lists explicitly (e.g., asset_directory)
+        if isinstance(value, list):
+            data[source][final_key] = value  # Retain lists as-is
         else:
-            data[source][final_key] = value
+            # Handle individual values
+            if value is not None and not isinstance(value, bool):
+                try:
+                    value = int(value)  # Convert numbers to integers
+                except ValueError:
+                    value = (
+                        value.strip() if isinstance(value, str) else value
+                    )  # Clean strings
+
+            # Assign the value to the appropriate place
+            if final_key == "validated":
+                data[final_key] = value
+            else:
+                data[source][final_key] = value
 
     # Special handling for run_order to split and clean it into a list
     if "run_order" in data[source]:

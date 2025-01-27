@@ -15,9 +15,20 @@
           <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="asset_directory" name="asset_directory"
-                  placeholder="" value="{{ data['settings']['asset_directory'] }}">
-                <label for="asset_directory">Asset Directory</label>
+                <div id="asset_directory_container">
+                  <label>Asset Directory</label>
+                  {% for directory in data['settings']['asset_directory'] %}
+                  <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="asset_directory" id="asset_directory_{{ loop.index }}" placeholder="Add asset Directory" value="{{ directory }}">
+                    <button class="btn btn-danger remove-asset-directory" type="button">Remove</button>
+                  </div>
+                  {% endfor %}
+                  <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="asset_directory" placeholder="Add asset Directory">
+                    <button class="btn btn-danger remove-asset-directory" type="button">Remove</button>
+                  </div>
+                </div>
+                <button class="btn btn-primary" id="add-asset-directory" type="button">Add Directory</button>
               </div>
 
               <div class="form-check form-switch">

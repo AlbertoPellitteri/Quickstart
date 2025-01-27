@@ -1,8 +1,46 @@
-/* global */
+/* global $ */
 
 document.addEventListener('DOMContentLoaded', function () {
+  const saveSyncChangesButton = document.getElementById('saveSyncChangesButton')
+  const saveExcludeChangesButton = document.getElementById('saveExcludeChangesButton')
   const configForm = document.getElementById('configForm')
   const validationMessages = document.getElementById('validation-messages')
+
+  saveSyncChangesButton.addEventListener('click', function () {
+    const selectedUsers = []
+    const checkboxes = document.querySelectorAll('#syncUserListForm input[type="checkbox"]:checked')
+
+    const allSelected = document.getElementById('sync_all_users').checked
+
+    if (allSelected) {
+      selectedUsers.push('all')
+    } else {
+      checkboxes.forEach((checkbox) => {
+        if (checkbox.value !== 'all') {
+          selectedUsers.push(checkbox.value)
+        }
+      })
+    }
+
+    const csvUsers = selectedUsers.join(', ')
+    document.getElementById('playlist_sync_to_users').value = csvUsers
+    $('#syncUsersModal').modal('hide')
+    setSettingsValidated(false)
+  })
+
+  saveExcludeChangesButton.addEventListener('click', function () {
+    const selectedUsers = []
+    const checkboxes = document.querySelectorAll('#excludeUserListForm input[type="checkbox"]:checked')
+
+    checkboxes.forEach((checkbox) => {
+      selectedUsers.push(checkbox.value)
+    })
+
+    const csvUsers = selectedUsers.join(', ')
+    document.getElementById('playlist_exclude_users').value = csvUsers
+    $('#excludeUsersModal').modal('hide')
+    setSettingsValidated(false)
+  })
 
   function setSettingsValidated (isValid) {
     const settingsValidatedInput = document.getElementById('settings_validated')
@@ -21,10 +59,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function validateField (field, regex, errorMessage) {
     const value = field.value.trim()
+    console.log(`Validating field: ${field.name}, Value: "${value}"`) // Debug log
+
     const errorDivClass = 'error-message'
     const successClass = 'is-valid'
 
-    // Locate or create the error message element
     let errorDiv = field.parentNode.querySelector(`.${errorDivClass}`)
     if (!errorDiv) {
       errorDiv = document.createElement('div')
@@ -33,17 +72,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (!regex.test(value)) {
-      // Invalid: Show error message
+      console.log(`Validation failed for: ${field.name}`) // Debug log
       field.classList.add('is-invalid')
-      field.classList.remove(successClass) // Remove success indicator
+      field.classList.remove(successClass)
       errorDiv.textContent = errorMessage
-      showAccordionForField(field) // Open accordion containing the invalid field
+      showAccordionForField(field)
       return false
     } else {
-      // Valid: Clear error message and add success indicator
+      console.log(`Validation passed for: ${field.name}`) // Debug log
       field.classList.remove('is-invalid')
       field.classList.add(successClass)
-      errorDiv.textContent = '' // Clear error message
+      errorDiv.textContent = ''
       return true
     }
   }
@@ -89,18 +128,34 @@ document.addEventListener('DOMContentLoaded', function () {
     let isFormValid = true
 
     fieldsToValidate.forEach(({ id, regex, errorMessage }) => {
-      const field = document.getElementById(id)
-      if (field) {
-        const isValid = validateField(field, regex, errorMessage)
-        if (!isValid) {
-          isFormValid = false
+      // Handle dynamically generated asset_directory inputs
+      const fields = id === 'asset_directory'
+        ? document.querySelectorAll('input[name="asset_directory"]')
+        : [document.getElementById(id)]
+
+      fields.forEach((field) => {
+        if (field) {
+          const isValid = validateField(field, regex, errorMessage)
+          if (!isValid) {
+            isFormValid = false
+          }
         }
-      }
+      })
     })
 
     updateValidationMessages(isFormValid)
     return isFormValid
   }
+
+  document.querySelectorAll('input[name="asset_directory"]').forEach((input) => {
+    const fieldToValidate = fieldsToValidate.find(field => field.id === 'asset_directory')
+    if (fieldToValidate) {
+      input.addEventListener('input', function () {
+        validateField(input, fieldToValidate.regex, fieldToValidate.errorMessage)
+        validateForm() // Recheck the entire form
+      })
+    }
+  })
 
   document.querySelectorAll('input, select, textarea').forEach((element) => {
     const fieldToValidate = fieldsToValidate.find((field) => field.id === element.id)
@@ -110,6 +165,39 @@ document.addEventListener('DOMContentLoaded', function () {
         const isValid = validateField(this, fieldToValidate.regex, fieldToValidate.errorMessage)
         updateValidationMessages(isValid && validateForm())
       })
+    }
+  })
+
+  const assetDirectoryContainer = document.getElementById('asset_directory_container')
+  const addAssetDirectoryButton = document.getElementById('add-asset-directory')
+
+  // Add new asset directory input field
+  addAssetDirectoryButton.addEventListener('click', () => {
+    const newFieldGroup = document.createElement('div')
+    newFieldGroup.className = 'input-group mb-2'
+
+    newFieldGroup.innerHTML = `
+        <input type="text" class="form-control" name="asset_directory" placeholder="Add asset directory">
+        <button class="btn btn-danger remove-asset-directory" type="button">Remove</button>
+    `
+    assetDirectoryContainer.appendChild(newFieldGroup)
+
+    // Attach validation to the new field
+    const newField = newFieldGroup.querySelector('input[name="asset_directory"]')
+    const fieldToValidate = fieldsToValidate.find(field => field.id === 'asset_directory')
+    if (fieldToValidate) {
+      newField.addEventListener('input', function () {
+        validateField(newField, fieldToValidate.regex, fieldToValidate.errorMessage)
+        validateForm() // Recheck the form
+      })
+    }
+  })
+
+  // Remove an asset directory input field
+  assetDirectoryContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('remove-asset-directory')) {
+      const fieldGroup = event.target.closest('.input-group')
+      assetDirectoryContainer.removeChild(fieldGroup)
     }
   })
 
