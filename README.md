@@ -2,7 +2,7 @@
 
 ![image](./static/images/header.png)
 
-![image](./static/images/wizard.webp)
+![image](./static/images/logo.webp)
 
 Welcome to the Kometa Quickstart Wizard. Here are some steps to getting started.
 
