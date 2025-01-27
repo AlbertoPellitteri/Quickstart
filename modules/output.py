@@ -284,8 +284,8 @@ def build_config(header_style="ascii"):
         import ruamel.yaml
 
         yaml = ruamel.yaml.YAML()
-        yaml.default_flow_style = False
-        yaml.sort_keys = False
+        yaml.default_flow_style = False  # Use block-style formatting
+        yaml.sort_keys = False  # Preserve original key order
 
         # Custom representation for `None` values
         yaml.representer.add_representer(
@@ -314,7 +314,9 @@ def build_config(header_style="ascii"):
                     "trakt",
                     "mal",
                 ]:
-                    obj = dict(sorted(obj.items()))  # Alphabetically sort `settings`
+                    obj = dict(
+                        sorted(obj.items())
+                    )  # Alphabetically sort keys in the section
                 return {k: clean_data(v) for k, v in obj.items() if k != "valid"}
             elif isinstance(obj, list):
                 return [clean_data(v) for v in obj]
@@ -323,6 +325,22 @@ def build_config(header_style="ascii"):
 
         # Clean the data
         cleaned_data = clean_data(data)
+
+        # Ensure `asset_directory` is serialized as a proper YAML list
+        if name == "settings" and "asset_directory" in cleaned_data.get("settings", {}):
+            if isinstance(cleaned_data["settings"]["asset_directory"], str):
+                # Convert multi-line string into a list
+                cleaned_data["settings"]["asset_directory"] = [
+                    line.strip()
+                    for line in cleaned_data["settings"]["asset_directory"].splitlines()
+                    if line.strip()
+                ]
+            elif isinstance(cleaned_data["settings"]["asset_directory"], list):
+                # Ensure all list items are strings
+                cleaned_data["settings"]["asset_directory"] = [
+                    str(item).strip()
+                    for item in cleaned_data["settings"]["asset_directory"]
+                ]
 
         # Dump the cleaned data to YAML
         with io.StringIO() as stream:

@@ -29,55 +29,78 @@ def extract_names(raw_source):
 
 def clean_form_data(form_data):
     clean_data = {}
-
-    for key in form_data:
-        value = form_data[key]
-        lc_value = value.lower() if isinstance(value, str) else None
-        if len(value) == 0 or lc_value == "none":
-            clean_data[key] = None
-        elif lc_value == "true" or lc_value == "on":
-            clean_data[key] = True
-        elif lc_value == "false":
-            clean_data[key] = False
+    for key, value in form_data.items():
+        # Ensure asset_directory is processed as a list
+        if key == "asset_directory":
+            # Retrieve all values as a list
+            value_list = form_data.getlist(key)
+            # Clean each value in the list
+            clean_data[key] = [v.strip() for v in value_list if v.strip()]
+        elif isinstance(value, str):
+            lc_value = value.lower()
+            if len(value) == 0 or lc_value == "none":
+                clean_data[key] = None
+            elif lc_value in ["true", "on"]:
+                clean_data[key] = True
+            elif lc_value == "false":
+                clean_data[key] = False
+            else:
+                clean_data[key] = value.strip()
         else:
             clean_data[key] = value
-
     return clean_data
 
 
 def save_settings(raw_source, form_data):
-    # get source from referrer
+    # Extract the source and source_name
     source, source_name = extract_names(raw_source)
-    # source will be `010-plex`
-    # source_name will be `plex`
+    # Log raw form data
+    print(f"[DEBUG] Raw form data received: {form_data}")
 
-    # grab new config name if they entered one:
-    if "config_name" in form_data:
-        session["config_name"] = form_data["config_name"]
-        print(f"received config name in form: {session['config_name']}")
+    # Handle asset_directory specifically
+    if "asset_directory" in form_data:
+        # Use getlist to retrieve all values for asset_directory
+        asset_directories = form_data.getlist("asset_directory")
+        print(f"[DEBUG] All asset_directory values from form: {asset_directories}")
 
+    # Clean the data
     clean_data = clean_form_data(form_data)
 
-    if len(source) > 0:
-        data = build_config_dict(source_name, clean_data)
+    # Debug specific fields for Plex
+    for field in ["plex_url", "plex_token"]:
+        print(f"[DEBUG] Cleaned value for {field}: {clean_data.get(field)}")
 
-        base_data = get_dummy_data(source_name)
+    # Log the cleaned asset_directory
+    if "asset_directory" in clean_data:
+        print(f"[DEBUG] Cleaned asset_directory: {clean_data['asset_directory']}")
 
-        user_entered = data != base_data
+    # Build the dictionary to save
+    data = build_config_dict(source_name, clean_data)
 
-        validated = data["validated"] if "validated" in data else False
+    # Debug final data to be saved
+    print(f"[DEBUG] Final data structure to save: {data}")
 
-        print(f"saving under config_name: {session['config_name']}")
-
-        save_section_data(
-            name=session["config_name"],
-            section=source_name,
-            validated=validated,
-            user_entered=user_entered,
-            data=data,
+    # Log the final data structure for asset_directory
+    if source_name == "settings" and "asset_directory" in data.get("settings", {}):
+        print(
+            f"[DEBUG] Final asset_directory structure to save: {data['settings']['asset_directory']}"
         )
 
-        print(f"data saved for {source}")
+    # Proceed with saving
+    base_data = get_dummy_data(source_name)
+    user_entered = data != base_data
+    validated = data.get("validated", False)
+
+    save_section_data(
+        name=session["config_name"],
+        section=source_name,
+        validated=validated,
+        user_entered=user_entered,
+        data=data,
+    )
+
+    # Confirm successful save
+    print(f"[DEBUG] Data saved successfully.")
 
 
 def retrieve_settings(target):
