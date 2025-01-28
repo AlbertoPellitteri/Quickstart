@@ -1,4 +1,4 @@
-/* global bootstrap, $, alert */
+/* global bootstrap, $ */
 
 // Event listener for clearing session data
 document.addEventListener('DOMContentLoaded', function () {
@@ -72,14 +72,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /* eslint-disable no-unused-vars, camelcase */
 function validate_name (select) {
-  let text = select.value.trim()
-  text = text.toLowerCase().replace(/[^a-z0-9_]/g, '')
+  let text = select.value
 
-  if (text.length < 3 || text.length > 20) {
-    alert('Config name must be between 3 and 20 characters.')
-    select.value = '' // Reset invalid input
-  } else {
-    select.value = text
-  }
+  text = text.toLowerCase()
+  text = text.replace(/[^a-z0-9_]/g, '')
+
+  select.value = text
 }
 /* eslint-enable no-unused-vars, camelcase */
