@@ -57,6 +57,11 @@ def save_settings(raw_source, form_data):
     # Log raw form data
     print(f"[DEBUG] Raw form data received: {form_data}")
 
+    # grab new config name if they entered one:
+    if "config_name" in form_data:
+        session["config_name"] = form_data["config_name"]
+        print(f"[DEBUG] Received config name in form: {session['config_name']}")
+
     # Handle asset_directory specifically
     if "asset_directory" in form_data:
         # Use getlist to retrieve all values for asset_directory
