@@ -123,12 +123,18 @@ def clear_session():
 
         if config_name != session["config_name"]:
             session["config_name"] = config_name
-    except:
-        config_name = session["config_name"]
+    except KeyError:  # Handle missing `name` key safely
+        config_name = session.get("config_name")
 
     flush_session_storage(config_name)
-    flash("Session storage cleared successfully.", "success")
-    return redirect(url_for("start"))
+
+    # Send message to toast
+    return jsonify(
+        {
+            "status": "success",
+            "message": f"Session storage cleared for '{config_name}'.",
+        }
+    )
 
 
 @app.route("/clear_data/<name>/<section>")
