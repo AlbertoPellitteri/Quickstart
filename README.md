@@ -1,10 +1,12 @@
-### WIP, not fully functional
+### WIP - Not Fully Functional
 
 ![image](./static/images/header.png)
 
-![image](./static/images/wizard.webp)
+![image](./static/images/logo.webp)
 
-Welcome to the Kometa Quickstart Wizard. Here are some steps to getting started.
+Welcome to the Kometa Quickstart. Let's get started.
+
+** We recommend you run this yourself and not from someone else hosting quickstart as it will make connection attempts to services and machines available to you and only you. Additionally, the credentials used are stored locally and you would not want to store your information on someone else's machine.**
 
 After having cloned the repo and assuming you are on Windows and you have a folder on your machine called `pyprogs` where you cloned Quickstart, open a powershell prompt into the `pyprogs` folder and then:
 
