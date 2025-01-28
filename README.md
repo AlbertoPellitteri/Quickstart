@@ -4,7 +4,7 @@
 
 ![image](./static/images/logo.webp)
 
-Welcome to the Kometa Quickstart. Let's get started.
+Welcome to Kometa Quickstart. Let's get started.
 
 > **We strongly recommend running this yourself rather than relying on someone else to host Quickstart.**
 >
