@@ -16,16 +16,16 @@ document.addEventListener('DOMContentLoaded', function () {
       const configName = configNameInput.value.trim()
 
       // Update modal message dynamically
-      modalBody.textContent = `Are you sure you want to clear the session data for "${configName}"? This action cannot be undone.`
+      modalBody.textContent = `Are you sure you want to reset the configuration for "${configName}"? This action will delete any saved data for "${configName}" and cannot be undone.`
       modal.show()
 
       // Add confirm action to the modal button
       modalConfirmButton.onclick = function () {
         $.post('/clear_session', { name: configName }, function (data) {
           // Handle success or failure (if necessary)
-          console.log('Session cleared for:', configName)
+          console.log('Config cleared for:', configName)
         }).fail(function (error) {
-          console.error('Error clearing session:', error)
+          console.error('Error clearing config:', error)
         })
 
         // Hide modal after submission

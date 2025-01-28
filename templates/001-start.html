@@ -66,6 +66,9 @@
     <br>
     <div class="form-text" id="pin-info">
       <p class="fs-5">Quickstart is a Web UI that will guide you through creating a Configuration File for Kometa.</p>
+      <div class="alert alert-danger" role="alert">
+        <strong>Important Notice:</strong> Quickstart is designed to be run by you, on your own machine, to ensure your data and credentials remain secure. All information entered, including credentials, is stored locally on your device, and Quickstart only communicates with third-party services to verify credentials. Kometa does not collect or share any data. We strongly advise against using a version of Quickstart hosted by someone else. For the official repository, visit <a href="https://github.com/Kometa-Team/Quickstart" target="_blank">Quickstart on GitHub</a>.
+      </div>
       <p class="fs-5">Minimally, you will need information about your media server (URL and Token) and your TMDb information (API Key) before downloading the final config.yml file.</p>
       <p class="fs-5">Once you have gathered that stuff, click the next "Arrow" above.</p>
     </div>
@@ -83,7 +86,7 @@
   <form>
     <div class="d-grid gap-2">
       <a href="#" id="reset">
-        <button class="btn btn-danger" type="submit" id="clearSessionButton">Clear Session Data</button>
+        <button class="btn btn-danger" type="submit" id="clearSessionButton">Reset and Start Over</button>
       </a>
     </div>
   </form>
@@ -93,7 +96,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-danger" id="confirmationModalLabel">Confirm Clear Session</h5>
+        <h5 class="modal-title text-danger" id="confirmationModalLabel">Confirm</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="confirmationModalBody">
@@ -101,7 +104,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" id="confirmClearSession">Clear Session</button>
+        <button type="button" class="btn btn-danger" id="confirmClearSession">Yes, Reset</button>
       </div>
     </div>
   </div>
