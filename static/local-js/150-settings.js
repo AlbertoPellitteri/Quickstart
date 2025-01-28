@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
   saveSyncChangesButton.addEventListener('click', function () {
     const selectedUsers = []
     const checkboxes = document.querySelectorAll('#syncUserListForm input[type="checkbox"]:checked')
-
     const allSelected = document.getElementById('sync_all_users').checked
 
     if (allSelected) {
@@ -24,10 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const csvUsers = selectedUsers.join(', ')
     document.getElementById('playlist_sync_to_users').value = csvUsers
+
+    // Close the modal using Bootstrap 4 jQuery method
+    console.log($('#syncUsersModal').data('bs.modal'))
     $('#syncUsersModal').modal('hide')
+
+    // Mark settings as invalid until re-validated
     setSettingsValidated(false)
   })
-
   saveExcludeChangesButton.addEventListener('click', function () {
     const selectedUsers = []
     const checkboxes = document.querySelectorAll('#excludeUserListForm input[type="checkbox"]:checked')
@@ -177,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
     newFieldGroup.className = 'input-group mb-2'
 
     newFieldGroup.innerHTML = `
-        <input type="text" class="form-control" name="asset_directory" placeholder="Add asset directory">
+        <input type="text" class="form-control" name="asset_directory" placeholder="Add Asset Directory">
         <button class="btn btn-danger remove-asset-directory" type="button">Remove</button>
     `
     assetDirectoryContainer.appendChild(newFieldGroup)

@@ -19,12 +19,12 @@
                   <label>Asset Directory</label>
                   {% for directory in data['settings']['asset_directory'] %}
                   <div class="input-group mb-2">
-                    <input type="text" class="form-control" name="asset_directory" id="asset_directory_{{ loop.index }}" placeholder="Add asset Directory" value="{{ directory }}">
+                    <input type="text" class="form-control" name="asset_directory" id="asset_directory_{{ loop.index }}" placeholder="Add Asset Directory" value="{{ directory }}">
                     <button class="btn btn-danger remove-asset-directory" type="button">Remove</button>
                   </div>
                   {% endfor %}
                   <div class="input-group mb-2">
-                    <input type="text" class="form-control" name="asset_directory" placeholder="Add asset Directory">
+                    <input type="text" class="form-control" name="asset_directory" placeholder="Add Asset Directory">
                     <button class="btn btn-danger remove-asset-directory" type="button">Remove</button>
                   </div>
                 </div>
@@ -279,7 +279,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="saveSyncChangesButton">Save changes</button>
+                      <button type="button" class="btn btn-primary" id="saveSyncChangesButton">Apply</button>
                     </div>
                   </div>
                 </div>
@@ -312,7 +312,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="saveExcludeChangesButton">Save changes</button>
+                      <button type="button" class="btn btn-primary" id="saveExcludeChangesButton">Apply</button>
                     </div>
                   </div>
                 </div>

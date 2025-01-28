@@ -7,7 +7,7 @@
       "request": "launch",
       "module": "flask",
       "env": {
-        "FLASK_APP": "app.py",
+        "FLASK_APP": "quickstart.py",
         "FLASK_DEBUG": "1"
       },
       "args": [
