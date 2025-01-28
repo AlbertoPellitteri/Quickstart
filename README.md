@@ -4,7 +4,7 @@
 
 ![image](./static/images/wizard.webp)
 
-Welcome to Kometa Quickstart. Here are some steps to getting started.
+Welcome to Kometa Quickstart. Here are some steps to get started.
 
 After having cloned the repo and assuming you are on Windows and you have a folder on your machine called `pyprogs` where you cloned Quickstart, open a powershell prompt into the `pyprogs` folder and then:
 
