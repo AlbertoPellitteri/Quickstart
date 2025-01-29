@@ -46,9 +46,10 @@
               </div>
 
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="asset_depth" name="asset_depth" placeholder="0" min="0"
+                <input type="number" class="form-control" id="asset_depth" name="asset_depth" placeholder="" min="0"
                   value="{{ data['settings']['asset_depth'] }}">
                 <label for="asset_depth">Asset Depth</label>
+                <div class="error-message text-danger"></div>
               </div>
 
               <div class="form-check form-switch">
@@ -117,9 +118,10 @@
               </div>
 
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="overlay_artwork_quality" name="overlay_artwork_quality"
-                  placeholder="75" min="1" max="100" value="{{ data['settings']['overlay_artwork_quality'] }}">
+                <input type="number" class="form-control" id="overlay_artwork_quality" name="overlay_artwork_quality" min="1" max="100"
+                  placeholder="" value="{{ data['settings']['overlay_artwork_quality'] }}">
                 <label for="overlay_artwork_quality">Overlay Artwork Quality</label>
+                <div class="error-message text-danger"></div>
               </div>
             </div>
           </div>
@@ -140,9 +142,10 @@
                 <label class="form-check-label" for="cache">Cache</label>
               </div>
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="cache_expiration" name="cache_expiration" placeholder="60"
-                  min="1" value="{{ data['settings']['cache_expiration'] }}">
+                <input type="number" class="form-control" id="cache_expiration" name="cache_expiration" placeholder="" min="1"
+                  value="{{ data['settings']['cache_expiration'] }}">
                 <label for="cache_expiration">Cache Expiration (days)</label>
+                <div class="error-message text-danger"></div>
               </div>
             </div>
           </div>
@@ -207,15 +210,17 @@
               </div>
 
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="item_refresh_delay" name="item_refresh_delay"
-                  placeholder="0" min="0" value="{{ data['settings']['item_refresh_delay'] }}">
+                <input type="number" class="form-control" id="item_refresh_delay" name="item_refresh_delay" min="0"
+                  placeholder="" value="{{ data['settings']['item_refresh_delay'] }}">
                 <label for="item_refresh_delay">Item Refresh Delay (seconds)</label>
+                <div class="error-message text-danger"></div>
               </div>
 
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="minimum_items" name="minimum_items" placeholder="1"
-                  min="1" value="{{ data['settings']['minimum_items'] }}">
+                <input type="number" class="form-control" id="minimum_items" name="minimum_items" placeholder="" min="1"
+                  value="{{ data['settings']['minimum_items'] }}">
                 <label for="minimum_items">Minimum Items</label>
+                <div class="error-message text-danger"></div>
               </div>
 
               <div class="form-check form-switch">
@@ -243,6 +248,7 @@
                 <input type="number" class="form-control" id="run_again_delay" name="run_again_delay" min="0"
                   value="{{ data['settings']['run_again_delay'] }}">
                 <label for="run_again_delay">Run Again Delay (minutes)</label>
+                <div class="error-message text-danger"></div>
               </div>
 
               <!-- Button to open the modal for playlist_sync_to_users -->

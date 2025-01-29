@@ -97,6 +97,36 @@ document.addEventListener('DOMContentLoaded', function () {
       errorMessage: 'Please enter a valid asset directory path.'
     },
     {
+      id: 'asset_depth',
+      regex: /^(0|[1-9]\d*)$/,
+      errorMessage: 'Please enter a valid integer (0 or greater).'
+    },
+    {
+      id: 'overlay_artwork_quality',
+      regex: /^(100|[1-9][0-9]?)$/,
+      errorMessage: 'Please enter an integer between 1 and 100.'
+    },
+    {
+      id: 'cache_expiration',
+      regex: /^[1-9]\d*$/,
+      errorMessage: 'Please enter a valid integer greater than 0.'
+    },
+    {
+      id: 'item_refresh_delay',
+      regex: /^(0|[1-9]\d*)$/,
+      errorMessage: 'Please enter a valid integer (0 or greater).'
+    },
+    {
+      id: 'minimum_items',
+      regex: /^[1-9]\d*$/,
+      errorMessage: 'Please enter a valid integer greater than 0.'
+    },
+    {
+      id: 'run_again_delay',
+      regex: /^(0|[1-9]\d*)$/,
+      errorMessage: 'Please enter a valid integer (0 or greater).'
+    },
+    {
       id: 'ignore_ids',
       regex: /^(None|\d{1,8}(,\d{1,8})*)$/,
       errorMessage: 'Please enter a valid CSV list of numeric IDs (1-8 digits) or "None".'
