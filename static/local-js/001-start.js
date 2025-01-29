@@ -3,21 +3,29 @@
 // Event listener for clearing session data
 document.addEventListener('DOMContentLoaded', function () {
   const clearSessionButton = document.getElementById('clearSessionButton')
-  const configNameInput = document.getElementById('config_name')
+  const configSelector = document.getElementById('configSelector') // Dropdown replacing config_name
+  const newConfigInput = document.getElementById('newConfigName') // Input when "Add Config" is selected
 
   // Get references to modal and its elements
   const modal = new bootstrap.Modal(document.getElementById('confirmationModal'))
   const modalBody = document.getElementById('confirmationModalBody')
   const modalConfirmButton = document.getElementById('confirmClearSession')
 
-  // Get references to toast elements
-  const successToastElement = document.getElementById('successToast')
-  const errorToastElement = document.getElementById('errorToast')
-
   if (clearSessionButton) {
     clearSessionButton.addEventListener('click', function (event) {
       event.preventDefault()
-      const configName = configNameInput.value.trim()
+
+      let configName = configSelector.value.trim()
+
+      // If "Add Config" is selected, get the name from newConfigName input
+      if (configName === 'add_config') {
+        configName = newConfigInput.value.trim()
+      }
+
+      if (!configName) {
+        showToast('error', 'Config name is required.')
+        return
+      }
 
       // Update modal message dynamically
       modalBody.textContent = `Are you sure you want to reset the configuration for "${configName}"? This action will delete any saved data for "${configName}" and cannot be undone.`
@@ -25,48 +33,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Add confirm action to the modal button
       modalConfirmButton.onclick = function () {
-        const configName = configNameInput.value.trim()
+        let configName = configSelector.value.trim()
+
+        if (configName === 'add_config') {
+          configName = newConfigInput.value.trim()
+        }
 
         if (!configName) {
-          // Show error toast for missing config name
-          const errorToastBody = errorToastElement.querySelector('.toast-body')
-          errorToastBody.textContent = 'Config name is required.'
-          const errorToast = new bootstrap.Toast(errorToastElement)
-          errorToast.show()
-          return // Exit if no config name is provided
+          showToast('error', 'Config name is required.')
+          return
         }
 
         // Send AJAX POST request to clear the session
         $.post('/clear_session', { name: configName }, function (response) {
           if (response.status === 'success') {
-            // Show success toast
-            const successToastBody = successToastElement.querySelector('.toast-body')
-            successToastBody.textContent = response.message
-            const successToast = new bootstrap.Toast(successToastElement)
-            successToast.show()
+            showToast('success', response.message)
 
-            // Hide the modal
-            modal.hide()
+            // Redirect to start page after a short delay
+            setTimeout(() => {
+              window.location.href = window.location.origin + window.location.pathname
+            }, 1500)
           } else {
-            // Show error toast for an unexpected server response
-            const errorToastBody = errorToastElement.querySelector('.toast-body')
-            errorToastBody.textContent = response.message || 'An unexpected error occurred.'
-            const errorToast = new bootstrap.Toast(errorToastElement)
-            errorToast.show()
+            showToast('error', response.message || 'An unexpected error occurred.')
           }
         }).fail(function (error) {
-          // Show error toast for failed request
           const errorMessage = error.responseJSON?.message || 'An unknown error occurred.'
-          const errorToastBody = errorToastElement.querySelector('.toast-body')
-          errorToastBody.textContent = errorMessage
-          const errorToast = new bootstrap.Toast(errorToastElement)
-          errorToast.show()
+          showToast('error', errorMessage)
         })
 
-        // Hide modal after the action (optional, could move to success block)
         modal.hide()
       }
     })
+  }
+})
+
+// Function to show toast messages
+function showToast (type, message) {
+  const toastElement = type === 'success' ? document.getElementById('successToast') : document.getElementById('errorToast')
+  const toastBody = toastElement.querySelector('.toast-body')
+  toastBody.textContent = message
+  const toast = new bootstrap.Toast(toastElement)
+  toast.show()
+}
+
+// Function to handle the "Add Config" dropdown logic
+function toggleConfigInput (selectElement) {
+  const newConfigInput = document.getElementById('newConfigInput')
+
+  if (selectElement.value === 'add_config') {
+    newConfigInput.style.display = 'block'
+  } else {
+    newConfigInput.style.display = 'none'
+  }
+}
+
+// Ensure "Add Config" is visible if pre-selected on page load
+document.addEventListener('DOMContentLoaded', function () {
+  const configSelector = document.getElementById('configSelector')
+  if (configSelector.value === 'add_config') {
+    toggleConfigInput(configSelector)
   }
 })
 

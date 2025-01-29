@@ -149,3 +149,19 @@ def reset_data(name, section=None):
     finally:
         if sqliteConnection:
             sqliteConnection.close()
+
+
+def get_unique_config_names():
+    try:
+        sqliteConnection = sqlite3.connect(DATABASE_PATH)
+        cursor = sqliteConnection.cursor()
+        query = "SELECT DISTINCT name FROM section_data ORDER BY name ASC"
+        cursor.execute(query)
+        configs = [row[0] for row in cursor.fetchall()]
+        return configs
+    except sqlite3.Error as error:
+        print("Error while fetching configurations:", error)
+        return []
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()

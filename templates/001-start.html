@@ -78,9 +78,31 @@
         <strong>Note:</strong> Please write down the config name for future reference. This will help you to retrieve and modify your configuration later.
       </div>
     </div>
-    <div class="form-floating">
-      <input type="text" class="form-control" id="config_name" name="config_name" value="{{ page_info['config_name'] }}" title="Enter a config name if you wish" required="" onkeyup="validate_name(this)">
-      <label for="config_name">Config Name</label>
+
+    <div class="form-floating mb-3">
+      <select id="configSelector" name="configSelector" class="form-select" onchange="toggleConfigInput(this)">
+        <option value="add_config" {% if page_info['config_name'] not in available_configs %}selected{% endif %}>
+          Add Config
+        </option>
+        {% for name in available_configs %}
+        <option value="{{ name }}" {% if name == page_info['config_name'] %}selected{% endif %}>
+          {{ name }}
+        </option>
+        {% endfor %}
+      </select>
+      <label for="configSelector">Select or Add Config</label>
+    </div>
+
+    <div id="newConfigInput" class="form-floating" style="display: {% if page_info['config_name'] not in available_configs %}block{% else %}none{% endif %};">
+      <input
+        type="text"
+        id="newConfigName"
+        name="newConfigName"
+        class="form-control"
+        placeholder="Enter a new config name"
+        value="{% if page_info['config_name'] not in available_configs %}{{ page_info['config_name'] }}{% else %}{{ page_info['new_config_name'] }}{% endif %}"
+      >
+      <label for="newConfigName">New Config Name</label>
     </div>
   </div>
   <form>
