@@ -227,14 +227,34 @@ def step(name):
         page_info["ntfy_available"],
     ) = notification_systems_available()
 
-    return render_template(
-        name + ".html",
-        page_info=page_info,
-        data=data,
-        plex_data=plex_data,
-        template_list=file_list,
-        available_configs=available_configs,
-    )
+    # This should not be based on name; maybe next being empty
+    if name == "900-final":
+        validated, validation_error, config_data, yaml_content = build_config(
+            header_style
+        )
+
+        page_info["yaml_valid"] = validated
+        session["yaml_content"] = yaml_content
+
+        return render_template(
+            "900-final.html",
+            page_info=page_info,
+            data=data,
+            yaml_content=yaml_content,
+            validation_error=validation_error,
+            template_list=file_list,
+            available_configs=available_configs,
+        )
+
+    else:
+        return render_template(
+            name + ".html",
+            page_info=page_info,
+            data=data,
+            plex_data=plex_data,
+            template_list=file_list,
+            available_configs=available_configs,
+        )
 
 
 @app.route("/download")
