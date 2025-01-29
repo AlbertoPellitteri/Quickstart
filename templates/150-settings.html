@@ -46,9 +46,10 @@
               </div>
 
               <div class="form-floating mb-3">
-                <input type="number" class="form-control" id="asset_depth" name="asset_depth" placeholder="0" min="0"
+                <input type="number" class="form-control" id="asset_depth" name="asset_depth" placeholder=""
                   value="{{ data['settings']['asset_depth'] }}">
                 <label for="asset_depth">Asset Depth</label>
+                <div class="error-message text-danger"></div>
               </div>
 
               <div class="form-check form-switch">
@@ -118,8 +119,9 @@
 
               <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="overlay_artwork_quality" name="overlay_artwork_quality"
-                  placeholder="75" min="1" max="100" value="{{ data['settings']['overlay_artwork_quality'] }}">
+                  placeholder="" value="{{ data['settings']['overlay_artwork_quality'] }}">
                 <label for="overlay_artwork_quality">Overlay Artwork Quality</label>
+                <div class="error-message text-danger"></div>
               </div>
             </div>
           </div>
