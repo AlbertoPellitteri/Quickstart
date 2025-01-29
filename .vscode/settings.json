@@ -1,6 +1,11 @@
 {
     "cSpell.words": [
         "anidb",
+        "apikey",
+        "booler",
+        "clientver",
+        "COLNAMES",
+        "DECLTYPES",
         "dotenv",
         "figlet",
         "gotify",
@@ -13,8 +18,11 @@
         "oderwat",
         "omdb",
         "plexapi",
+        "protover",
+        "qualityprofile",
         "radarr",
         "representer",
+        "rootfolder",
         "ruamel",
         "sonarr",
         "tautulli",
