@@ -81,7 +81,7 @@ try:
     # Load the schema
     schema = yaml.load(response.text)
 except requests.RequestException as e:
-    print(f"Error fetching the JSON schema: {e}")
+    print(f"[DEBUG] Error fetching the JSON schema: {e}")
     schema = None  # or handle the error appropriately
 
 load_dotenv()
@@ -212,7 +212,7 @@ def step(name):
     data = retrieve_settings(name)
     plex_data = retrieve_settings("010-plex")
 
-    print(f"Data retrieved for {name}")
+    print(f"[DEBUG] Data retrieved for {name}")
 
     (
         page_info["plex_valid"],

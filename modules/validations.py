@@ -121,7 +121,7 @@ def validate_tautulli_server(data):
             app.logger.error(f"Tautulli connection failed.")
 
     except requests.exceptions.RequestException as e:
-        print(f"Error validating Tautulli connection: {e}")
+        print(f"[DEBUG] Error validating Tautulli connection: {e}")
         flash(f"Invalid Tautulli URL or API Key: {str(e)}", "error")
         return jsonify(
             {"valid": False, "error": f"Invalid Tautulli URL or Apikey: {str(e)}"}
@@ -198,7 +198,7 @@ def validate_trakt_server(data):
                 isValid = True
 
     except requests.exceptions.RequestException as e:
-        print(f"Error validating Trakt connection: {e}")
+        print(f"[DEBUG] Error validating Trakt connection: {e}")
         flash(f"Invalid Trakt ID, Secret, or PIN: {str(e)}", "error")
         return jsonify(
             {"valid": False, "error": f"Invalid Trakt ID, Secret, or PIN: {str(e)}"}
@@ -486,7 +486,7 @@ def validate_radarr_server(data):
         )
 
     except requests.exceptions.RequestException as e:
-        print(f"Error validating Radarr connection: {e}")
+        print(f"[DEBUG] Error validating Radarr connection: {e}")
         flash(f"Invalid Radarr URL or API Key: {str(e)}", "error")
         return jsonify(
             {"valid": False, "error": f"Invalid Radarr URL or Apikey: {str(e)}"}
@@ -541,7 +541,7 @@ def validate_sonarr_server(data):
         )
 
     except requests.exceptions.RequestException as e:
-        print(f"Error validating Sonarr connection: {e}")
+        print(f"[DEBUG] Error validating Sonarr connection: {e}")
         flash(f"Invalid Sonarr URL or API Key: {str(e)}", "error")
         return jsonify(
             {"valid": False, "error": f"Invalid Sonarr URL or Apikey: {str(e)}"}
@@ -562,7 +562,7 @@ def validate_omdb_server(data):
                 {"valid": False, "message": data.get("Error", "Invalid API key")}
             )
     except Exception as e:
-        print(f"Error validating OMDb connection: {e}")
+        print(f"[DEBUG] Error validating OMDb connection: {e}")
         flash(f"Invalid OMDb API Key: {str(e)}", "error")
         return jsonify({"valid": False, "message": str(e)})
 

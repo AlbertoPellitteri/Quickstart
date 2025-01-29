@@ -66,7 +66,7 @@ def save_section_data(section, validated, user_entered, data, name="default"):
         cursor.close()
 
     except sqlite3.Error as error:
-        print("Error while working with SQLite", error)
+        print("[DEBUG] Error while working with SQLite", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()
@@ -81,7 +81,7 @@ def retrieve_section_data(name, section):
                 detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
             )
         except sqlite3.Error as error:
-            print("Error while connecting to SQLite", error)
+            print("[DEBUG] Error while connecting to SQLite", error)
             return False, False, None
 
         cursor = sqliteConnection.cursor()
@@ -111,7 +111,7 @@ def retrieve_section_data(name, section):
         cursor.close()
 
     except sqlite3.Error as error:
-        print("Error while working with SQLite", error)
+        print("[DEBUG] Error while working with SQLite", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()
@@ -145,7 +145,7 @@ def reset_data(name, section=None):
         cursor.close()
 
     except sqlite3.Error as error:
-        print("Error while working with SQLite", error)
+        print("[DEBUG] Error while working with SQLite", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()
@@ -160,7 +160,7 @@ def get_unique_config_names():
         configs = [row[0] for row in cursor.fetchall()]
         return configs
     except sqlite3.Error as error:
-        print("Error while fetching configurations:", error)
+        print("[DEBUG] Error while fetching configurations:", error)
         return []
     finally:
         if sqliteConnection:
