@@ -168,7 +168,6 @@
 
               <div class="form-floating mb-3">
                 <select class="form-select" id="default_collection_order" name="default_collection_order">
-                  <!-- <option value="" {% if data['settings']['default_collection_order']=='' %}selected{% endif %}>Select Default Collection Order</option> -->
                   <option value="added.asc" {% if data['settings']['default_collection_order']=='added.asc' %}selected{% endif %}>Added (Ascending)</option>
                   <option value="added.desc" {% if data['settings']['default_collection_order']=='added.desc' %}selected{% endif %}>Added (Descending)</option>
                   <option value="alpha" {% if data['settings']['default_collection_order']=='alpha' %}selected{% endif %}>Alphabetical</option>
@@ -409,7 +408,6 @@
 
               <div class="form-floating mb-3">
                 <select class="form-select" id="tvdb_language" name="tvdb_language">
-                  <!-- <option value="">Select TVDb Language</option> -->
                   {% for code, language in data['iso_639_2_languages'] | sort(attribute='1') %}
                   <option value="{{ code }}" {% if code==data['settings']['tvdb_language'] %}selected{% endif %}>{{
                     language }}</option>
@@ -454,7 +452,6 @@
 
               <div class="form-floating mb-3">
                 <select class="form-select" id="run_order" name="run_order">
-                  <!-- <option value="">Select Run Order</option> -->
                   <option value="operations metadata collections overlays" {% if ' ' .join(data['settings']['run_order'])=='operations metadata collections overlays' %}selected{% endif %}>(default) operations metadata collections overlays</option>
                   <option value="operations metadata overlays collections" {% if ' ' .join(data['settings']['run_order'])=='operations metadata overlays collections' %}selected{% endif %}>operations metadata overlays collections</option>
                   <option value="operations collections metadata overlays" {% if ' ' .join(data['settings']['run_order'])=='operations collections metadata overlays' %}selected{% endif %}>operations collections metadata overlays</option>

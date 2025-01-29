@@ -55,41 +55,48 @@ def save_settings(raw_source, form_data):
     # Extract the source and source_name
     source, source_name = extract_names(raw_source)
     # Log raw form data
-    print(f"[DEBUG] Raw form data received: {form_data}")
+    if app.config["QS_DEBUG"]:
+        print(f"[DEBUG] Raw form data received: {form_data}")
 
     # grab new config name if they entered one:
     if "config_name" in form_data:
         session["config_name"] = form_data["config_name"]
-        print(f"[DEBUG] Received config name in form: {session['config_name']}")
+        if app.config["QS_DEBUG"]:
+            print(f"[DEBUG] Received config name in form: {session['config_name']}")
 
     # Handle asset_directory specifically
     if "asset_directory" in form_data:
         # Use getlist to retrieve all values for asset_directory
         asset_directories = form_data.getlist("asset_directory")
-        print(f"[DEBUG] All asset_directory values from form: {asset_directories}")
+        if app.config["QS_DEBUG"]:
+            print(f"[DEBUG] All asset_directory values from form: {asset_directories}")
 
     # Clean the data
     clean_data = clean_form_data(form_data)
 
     # Debug specific fields for Plex
     for field in ["plex_url", "plex_token"]:
-        print(f"[DEBUG] Cleaned value for {field}: {clean_data.get(field)}")
+        if app.config["QS_DEBUG"]:
+            print(f"[DEBUG] Cleaned value for {field}: {clean_data.get(field)}")
 
     # Log the cleaned asset_directory
     if "asset_directory" in clean_data:
-        print(f"[DEBUG] Cleaned asset_directory: {clean_data['asset_directory']}")
+        if app.config["QS_DEBUG"]:
+            print(f"[DEBUG] Cleaned asset_directory: {clean_data['asset_directory']}")
 
     # Build the dictionary to save
     data = build_config_dict(source_name, clean_data)
 
     # Debug final data to be saved
-    print(f"[DEBUG] Final data structure to save: {data}")
+    if app.config["QS_DEBUG"]:
+        print(f"[DEBUG] Final data structure to save: {data}")
 
     # Log the final data structure for asset_directory
     if source_name == "settings" and "asset_directory" in data.get("settings", {}):
-        print(
-            f"[DEBUG] Final asset_directory structure to save: {data['settings']['asset_directory']}"
-        )
+        if app.config["QS_DEBUG"]:
+            print(
+                f"[DEBUG] Final asset_directory structure to save: {data['settings']['asset_directory']}"
+            )
 
     # Proceed with saving
     base_data = get_dummy_data(source_name)
@@ -105,7 +112,8 @@ def save_settings(raw_source, form_data):
     )
 
     # Confirm successful save
-    print(f"[DEBUG] Data saved successfully.")
+    if app.config["QS_DEBUG"]:
+        print(f"[DEBUG] Data saved successfully.")
 
 
 def retrieve_settings(target):

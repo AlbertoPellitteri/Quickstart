@@ -63,29 +63,22 @@ from modules.persistence import (
     notification_systems_available,
 )
 from modules.database import reset_data
+from modules.database import get_unique_config_names
+from modules.helpers import booler
 
 basedir = os.path.abspath
-
-# Load JSON Schema
-yaml = YAML(typ="safe", pure=True)
-
-# URL to the JSON schema
-url = "https://raw.githubusercontent.com/Kometa-Team/Kometa/nightly/json-schema/config-schema.json"
-
-try:
-    # Fetch the schema
-    response = requests.get(url)
-    response.raise_for_status()  # Ensure we notice bad responses
-
-    # Load the schema
-    schema = yaml.load(response.text)
-except requests.RequestException as e:
-    print(f"Error fetching the JSON schema: {e}")
-    schema = None  # or handle the error appropriately
 
 load_dotenv()
 
 app = Flask(__name__)
+
+# Use booler() for FLASK_DEBUG conversion
+app.config["QS_DEBUG"] = booler(os.getenv("QS_DEBUG", "0"))
+
+if app.config["QS_DEBUG"]:
+    print("[DEBUG] Quickstart Debugging is enabled.")
+else:
+    print("[INFO] Quickstart Debugging is disabled.")
 
 app.config["SESSION_TYPE"] = "cachelib"
 app.config["SESSION_CACHELIB"] = FileSystemCache(
@@ -153,31 +146,43 @@ def clear_data(name):
 
 @app.route("/step/<name>", methods=["GET", "POST"])
 def step(name):
-
     page_info = {}
     header_style = "ascii"  # Default to ASCII art
+
     if request.method == "POST":
         save_settings(request.referrer, request.form)
         header_style = request.form.get("header_style", "ascii")
 
-    try:
-        if not session["config_name"]:
-            session["config_name"] = namesgenerator.get_random_name()
-        else:
-            print(f"There's a config name in the session")
-    except:
-        session["config_name"] = namesgenerator.get_random_name()
+    # Get selected config from form data (sent from the dropdown)
+    selected_config = request.form.get("configSelector")  # Comes from the dropdown
+    new_config_name = request.form.get("newConfigName")  # If "Add Config" is used
 
-    print(f"using config name: {session['config_name']}")
+    # If "Add Config" is selected, use newConfigName instead
+    if selected_config == "add_config" and new_config_name:
+        selected_config = new_config_name.strip()
 
-    page_info["config_name"] = session["config_name"]
+    # If no config is selected, fall back to the session or generate a new one
+    if not selected_config:
+        selected_config = session.get("config_name") or namesgenerator.get_random_name()
+
+    # Update session with the chosen config
+    session["config_name"] = selected_config
+    page_info["config_name"] = selected_config
     page_info["header_style"] = header_style
     page_info["template_name"] = name
 
+    # Generate a placeholder name for "Add Config"
+    page_info["new_config_name"] = namesgenerator.get_random_name()
+
+    # Fetch available configurations from the database
+    available_configs = get_unique_config_names()
+
+    # Ensure the selected config is either in the dropdown or newly created
+    if selected_config not in available_configs:
+        page_info["new_config_name"] = selected_config  # Use the new config name
+
     file_list = get_menu_list()
-
     template_list = get_template_list()
-
     total_steps = len(template_list)
 
     stem, num, b = get_bits(name)
@@ -189,11 +194,9 @@ def step(name):
         current_index = list(template_list).index(num)
         item = template_list[num]
     except:
-        # not in there
         return f"ERROR WITH NAME {name}; stem, num, b: {stem}, {num}, {b}"
 
     page_info["progress"] = round((current_index + 1) / total_steps * 100)
-
     page_info["title"] = item["name"]
     page_info["next_page"] = item["next"]
     page_info["prev_page"] = item["prev"]
@@ -201,7 +204,8 @@ def step(name):
     data = retrieve_settings(name)
     plex_data = retrieve_settings("010-plex")
 
-    print(f"data retrieved for {name}")
+    if app.config["QS_DEBUG"]:
+        print(f"[DEBUG] Data retrieved for {name}")
 
     (
         page_info["plex_valid"],
@@ -232,6 +236,7 @@ def step(name):
             yaml_content=yaml_content,
             validation_error=validation_error,
             template_list=file_list,
+            available_configs=available_configs,
         )
 
     else:
@@ -241,6 +246,7 @@ def step(name):
             data=data,
             plex_data=plex_data,
             template_list=file_list,
+            available_configs=available_configs,
         )
 
 

@@ -25,9 +25,6 @@ def enforce_string_fields(data, string_fields):
         elif key in string_fields:
             original_type = type(value)
             data[key] = str(value)
-            # print(
-            #     f"Key '{key}': Original Type: {original_type}, New Type: {type(data[key])}, Value: {repr(data[key])}"
-            # )
     return data
 
 
@@ -145,10 +142,11 @@ def booler(thing):
             return False
         else:
             # Default to False for invalid strings
-            print(
-                f"Warning: Invalid boolean string encountered: {thing}. Defaulting to False."
-            )
-            return False
+            if app.config["QS_DEBUG"]:
+                print(
+                    f"[DEBUG] Warning: Invalid boolean string encountered: {thing}. Defaulting to False."
+                )
+                return False
     return bool(thing)
 
 
