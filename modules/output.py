@@ -2,6 +2,7 @@ import io
 import jsonschema
 import pyfiglet
 from ruamel.yaml import YAML
+from flask import current_app as app
 
 from .persistence import (
     save_settings,
@@ -153,26 +154,32 @@ def build_config(header_style="ascii"):
         playlist_data = config_data["playlist_files"]
 
         # Debug raw data
-        print(
-            "[DEBUG] Raw config_data['playlist_files'] content (Level 1):",
-            playlist_data,
-        )
+        if app.config["QS_DEBUG"]:
+            print(
+                "[DEBUG] Raw config_data['playlist_files'] content (Level 1):",
+                playlist_data,
+            )
 
         # Adjust for possible extra nesting
         if "playlist_files" in playlist_data and isinstance(
             playlist_data["playlist_files"], dict
         ):
             playlist_data = playlist_data["playlist_files"]
-            print("[DEBUG] Adjusted playlist_data after extra nesting:", playlist_data)
+            if app.config["QS_DEBUG"]:
+                print(
+                    "[DEBUG] Adjusted playlist_data after extra nesting:", playlist_data
+                )
 
         # Extract and process libraries
         libraries_value = playlist_data.get("libraries", "")
-        print("[DEBUG] Extracted libraries value:", libraries_value)
+        if app.config["QS_DEBUG"]:
+            print("[DEBUG] Extracted libraries value:", libraries_value)
 
         libraries_list = [
             lib.strip() for lib in libraries_value.split(",") if lib.strip()
         ]
-        print("[DEBUG] Processed libraries list:", libraries_list)
+        if app.config["QS_DEBUG"]:
+            print("[DEBUG] Processed libraries list:", libraries_list)
 
         # Format playlist_files data
         formatted_playlist_files = {
@@ -183,7 +190,8 @@ def build_config(header_style="ascii"):
                 }
             ]
         }
-        print("[DEBUG] Formatted playlist_files data:", formatted_playlist_files)
+        if app.config["QS_DEBUG"]:
+            print("[DEBUG] Formatted playlist_files data:", formatted_playlist_files)
 
         # Replace in config_data
         config_data["playlist_files"] = formatted_playlist_files
@@ -193,7 +201,8 @@ def build_config(header_style="ascii"):
         nested_libraries_data = config_data["libraries"]["libraries"]
 
         # Debugging
-        print("[DEBUG] Raw nested libraries data:", nested_libraries_data)
+        if app.config["QS_DEBUG"]:
+            print("[DEBUG] Raw nested libraries data:", nested_libraries_data)
 
         # Separate data by prefix
         movie_libraries = {
@@ -238,14 +247,15 @@ def build_config(header_style="ascii"):
         }
 
         # Debugging
-        print("[DEBUG] Extracted Movie Libraries:", movie_libraries)
-        print("[DEBUG] Extracted Show Libraries:", show_libraries)
-        print("[DEBUG] Extracted Movie Collections:", movie_collections)
-        print("[DEBUG] Extracted Show Collections:", show_collections)
-        print("[DEBUG] Extracted Movie Overlays:", movie_overlays)
-        print("[DEBUG] Extracted Show Overlays:", show_overlays)
-        print("[DEBUG] Extracted Movie Attributes:", movie_attributes)
-        print("[DEBUG] Extracted Show Attributes:", show_attributes)
+        if app.config["QS_DEBUG"]:
+            print("[DEBUG] Extracted Movie Libraries:", movie_libraries)
+            print("[DEBUG] Extracted Show Libraries:", show_libraries)
+            print("[DEBUG] Extracted Movie Collections:", movie_collections)
+            print("[DEBUG] Extracted Show Collections:", show_collections)
+            print("[DEBUG] Extracted Movie Overlays:", movie_overlays)
+            print("[DEBUG] Extracted Show Overlays:", show_overlays)
+            print("[DEBUG] Extracted Movie Attributes:", movie_attributes)
+            print("[DEBUG] Extracted Show Attributes:", show_attributes)
 
         # Build nested libraries structure
         libraries_section = build_libraries_section(
@@ -259,7 +269,8 @@ def build_config(header_style="ascii"):
             show_attributes,
         )
         config_data["libraries"] = libraries_section
-        print("[DEBUG] Final Libraries Section:", libraries_section)
+        if app.config["QS_DEBUG"]:
+            print("[DEBUG] Final Libraries Section:", libraries_section)
 
     # Header comment for YAML file
     header_comment = (

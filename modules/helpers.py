@@ -142,10 +142,11 @@ def booler(thing):
             return False
         else:
             # Default to False for invalid strings
-            print(
-                f"[DEBUG] Warning: Invalid boolean string encountered: {thing}. Defaulting to False."
-            )
-            return False
+            if app.config["QS_DEBUG"]:
+                print(
+                    f"[DEBUG] Warning: Invalid boolean string encountered: {thing}. Defaulting to False."
+                )
+                return False
     return bool(thing)
 
 

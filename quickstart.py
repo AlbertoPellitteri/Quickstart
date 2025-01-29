@@ -64,29 +64,21 @@ from modules.persistence import (
 )
 from modules.database import reset_data
 from modules.database import get_unique_config_names
+from modules.helpers import booler
 
 basedir = os.path.abspath
-
-# Load JSON Schema
-yaml = YAML(typ="safe", pure=True)
-
-# URL to the JSON schema
-url = "https://raw.githubusercontent.com/Kometa-Team/Kometa/nightly/json-schema/config-schema.json"
-
-try:
-    # Fetch the schema
-    response = requests.get(url)
-    response.raise_for_status()  # Ensure we notice bad responses
-
-    # Load the schema
-    schema = yaml.load(response.text)
-except requests.RequestException as e:
-    print(f"[DEBUG] Error fetching the JSON schema: {e}")
-    schema = None  # or handle the error appropriately
 
 load_dotenv()
 
 app = Flask(__name__)
+
+# Use booler() for FLASK_DEBUG conversion
+app.config["QS_DEBUG"] = booler(os.getenv("QS_DEBUG", "0"))
+
+if app.config["QS_DEBUG"]:
+    print("[DEBUG] Quickstart Debugging is enabled.")
+else:
+    print("[INFO] Quickstart Debugging is disabled.")
 
 app.config["SESSION_TYPE"] = "cachelib"
 app.config["SESSION_CACHELIB"] = FileSystemCache(
@@ -212,7 +204,8 @@ def step(name):
     data = retrieve_settings(name)
     plex_data = retrieve_settings("010-plex")
 
-    print(f"[DEBUG] Data retrieved for {name}")
+    if app.config["QS_DEBUG"]:
+        print(f"[DEBUG] Data retrieved for {name}")
 
     (
         page_info["plex_valid"],
