@@ -65,30 +65,31 @@ def build_libraries_section(
     movie_attributes,
     show_attributes,
 ):
-    """
-    Build the libraries section for the YAML config, ensuring that settings are
-    correctly applied to movies and shows. Exclude empty fields from the final output.
-    """
     libraries_section = {}
 
-    # Helper function to clean and add entries
     def add_entry(library_name, library_type, collections, overlays, attributes):
         entry = {}
 
-        # Process collections
+        # Ensure collection_files are added if any are selected
         collection_files = [
-            {"default": collection.replace(f"{library_type}-collection_", "")}
+            collection.replace(f"{library_type}-collection_", "")
             for collection, selected in collections.items()
             if selected
         ]
-        if collection_files:
-            entry["collection_files"] = collection_files
 
-        # Process attributes
-        for attr_key, attr_value in attributes.items():
-            clean_key = attr_key.replace(f"{library_type}-attribute_", "")
-            if attr_value not in [None, False, [], {}, ""]:
-                entry[clean_key] = attr_value
+        if collection_files:
+            entry["collection_files"] = [
+                {"default": cf} for cf in collection_files
+            ]  # Ensure proper alignment
+
+        # Ensure template_variables always exists with use_separators
+        template_vars = {
+            "use_separators": attributes.get(
+                f"{library_type}-attribute_use_separators", False
+            )
+        }
+
+        entry["template_variables"] = template_vars  # Always include template_variables
 
         # Process overlays
         overlay_files = [
@@ -99,17 +100,24 @@ def build_libraries_section(
         if overlay_files:
             entry["overlay_files"] = overlay_files
 
-        # Add only non-empty entries
+        # Ensure remove_overlays & reset_overlays appear at the correct level (not inside template_variables)
+        remove_overlays_key = f"{library_type}-attribute_remove_overlays"
+        reset_overlays_key = f"{library_type}-attribute_reset_overlays"
+
+        if attributes.get(remove_overlays_key, False):  # Only add if True
+            entry["remove_overlays"] = True
+
+        if attributes.get(reset_overlays_key):  # Only add if value is not empty
+            entry["reset_overlays"] = attributes[reset_overlays_key]
+
         if entry:
             libraries_section[library_name] = entry
 
-    # Process movie libraries
     for library_key, library_name in movie_libraries.items():
         add_entry(
             library_name, "mov", movie_collections, movie_overlays, movie_attributes
         )
 
-    # Process show libraries
     for library_key, library_name in show_libraries.items():
         add_entry(library_name, "sho", show_collections, show_overlays, show_attributes)
 

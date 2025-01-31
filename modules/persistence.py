@@ -30,11 +30,8 @@ def extract_names(raw_source):
 def clean_form_data(form_data):
     clean_data = {}
     for key, value in form_data.items():
-        # Ensure asset_directory is processed as a list
         if key == "asset_directory":
-            # Retrieve all values as a list
             value_list = form_data.getlist(key)
-            # Clean each value in the list
             clean_data[key] = [v.strip() for v in value_list if v.strip()]
         elif isinstance(value, str):
             lc_value = value.lower()

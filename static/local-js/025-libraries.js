@@ -1,6 +1,39 @@
 /* global $ */
 
+document.addEventListener('DOMContentLoaded', function () {
+  const useSeparatorsToggle = document.getElementById('use_separators')
+  const form = document.getElementById('librariesForm')
+
+  if (useSeparatorsToggle) {
+    useSeparatorsToggle.addEventListener('change', function () {
+      const isChecked = useSeparatorsToggle.checked
+
+      // Ensure award_separator and chart_separator toggles reflect use_separators
+      document.getElementById('award_separator').checked = isChecked
+      document.getElementById('chart_separator').checked = isChecked
+
+      // Ensure form data always includes template_variables
+      const hiddenTemplateVar = document.getElementById('template_variables')
+      if (!hiddenTemplateVar) {
+        const input = document.createElement('input')
+        input.type = 'hidden'
+        input.name = 'template_variables[use_separators]'
+        input.id = 'template_variables'
+        form.appendChild(input)
+      }
+      document.getElementById('template_variables').value = isChecked ? 'true' : 'false'
+    })
+  }
+})
+
+/* eslint-disable camelcase */
 $(document).ready(function () {
+  const mov_useSeparatorsToggle = $('#mov-attribute_use_separators')
+  const mov_awardSeparatorToggle = $('#mov-collection_separator_award')
+  const mov_chartSeparatorToggle = $('#mov-collection_separator_chart')
+  const sho_useSeparatorsToggle = $('#sho-attribute_use_separators')
+  const sho_awardSeparatorToggle = $('#sho-collection_separator_award')
+  const sho_chartSeparatorToggle = $('#sho-collection_separator_chart')
   const plexValid = $('#plex_valid').data('plex-valid') === 'True'
   console.log('Plex Valid:', plexValid)
 
@@ -39,6 +72,48 @@ $(document).ready(function () {
 
   // Initial validation check
   updateValidationState()
+
+  function mov_updateSeparatorsState () {
+    const isChecked = mov_useSeparatorsToggle.prop('checked')
+
+    // Enable or disable based on the `use_separators` state
+    mov_awardSeparatorToggle.prop('checked', isChecked)
+    mov_chartSeparatorToggle.prop('checked', isChecked)
+  }
+
+  function sho_updateSeparatorsState () {
+    const isChecked = sho_useSeparatorsToggle.prop('checked')
+
+    // Enable or disable based on the `use_separators` state
+    sho_awardSeparatorToggle.prop('checked', isChecked)
+    sho_chartSeparatorToggle.prop('checked', isChecked)
+  }
+
+  // Run on page load to ensure initial state is correct
+  mov_updateSeparatorsState()
+  sho_updateSeparatorsState()
+
+  // Listen for changes on `use_separators` and update accordingly
+  mov_useSeparatorsToggle.change(function () {
+    mov_updateSeparatorsState()
+  })
+
+  // Listen for changes on `use_separators` and update accordingly
+  sho_useSeparatorsToggle.change(function () {
+    sho_updateSeparatorsState()
+  })
+
+  // Ensure values are stored properly before form submission
+  $('#configForm').submit(function () {
+    $('input[name="mov-template_variables[use_separators]"]').val(mov_useSeparatorsToggle.prop('checked') ? 'true' : 'false')
+    $('input[name="mov-collection_separator_award"]').val(mov_awardSeparatorToggle.prop('checked') ? 'true' : 'false')
+    $('input[name="mov-collection_separator_chart"]').val(mov_chartSeparatorToggle.prop('checked') ? 'true' : 'false')
+    $('input[name="mov-attribute_use_separators"]').val(mov_useSeparatorsToggle.prop('checked') ? 'true' : 'false')
+    $('input[name="sho-collection_separator_award"]').val(sho_awardSeparatorToggle.prop('checked') ? 'true' : 'false')
+    $('input[name="sho-collection_separator_chart"]').val(sho_chartSeparatorToggle.prop('checked') ? 'true' : 'false')
+    $('input[name="sho-attribute_use_separators"]').val(sho_useSeparatorsToggle.prop('checked') ? 'true' : 'false')
+  })
+  /* eslint-enable camelcase */
 
   function updateValidationState () {
     const selectedMovieLibraries = getSelectedLibraries('mov-library_')
