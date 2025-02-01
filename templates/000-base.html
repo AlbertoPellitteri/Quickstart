@@ -62,10 +62,26 @@
       type="text/javascript"
       src="{{ url_for('static', filename='local-js/' + page_info['template_name'] + '.js') }}"
     ></script>
-    <div class="footer">
-      <a href="https://github.com/sponsors/meisnate12" class="donate-button" target="_blank">
-        <i class="fa fa-heart"></i> Donate
-      </a>
+    <footer class="footer bg-dark text-light py-3">
+      <div class="d-flex justify-content-center gap-3 mt-3">
+        <a href="https://github.com/sponsors/meisnate12" class="btn sponsor-btn" target="_blank">
+          <i class="fa fa-heart"></i> Donate
+        </a>
+
+        <a href="https://kometa.wiki/en/latest/discord/" class="btn discord-btn" target="_blank">
+          <i class="bi bi-discord"></i> Discord
+        </a>
+
+        <a href="https://github.com/Kometa-Team/Quickstart" class="btn btn-dark" target="_blank">
+          <i class="bi bi-github"></i> Quickstart
+        </a>
+
+        <a href="https://github.com/Kometa-Team/Kometa" class="btn btn-dark" target="_blank">
+          <i class="bi bi-github"></i> Kometa
+        </a>
+      </div>
+    </footer>
+
     </div>
   </body>
 </html>
