@@ -146,6 +146,10 @@ label {
     margin-right: 10px;
 }
 
+.readonly-toggle {
+    pointer-events: none;  /* Prevents clicking */
+    opacity: 0.6;          /* Visually indicates it's disabled */
+}
 
 /* -------------------- */
 /* INPUT STYLES         */
