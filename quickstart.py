@@ -201,8 +201,23 @@ def step(name):
     page_info["next_page"] = item["next"]
     page_info["prev_page"] = item["prev"]
 
+    # Retrieve data from storage
     data = retrieve_settings(name)
+    if app.config["QS_DEBUG"]:
+        print(f"[DEBUG] Raw data retrieved for {name}: {data}")
+
     plex_data = retrieve_settings("010-plex")
+
+    # Ensure `libraries` dictionary exists
+    if "libraries" not in data:
+        data["libraries"] = {}
+
+    # Ensure `mov-template_variables` and `sho-template_variables` exist inside `libraries`
+    if "mov-template_variables" not in data["libraries"]:
+        data["libraries"]["mov-template_variables"] = {}
+
+    if "sho-template_variables" not in data["libraries"]:
+        data["libraries"]["sho-template_variables"] = {}
 
     if app.config["QS_DEBUG"]:
         print(f"[DEBUG] Data retrieved for {name}")
@@ -220,7 +235,13 @@ def step(name):
         page_info["ntfy_available"],
     ) = notification_systems_available()
 
-    # This should not be based on name; maybe next being empty
+    # Ensure template variables exist
+    if "mov-template_variables" not in data:
+        data["mov-template_variables"] = {}
+    if "sho-template_variables" not in data:
+        data["sho-template_variables"] = {}
+
+    # Ensure correct rendering for the final validation page
     if name == "900-final":
         validated, validation_error, config_data, yaml_content = build_config(
             header_style

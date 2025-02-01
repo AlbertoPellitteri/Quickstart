@@ -1,5 +1,6 @@
 import io
 import jsonschema
+import json
 import pyfiglet
 from ruamel.yaml import YAML
 from flask import current_app as app
@@ -72,26 +73,14 @@ def build_libraries_section(
 
         # Ensure collection_files are added if any are selected
         collection_files = [
-            collection.replace(f"{library_type}-collection_", "")
+            {"default": collection.replace(f"{library_type}-collection_", "")}
             for collection, selected in collections.items()
             if selected
         ]
-
         if collection_files:
-            entry["collection_files"] = [
-                {"default": cf} for cf in collection_files
-            ]  # Ensure proper alignment
+            entry["collection_files"] = collection_files
 
-        # Ensure template_variables always exists with use_separators
-        template_vars = {
-            "use_separators": attributes.get(
-                f"{library_type}-attribute_use_separators", False
-            )
-        }
-
-        entry["template_variables"] = template_vars  # Always include template_variables
-
-        # Process overlays
+        # Ensure overlay_files are added if any are selected
         overlay_files = [
             {"default": overlay.replace(f"{library_type}-overlay_", "")}
             for overlay, selected in overlays.items()
@@ -100,7 +89,41 @@ def build_libraries_section(
         if overlay_files:
             entry["overlay_files"] = overlay_files
 
-        # Ensure remove_overlays & reset_overlays appear at the correct level (not inside template_variables)
+        # Retrieve template variables properly
+        template_vars = {}
+
+        # Ensure we correctly access `mov-template_variables` or `sho-template_variables`
+        template_data = attributes.get(f"{library_type}-template_variables", {})
+
+        # Normalize `use_separators`
+        use_separators = template_data.get("use_separators", False)
+        if use_separators in [
+            None,
+            "None",
+            "",
+        ]:  # Convert None, "None", and empty string to False
+            use_separators = False
+        elif isinstance(use_separators, str):  # Convert non-empty string values to True
+            use_separators = True
+        elif not isinstance(use_separators, bool):  # Ensure it's either True or False
+            use_separators = False
+
+        template_vars["use_separators"] = use_separators  # Always include this key
+
+        # Normalize `sep_style`
+        sep_style = template_data.get("sep_style", "")
+        if sep_style not in [
+            None,
+            "None",
+            "",
+        ]:  # Ignore None, "None", and empty string values
+            template_vars["sep_style"] = sep_style.strip()
+
+        # Only add `template_variables` if it contains valid keys
+        if template_vars:
+            entry["template_variables"] = template_vars
+
+        # Ensure remove_overlays & reset_overlays appear at the correct level
         remove_overlays_key = f"{library_type}-attribute_remove_overlays"
         reset_overlays_key = f"{library_type}-attribute_reset_overlays"
 
@@ -110,14 +133,17 @@ def build_libraries_section(
         if attributes.get(reset_overlays_key):  # Only add if value is not empty
             entry["reset_overlays"] = attributes[reset_overlays_key]
 
+        # Add entry only if it has data
         if entry:
             libraries_section[library_name] = entry
 
+    # Process movie libraries
     for library_key, library_name in movie_libraries.items():
         add_entry(
             library_name, "mov", movie_collections, movie_overlays, movie_attributes
         )
 
+    # Process show libraries
     for library_key, library_name in show_libraries.items():
         add_entry(library_name, "sho", show_collections, show_overlays, show_attributes)
 
@@ -246,12 +272,12 @@ def build_config(header_style="ascii"):
         movie_attributes = {
             key: value
             for key, value in nested_libraries_data.items()
-            if key.startswith("mov-attribute_")
+            if key.startswith("mov-attribute_") or key == "mov-template_variables"
         }
         show_attributes = {
             key: value
             for key, value in nested_libraries_data.items()
-            if key.startswith("sho-attribute_")
+            if key.startswith("sho-attribute_") or key == "sho-template_variables"
         }
 
         # Debugging

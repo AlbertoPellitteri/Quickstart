@@ -29,12 +29,33 @@ def extract_names(raw_source):
 
 def clean_form_data(form_data):
     clean_data = {}
+
     for key, value in form_data.items():
+        # Handle asset_directory as a list
         if key == "asset_directory":
             value_list = form_data.getlist(key)
             clean_data[key] = [v.strip() for v in value_list if v.strip()]
+
+        # Handle use_separators & sep_style correctly for both mov & sho
+        elif key.endswith("use_separators"):
+            prefix = "mov" if key.startswith("mov") else "sho"
+            clean_data.setdefault(f"{prefix}-template_variables", {})[
+                "use_separators"
+            ] = (value if value != "none" else None)
+
+        elif key.endswith("sep_style"):
+            prefix = "mov" if key.startswith("mov") else "sho"
+            if (
+                form_data.get(f"{prefix}-template_variables[use_separators]", "false")
+                != "none"
+            ):
+                clean_data.setdefault(f"{prefix}-template_variables", {})[
+                    "sep_style"
+                ] = value.strip()
+
+        # Standard processing for other string values
         elif isinstance(value, str):
-            lc_value = value.lower()
+            lc_value = value.lower().strip()
             if len(value) == 0 or lc_value == "none":
                 clean_data[key] = None
             elif lc_value in ["true", "on"]:
@@ -43,8 +64,11 @@ def clean_form_data(form_data):
                 clean_data[key] = False
             else:
                 clean_data[key] = value.strip()
+
+        # Keep other values unchanged
         else:
             clean_data[key] = value
+
     return clean_data
 
 
@@ -117,39 +141,44 @@ def retrieve_settings(target):
     # target will be `010-plex`
     data = {}
 
-    # get source from referrer
+    # Get source from referrer
     source, source_name = extract_names(target)
     # source will be `010-plex`
     # source_name will be `plex`
 
+    # Fetch stored data from DB
     db_data = retrieve_section_data(name=session["config_name"], section=source_name)
     # db_data is a tuple of validated, user_entered, data
 
+    # Extract validation flags
     data["validated"] = booler(db_data[0])
     data["user_entered"] = booler(db_data[1])
-    data[source_name] = db_data[2][source_name] if db_data[2] else None
+    data[source_name] = db_data[2].get(source_name, {}) if db_data[2] else {}
 
     if not data[source_name]:
         data[source_name] = get_dummy_data(source_name)
 
+    # Only modify if the target is 'libraries'
+    if source_name == "libraries":
+        # Ensure mov-template_variables and sho-template_variables are always present
+        data[source_name].setdefault("mov-template_variables", {})
+        data[source_name].setdefault("sho-template_variables", {})
+
+        # Migrate incorrectly stored flat keys into the correct nested structure
+        for key in list(data[source_name].keys()):
+            if key.startswith("mov-template_variables[") or key.startswith(
+                "sho-template_variables["
+            ):
+                prefix, variable = key.split("[")
+                variable = variable.strip(
+                    "]"
+                )  # Extract 'use_separators' or 'sep_style'
+                data[source_name][prefix][variable] = data[source_name].pop(key)
+
     data["code_verifier"] = secrets.token_urlsafe(100)[:128]
     data["iso_639_1_languages"] = iso_639_1_languages
     data["iso_3166_1_regions"] = iso_3166_1_regions
-    data["iso_639_1_languages"] = iso_639_1_languages
     data["iso_639_2_languages"] = iso_639_2_languages
-
-    # if source_name == 'mal':
-    #     data['code_verifier'] = secrets.token_urlsafe(100)[:128]
-
-    # if source_name == 'tmdb':
-    #     data['iso_639_1_languages'] = iso_639_1_languages
-    #     data['iso_3166_1_regions'] = iso_3166_1_regions
-
-    # if source_name == 'anidb':
-    #     data['iso_639_1_languages'] = iso_639_1_languages
-
-    # if target == '150-settings':
-    #     data['iso_639_2_languages'] = iso_639_2_languages
 
     return data
 
