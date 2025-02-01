@@ -1,20 +1,79 @@
-/* global bootstrap, $ */
+/* global showToast, bootstrap, $ */
 
-// Event listener for clearing session data
+/* eslint-disable no-unused-vars */
+// 🛠️ Ensure toggleConfigInput is globally available
+function toggleConfigInput (selectElement) {
+  const newConfigInputContainer = document.getElementById('newConfigInput')
+
+  if (selectElement.value === 'add_config') {
+    newConfigInputContainer.style.display = 'block'
+  } else {
+    newConfigInputContainer.style.display = 'none'
+
+    // 🛠️ Reset validation when hiding input
+    const newConfigInput = document.getElementById('newConfigName')
+    removeValidationMessages(newConfigInput)
+  }
+}
+/* eslint-enable no-unused-vars */
+
 document.addEventListener('DOMContentLoaded', function () {
   const clearSessionButton = document.getElementById('clearSessionButton')
-  const configSelector = document.getElementById('configSelector') // Dropdown replacing config_name
-  const newConfigInput = document.getElementById('newConfigName') // Input when "Add Config" is selected
+  const configSelector = document.getElementById('configSelector') // Dropdown
+  const newConfigInput = document.getElementById('newConfigName') // Input for new config
 
   // Get references to modal and its elements
   const modal = new bootstrap.Modal(document.getElementById('confirmationModal'))
   const modalBody = document.getElementById('confirmationModalBody')
   const modalConfirmButton = document.getElementById('confirmClearSession')
 
+  // ✅ **Regex-Based Input Validation (Forces Lowercase & Removes Invalid Characters)**
+  if (newConfigInput) {
+    newConfigInput.addEventListener('input', function () {
+      let text = newConfigInput.value
+
+      // ✅ Convert to lowercase & remove invalid characters (only a-z, 0-9, _ allowed)
+      text = text.toLowerCase()
+      text = text.replace(/[^a-z0-9_]/g, '')
+
+      newConfigInput.value = text
+
+      // ✅ **Check for duplicate name**
+      checkDuplicateConfigName()
+    })
+  }
+
+  // ✅ **Duplicate Name Check**
+  function checkDuplicateConfigName () {
+    const newConfigName = newConfigInput.value.trim().toLowerCase()
+    let isDuplicate = false
+
+    // Remove previous icons/messages
+    removeValidationMessages(newConfigInput)
+
+    // Loop through existing dropdown options
+    for (const option of configSelector.options) {
+      if (option.value.trim().toLowerCase() === newConfigName) {
+        isDuplicate = true
+        break
+      }
+    }
+
+    if (isDuplicate) {
+      showToast('error', `Config "${newConfigInput.value}" already exists!`)
+
+      // 🔴 Apply **error** styles (Red border, error icon)
+      applyValidationStyles(newConfigInput, 'error')
+    } else if (newConfigName !== '') {
+      // ✅ Apply **success** styles (Green border, checkmark icon)
+      applyValidationStyles(newConfigInput, 'success')
+    }
+  }
+
+  // ✅ **Event Listener for Clearing Session Data (WITH MODAL CONFIRMATION)**
   if (clearSessionButton) {
     clearSessionButton.addEventListener('click', function (event) {
       event.preventDefault()
-
       let configName = configSelector.value.trim()
 
       // If "Add Config" is selected, get the name from newConfigName input
@@ -27,11 +86,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return
       }
 
-      // Update modal message dynamically
+      // **Show Confirmation Modal**
       modalBody.textContent = `Are you sure you want to reset the configuration for "${configName}"? This action will delete any saved data for "${configName}" and cannot be undone.`
       modal.show()
 
-      // Add confirm action to the modal button
+      // ✅ **Handle Modal Confirmation**
       modalConfirmButton.onclick = function () {
         let configName = configSelector.value.trim()
 
@@ -44,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return
         }
 
-        // Send AJAX POST request to clear the session
+        // **Send AJAX POST Request to Clear the Session**
         $.post('/clear_session', { name: configName }, function (response) {
           if (response.status === 'success') {
             showToast('success', response.message)
@@ -52,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Redirect to start page after a short delay
             setTimeout(() => {
               window.location.href = window.location.origin + window.location.pathname
-            }, 1500)
+            }, 4500)
           } else {
             showToast('error', response.message || 'An unexpected error occurred.')
           }
@@ -67,41 +126,30 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 })
 
-// Function to show toast messages
-function showToast (type, message) {
-  const toastElement = type === 'success' ? document.getElementById('successToast') : document.getElementById('errorToast')
-  const toastBody = toastElement.querySelector('.toast-body')
-  toastBody.textContent = message
-  const toast = new bootstrap.Toast(toastElement)
-  toast.show()
-}
+// ✅ **Apply Validation Styles for Input Fields**
+function applyValidationStyles (inputElement, type) {
+  removeValidationMessages(inputElement)
 
-// Function to handle the "Add Config" dropdown logic
-function toggleConfigInput (selectElement) {
-  const newConfigInput = document.getElementById('newConfigInput')
+  let iconHTML = ''
 
-  if (selectElement.value === 'add_config') {
-    newConfigInput.style.display = 'block'
-  } else {
-    newConfigInput.style.display = 'none'
+  if (type === 'error') {
+    inputElement.classList.add('is-invalid')
+    inputElement.style.border = '1px solid #dc3545' // 🔴 Red border
+    iconHTML = '<div class="invalid-feedback"><i class="bi bi-exclamation-triangle-fill text-danger"></i> Name already exists. Pick from dropdown instead?</div>'
+  } else if (type === 'success') {
+    inputElement.classList.add('is-valid')
+    inputElement.style.border = '1px solid #28a745' // ✅ Green border
+    iconHTML = '<div class="valid-feedback"><i class="bi bi-check-circle-fill text-success"></i> Name is available</div>'
   }
+
+  // **Insert feedback message**
+  inputElement.insertAdjacentHTML('afterend', iconHTML)
 }
 
-// Ensure "Add Config" is visible if pre-selected on page load
-document.addEventListener('DOMContentLoaded', function () {
-  const configSelector = document.getElementById('configSelector')
-  if (configSelector.value === 'add_config') {
-    toggleConfigInput(configSelector)
-  }
-})
-
-/* eslint-disable no-unused-vars, camelcase */
-function validate_name (select) {
-  let text = select.value
-
-  text = text.toLowerCase()
-  text = text.replace(/[^a-z0-9_]/g, '')
-
-  select.value = text
+// ✅ **Remove Validation Messages**
+function removeValidationMessages (inputElement) {
+  inputElement.classList.remove('is-invalid', 'is-valid')
+  inputElement.style.border = ''
+  const feedback = inputElement.parentElement.querySelector('.invalid-feedback, .valid-feedback')
+  if (feedback) feedback.remove()
 }
-/* eslint-enable no-unused-vars, camelcase */
