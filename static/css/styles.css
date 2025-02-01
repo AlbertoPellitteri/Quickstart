@@ -213,6 +213,11 @@ label {
     max-width: none; /* Allow image to scale properly */
 }
 
+.text-tooltip .tooltip-inner {
+    background-color: #fff;
+    max-width: 500px;
+}
+
 div#loading {
     width: 100;
     height: 100;
