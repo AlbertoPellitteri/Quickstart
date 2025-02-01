@@ -1300,20 +1300,20 @@
         <div id="movieAttributes" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
           <div class="accordion-body">
             <!-- Use Separators Dropdown -->
-            <label for="mov-attribute_use_separators" class="form-label">
-              <a target="_blank" href="https://kometa.wiki/en/latest/defaults/separators/#use-separators">Use Separators</a>
+            <label class="form-label">
+              <h6><u>Separators</u></h6>
             </label>
-            <div class="d-flex align-items-center">
+            <p>
+              Separators are like index cards at a library, to categorize Collections in your library. Example:
               <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
-                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="400" style="opacity: 1;">'>
-              </i>
+                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="400" style="opacity: 1;">'></i>
+            </p>
+            <p>
+              To enable Separators for the Defaults Collections, select your style from the drop-down below. Example of each Style:
               <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
-                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators2.jpg" height="600" style="opacity: 1;">'>
-              </i>
-              <i class="bi bi-exclamation-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top"
-                 title="This will enable Separators between all of your selected default collections.">
-              </i>
-            </div>
+                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators2.jpg" height="900" style="opacity: 1;">'></i>
+            </p>
+
             <!-- Dropdown for separator styles -->
             <div class="form-floating mb-3">
               <select class="form-select" id="mov-attribute_use_separators" name="mov-template_variables[use_separators]">
@@ -1338,6 +1338,38 @@
               </select>
               <label for="mov-attribute_use_separators">Separator Style</label>
             </div>
+            <label class="form-label">
+              <h6><u>Remove / Reset Overlays</u></h6>
+            </label>
+
+            <p><b>Remove Overlays</b> will remove all Overlays from your library - you do not need to unselect previously selected Overlays as this toggle will take priority.</p>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="mov-attribute_remove_overlays"
+                name="mov-attribute_remove_overlays" value="true" {% if
+                data['libraries']['mov-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-attribute_remove_overlays" value="false">
+              <label class="form-check-label me-3" for="mov-attribute_remove_overlays">
+                <a target="_blank" href="https://kometa.wiki/en/latest/config/libraries/#remove-overlays/">Remove Overlays</a>
+              </label>
+            </div>
+
+            <p><b>Reset Overlays</b> will grab a new base image from the source that you choose, and then use that as the source for applying your Overlays</p>
+            <p><b class="text-danger">Read this Warning:</b>
+            <i class="bi bi-exclamation-circle text-danger"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               data-bs-custom-class="text-tooltip"
+               title="Once you have done a run with Reset Overlays, you should then set this value to None or remove the reset_overlays line(s) from your config.yml. If you do not do this, you will end up in a loop of your Overlays being removed, a new image grabbed, and your Overlays reapplying.">
+            </i>
+            </p>
+            <div class="form-check form-switch" style="display:none;">
+              <input class="form-check-input" type="checkbox" id="mov-attribute_reapply_overlays"
+                name="mov-attribute_reapply_overlays" value="true" {% if
+                data['libraries']['mov-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="mov-attribute_reapply_overlays" value="false">
+              <label class="form-check-label" for="mov-attribute_reapply_overlays">Reapply Overlays</label>
+            </div>
 
             <div class="form-floating mb-3">
               <select class="form-select" id="mov-attribute_reset_overlays" name="mov-attribute_reset_overlays">
@@ -1349,23 +1381,7 @@
                   endif %}>Plex</option>
               </select>
               <label for="mov-attribute_reset_overlays">Reset Overlays</label>
-            </div>
-            <div class="form-check form-switch" style="display:none;">
-              <input class="form-check-input" type="checkbox" id="mov-attribute_reapply_overlays"
-                name="mov-attribute_reapply_overlays" value="true" {% if
-                data['libraries']['mov-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="mov-attribute_reapply_overlays" value="false">
-              <label class="form-check-label" for="mov-attribute_reapply_overlays">Reapply Overlays</label>
-            </div>
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="mov-attribute_remove_overlays"
-                name="mov-attribute_remove_overlays" value="true" {% if
-                data['libraries']['mov-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="mov-attribute_remove_overlays" value="false">
-              <label class="form-check-label me-3" for="mov-attribute_remove_overlays">
-                <a target="_blank" href="https://kometa.wiki/en/latest/config/libraries/#remove-overlays/">Remove Overlays</a>
-              </label>
-            </div>
+            <br><p><b class="text-info">Tip:</b> Using Reset Overlays or frequently Removing and Reapplying overlays will very quickly result in Image Bloat, as neither Plex or Kometa will clean up previously-used posters with Overlays. We would advise you to look at using <a href="https://kometa.wiki/en/latest/kometa/scripts/imagemaid">ImageMaid</a> to clean up old, unused images</p>
           </div>
         </div>
       </div>
@@ -2460,7 +2476,7 @@
           </div>
         </div>
       </div>
-      <!-- Show Attributes Accordion-->
+      <!-- Show Attributes Accordion -->
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -2468,48 +2484,79 @@
             Show Attributes
           </button>
         </h2>
-        <div id="showAttributes" class="accordion-collapse collapse">
+        <div id="showAttributes" class="accordion-collapse collapse" data-bs-parent="#accordionShows">
           <div class="accordion-body">
-            <div class="mb-3">
-              <!-- Use Separators Dropdown -->
-              <label for="sho-attribute_use_separators" class="form-label">
-                <a target="_blank" href="https://kometa.wiki/en/latest/defaults/separators/#use-separators">Use Separators</a>
+            <!-- Use Separators Dropdown -->
+            <label class="form-label">
+              <h6><u>Separators</u></h6>
+            </label>
+            <p>
+              Separators are like index cards at a library, to categorize Collections in your library. Example:
+              <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
+                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="400" style="opacity: 1;">'></i>
+            </p>
+            <p>
+              To enable Separators for the Defaults Collections, select your style from the drop-down below. Example of each Style:
+              <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
+                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators2.jpg" height="900" style="opacity: 1;">'></i>
+            </p>
+
+            <!-- Dropdown for separator styles -->
+            <div class="form-floating mb-3">
+              <select class="form-select" id="sho-attribute_use_separators" name="sho-template_variables[use_separators]">
+                <option value="none"
+                  {% if data['libraries'].get('sho-template_variables', {}).get('use_separators', None) in ['false', None] %}selected{% endif %}>
+                  None
+                </option>
+                {% set selected_style = data['libraries'].get('sho-template_variables', {}).get('sep_style', '') %}
+                {% for style, value in {
+                  "Amethyst": "amethyst", "Aqua": "aqua", "Blue": "blue", "Brown": "stb",
+                  "Forest": "forest", "Fuchsia": "fuchsia", "Gold": "gold", "Gray": "gray",
+                  "Green": "green", "Navy": "navy", "Ocean": "ocean", "Olive": "olive",
+                  "Orchid": "orchid", "Original": "orig", "Pink": "pink", "Plum": "plum", "Purple": "purple",
+                  "Red": "red", "Rust": "rust", "Salmon": "salmon", "Sand": "sand",
+                  "Tan": "tan"
+                }.items() %}
+                <option value="{{ value }}"
+                  {% if selected_style == value %}selected{% endif %}>
+                  {{ style }}
+                </option>
+                {% endfor %}
+              </select>
+              <label for="sho-attribute_use_separators">Separator Style</label>
+            </div>
+            <label class="form-label">
+              <h6><u>Remove / Reset Overlays</u></h6>
+            </label>
+
+            <p><b>Remove Overlays</b> will remove all Overlays from your library - you do not need to unselect previously selected Overlays as this toggle will take priority.</p>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sho-attribute_remove_overlays"
+                name="sho-attribute_remove_overlays" value="true" {% if
+                data['libraries']['sho-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-attribute_remove_overlays" value="false">
+              <label class="form-check-label me-3" for="sho-attribute_remove_overlays">
+                <a target="_blank" href="https://kometa.wiki/en/latest/config/libraries/#remove-overlays/">Remove Overlays</a>
               </label>
-              <div class="d-flex align-items-center">
-                <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
-                   title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="400" style="opacity: 1;">'>
-                </i>
-                <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
-                   title='<img src="https://kometa.wiki/en/latest/defaults/images/separators2.jpg" height="600" style="opacity: 1;">'>
-                </i>
-                <i class="bi bi-exclamation-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top"
-                   title="This will enable Separators between all of your selected default collections.">
-                </i>
-              </div>
-              <!-- Dropdown for separator styles -->
-              <div class="form-floating mb-3">
-                <select class="form-select" id="sho-attribute_use_separators" name="sho-template_variables[use_separators]">
-                  <option value="none"
-                    {% if data['libraries'].get('sho-template_variables', {}).get('use_separators', None) in ['false', None] %}selected{% endif %}>
-                    None
-                  </option>
-                  {% set selected_style = data['libraries'].get('sho-template_variables', {}).get('sep_style', '') %}
-                  {% for style, value in {
-                    "Amethyst": "amethyst", "Aqua": "aqua", "Blue": "blue", "Brown": "stb",
-                    "Forest": "forest", "Fuchsia": "fuchsia", "Gold": "gold", "Gray": "gray",
-                    "Green": "green", "Navy": "navy", "Ocean": "ocean", "Olive": "olive",
-                    "Orchid": "orchid", "Original": "orig", "Pink": "pink", "Plum": "plum", "Purple": "purple",
-                    "Red": "red", "Rust": "rust", "Salmon": "salmon", "Sand": "sand",
-                    "Tan": "tan"
-                  }.items() %}
-                  <option value="{{ value }}"
-                    {% if selected_style == value %}selected{% endif %}>
-                    {{ style }}
-                  </option>
-                  {% endfor %}
-                </select>
-                <label for="sho-attribute_use_separators">Separator Style</label>
-              </div>
+            </div>
+
+            <p><b>Reset Overlays</b> will grab a new base image from the source that you choose, and then use that as the source for applying your Overlays</p>
+            <p><b class="text-danger">Read this Warning:</b>
+            <i class="bi bi-exclamation-circle text-danger"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               data-bs-custom-class="text-tooltip"
+               title="Once you have done a run with Reset Overlays, you should then set this value to None or remove the reset_overlays line(s) from your config.yml. If you do not do this, you will end up in a loop of your Overlays being removed, a new image grabbed, and your Overlays reapplying.">
+            </i>
+            </p>
+            <div class="form-check form-switch" style="display:none;">
+              <input class="form-check-input" type="checkbox" id="sho-attribute_reapply_overlays"
+                name="sho-attribute_reapply_overlays" value="true" {% if
+                data['libraries']['sho-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
+              <input type="hidden" name="sho-attribute_reapply_overlays" value="false">
+              <label class="form-check-label" for="sho-attribute_reapply_overlays">Reapply Overlays</label>
+            </div>
 
             <div class="form-floating mb-3">
               <select class="form-select" id="sho-attribute_reset_overlays" name="sho-attribute_reset_overlays">
@@ -2521,23 +2568,7 @@
                   endif %}>Plex</option>
               </select>
               <label for="sho-attribute_reset_overlays">Reset Overlays</label>
-            </div>
-            <div class="form-check form-switch" style="display:none;">
-              <input class="form-check-input" type="checkbox" id="sho-attribute_reapply_overlays"
-                name="sho-attribute_reapply_overlays" value="true" {% if
-                data['libraries']['sho-attribute_reapply_overlays']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="sho-attribute_reapply_overlays" value="false">
-              <label class="form-check-label" for="sho-attribute_reapply_overlays">Reapply Overlays</label>
-            </div>
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-attribute_remove_overlays"
-                name="sho-attribute_remove_overlays" value="true" {% if
-                data['libraries']['sho-attribute_remove_overlays']|string|lower=='true' %}checked{% endif %}>
-              <input type="hidden" name="sho-attribute_remove_overlays" value="false">
-              <label class="form-check-label me-3" for="sho-attribute_remove_overlays">
-                  <a target="_blank" href="https://kometa.wiki/en/latest/config/libraries/#remove-overlays/">Remove Overlays</a>
-              </label>
-            </div>
+            <br><p><b class="text-info">Tip:</b> Using Reset Overlays or frequently Removing and Reapplying overlays will very quickly result in Image Bloat, as neither Plex or Kometa will clean up previously-used posters with Overlays. We would advise you to look at using <a href="https://kometa.wiki/en/latest/kometa/scripts/imagemaid">ImageMaid</a> to clean up old, unused images</p>
           </div>
         </div>
       </div>
