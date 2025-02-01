@@ -253,6 +253,17 @@ div#loading {
     background-color: transparent;
 }
 
-a {
-    color: rgb(255 255 255 / 70%);
+.sponsor-btn, .discord-btn {
+  background-color: #24292e; /* GitHub button color */
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.sponsor-btn:hover {
+  background-color: #d62b3a; /* GitHub Sponsor brand color */
+}
+
+.discord-btn:hover {
+  background-color: #5865F2; /* Discord brand color */
 }
