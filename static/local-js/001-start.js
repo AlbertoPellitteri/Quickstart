@@ -1,19 +1,21 @@
 /* global showToast, bootstrap, $ */
 
+/* eslint-disable no-unused-vars */
 // 🛠️ Ensure toggleConfigInput is globally available
-// function toggleConfigInput (selectElement) {
-//   const newConfigInputContainer = document.getElementById('newConfigInput')
+function toggleConfigInput (selectElement) {
+  const newConfigInputContainer = document.getElementById('newConfigInput')
 
-//   if (selectElement.value === 'add_config') {
-//     newConfigInputContainer.style.display = 'block'
-//   } else {
-//     newConfigInputContainer.style.display = 'none'
+  if (selectElement.value === 'add_config') {
+    newConfigInputContainer.style.display = 'block'
+  } else {
+    newConfigInputContainer.style.display = 'none'
 
-//     // 🛠️ Reset validation when hiding input
-//     const newConfigInput = document.getElementById('newConfigName')
-//     removeValidationMessages(newConfigInput)
-//   }
-// }
+    // 🛠️ Reset validation when hiding input
+    const newConfigInput = document.getElementById('newConfigName')
+    removeValidationMessages(newConfigInput)
+  }
+}
+/* eslint-enable no-unused-vars */
 
 document.addEventListener('DOMContentLoaded', function () {
   const clearSessionButton = document.getElementById('clearSessionButton')
