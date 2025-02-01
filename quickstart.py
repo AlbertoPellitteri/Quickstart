@@ -175,7 +175,7 @@ def step(name):
     page_info["new_config_name"] = namesgenerator.get_random_name()
 
     # Fetch available configurations from the database
-    available_configs = get_unique_config_names()
+    available_configs = get_unique_config_names() or []
 
     # Ensure the selected config is either in the dropdown or newly created
     if selected_config not in available_configs:
