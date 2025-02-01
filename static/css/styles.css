@@ -252,7 +252,3 @@ div#loading {
 .accordion-button:not(.collapsed) {
     background-color: transparent;
 }
-
-a {
-    color: rgb(255 255 255 / 70%);
-}
