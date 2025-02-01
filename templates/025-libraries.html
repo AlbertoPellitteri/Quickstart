@@ -1300,20 +1300,22 @@
         <div id="movieAttributes" class="accordion-collapse collapse" data-bs-parent="#accordionMovies">
           <div class="accordion-body">
             <!-- Use Separators Dropdown -->
-            <div class="mb-3">
-              <label for="mov-attribute_use_separators" class="form-label">
-                <a target="_blank" href="https://kometa.wiki/en/latest/defaults/separators/#use-separators">Use Separators</a>
-              </label>
-              <div class="d-flex align-items-center">
-                <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
-                   title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="400" style="opacity: 1;">'>
-                </i>
-                <i class="bi bi-exclamation-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top"
-                   title="This will enable Separators between all of your selected default collections.">
-                </i>
-              </div>
-
-              <!-- Dropdown for separator styles -->
+            <label for="mov-attribute_use_separators" class="form-label">
+              <a target="_blank" href="https://kometa.wiki/en/latest/defaults/separators/#use-separators">Use Separators</a>
+            </label>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
+                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="400" style="opacity: 1;">'>
+              </i>
+              <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
+                 title='<img src="https://kometa.wiki/en/latest/defaults/images/separators2.jpg" height="600" style="opacity: 1;">'>
+              </i>
+              <i class="bi bi-exclamation-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                 title="This will enable Separators between all of your selected default collections.">
+              </i>
+            </div>
+            <!-- Dropdown for separator styles -->
+            <div class="form-floating mb-3">
               <select class="form-select" id="mov-attribute_use_separators" name="mov-template_variables[use_separators]">
                 <option value="none"
                   {% if data['libraries'].get('mov-template_variables', {}).get('use_separators', None) in ['false', None] %}selected{% endif %}>
@@ -1334,19 +1336,9 @@
                 </option>
                 {% endfor %}
               </select>
+              <label for="mov-attribute_use_separators">Separator Style</label>
             </div>
 
-            <!-- <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="mov-attribute_use_separators" name="mov-attribute_use_separators" value="true" {% if data['libraries']['mov-attribute_use_separators']|string|lower=='true' %}checked{% endif %}>
-              <div class="d-flex align-items-center">
-                <label class="form-check-label me-3" for="mov-attribute_use_separators">
-                  <a target="_blank" href="https://kometa.wiki/en/latest/defaults/separators/#use-separators">Use Separators</a>
-                </label>
-                <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true" title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="200" style="opacity: 1;">'></i>
-                <i class="bi bi-exclamation-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="This will enable Separators between all of your selected default collections."></i>
-              </div>
-            </div>
-            <input type="hidden" name="mov-template_variables[use_separators]" value="false"> -->
             <div class="form-floating mb-3">
               <select class="form-select" id="mov-attribute_reset_overlays" name="mov-attribute_reset_overlays">
                 <option value="" {% if data['libraries'].get('mov-attribute_reset_overlays')=="" %}selected{% endif %}>
@@ -2487,45 +2479,38 @@
                 <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
                    title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="400" style="opacity: 1;">'>
                 </i>
+                <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true"
+                   title='<img src="https://kometa.wiki/en/latest/defaults/images/separators2.jpg" height="600" style="opacity: 1;">'>
+                </i>
                 <i class="bi bi-exclamation-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top"
                    title="This will enable Separators between all of your selected default collections.">
                 </i>
               </div>
-
               <!-- Dropdown for separator styles -->
-              <select class="form-select" id="sho-attribute_use_separators" name="sho-template_variables[use_separators]">
-                <option value="none"
-                  {% if data['libraries'].get('sho-template_variables', {}).get('use_separators', None) in ['false', None] %}selected{% endif %}>
-                  None
-                </option>
-                {% set selected_style = data['libraries'].get('sho-template_variables', {}).get('sep_style', '') %}
-                {% for style, value in {
-                  "Amethyst": "amethyst", "Aqua": "aqua", "Blue": "blue", "Brown": "stb",
-                  "Forest": "forest", "Fuchsia": "fuchsia", "Gold": "gold", "Gray": "gray",
-                  "Green": "green", "Navy": "navy", "Ocean": "ocean", "Olive": "olive",
-                  "Orchid": "orchid", "Original": "orig", "Pink": "pink", "Plum": "plum", "Purple": "purple",
-                  "Red": "red", "Rust": "rust", "Salmon": "salmon", "Sand": "sand",
-                  "Tan": "tan"
-                }.items() %}
-                <option value="{{ value }}"
-                  {% if selected_style == value %}selected{% endif %}>
-                  {{ style }}
-                </option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <!-- <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sho-attribute_use_separators" name="sho-attribute_use_separators" value="true" {% if data['libraries']['sho-attribute_use_separators']|string|lower=='true' %}checked{% endif %}>
-              <div class="d-flex align-items-center">
-                <label class="form-check-label me-3" for="sho-attribute_use_separators">
-                  <a target="_blank" href="https://kometa.wiki/en/latest/defaults/separators/#use-separators">Use Separators</a>
-                </label>
-                <i class="bi bi-search text-success me-3" data-bs-toggle="tooltip" data-bs-html="true" title='<img src="https://kometa.wiki/en/latest/defaults/images/separators.jpg" height="200" style="opacity: 1;">'></i>
-                <i class="bi bi-exclamation-circle text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="This will enable Separators between all of your selected default collections."></i>
+              <div class="form-floating mb-3">
+                <select class="form-select" id="sho-attribute_use_separators" name="sho-template_variables[use_separators]">
+                  <option value="none"
+                    {% if data['libraries'].get('sho-template_variables', {}).get('use_separators', None) in ['false', None] %}selected{% endif %}>
+                    None
+                  </option>
+                  {% set selected_style = data['libraries'].get('sho-template_variables', {}).get('sep_style', '') %}
+                  {% for style, value in {
+                    "Amethyst": "amethyst", "Aqua": "aqua", "Blue": "blue", "Brown": "stb",
+                    "Forest": "forest", "Fuchsia": "fuchsia", "Gold": "gold", "Gray": "gray",
+                    "Green": "green", "Navy": "navy", "Ocean": "ocean", "Olive": "olive",
+                    "Orchid": "orchid", "Original": "orig", "Pink": "pink", "Plum": "plum", "Purple": "purple",
+                    "Red": "red", "Rust": "rust", "Salmon": "salmon", "Sand": "sand",
+                    "Tan": "tan"
+                  }.items() %}
+                  <option value="{{ value }}"
+                    {% if selected_style == value %}selected{% endif %}>
+                    {{ style }}
+                  </option>
+                  {% endfor %}
+                </select>
+                <label for="sho-attribute_use_separators">Separator Style</label>
               </div>
-            </div>
-            <input type="hidden" name="sho-template_variables[use_separators]" value="false"> -->
+
             <div class="form-floating mb-3">
               <select class="form-select" id="sho-attribute_reset_overlays" name="sho-attribute_reset_overlays">
                 <option value="" {% if data['libraries'].get('sho-attribute_reset_overlays')=="" %}selected{% endif %}>
