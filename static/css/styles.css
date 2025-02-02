@@ -4,6 +4,7 @@
 
 body {
     margin: 20px;
+    background-color: #181818;
 }
 
 code {
@@ -12,6 +13,15 @@ code {
     word-wrap: break-word;
     background-color: hsl(225deg 8.87% 10.98%);
     padding: 0 0.2941176471em;
+}
+
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: #181818 !important;
+}
+
+.form-control, .form-select {
+    background-color: hsl(225deg 8.87% 10.98%);
 }
 
 
@@ -36,7 +46,7 @@ code {
     display: flex;
     justify-content: center;
     padding: 20px 0;
-    background-color: #212529;
+    background-color: #181818;
     margin-top: 20px;
     border-top: 1px solid #343a40 ;
 }
@@ -45,7 +55,6 @@ code {
     padding: 8px 16px;
     font-size: 14px;
     color: #fff;
-    background-color: #007bff; /* Blue color */
     border: none;
     border-radius: 5px;
     text-align: center;
