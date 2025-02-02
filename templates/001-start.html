@@ -49,21 +49,26 @@
       <img src="{{ url_for('static', filename='images/logo.webp') }}"
       alt="Quickstart"
       style="width: 300px; height: auto;" />
+      <br><br><p><b class="text-danger">Read this warning (hover over the icon): </b>
+    <i class="bi bi-exclamation-circle text-danger"
+       data-bs-toggle="tooltip"
+       data-bs-placement="top"
+       data-bs-custom-class="text-tooltip"
+       title="Quickstart is designed to be run by you, on your own machine, to ensure your data and credentials remain secure. All information entered, including credentials, is stored locally on your device, and Quickstart only communicates with third-party services to verify credentials. Kometa does not collect or share any data. We strongly advise against using a version of Quickstart hosted by someone else.">
+    </i>
+    </p>
     </center>
-    <br>
     <div class="form-text" id="pin-info">
       <p class="fs-5">Quickstart is a Web UI that will guide you through creating a Configuration File for Kometa.</p>
-      <div class="alert alert-danger" role="alert">
-        <strong>Important Notice:</strong> Quickstart is designed to be run by you, on your own machine, to ensure your data and credentials remain secure. All information entered, including credentials, is stored locally on your device, and Quickstart only communicates with third-party services to verify credentials. Kometa does not collect or share any data. We strongly advise against using a version of Quickstart hosted by someone else. For the official repository, visit <a href="https://github.com/Kometa-Team/Quickstart" target="_blank">Quickstart on GitHub</a>.
-      </div>
-      <p class="fs-5">Minimally, you will need information about your media server (URL and Token) and your TMDb information (API Key) before downloading the final config.yml file.</p>
-      <p class="fs-5">Once you have gathered that stuff, click the next "Arrow" above.</p>
-    </div>
+      <p class="fs-5"><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Click here</a> for a more in-depth explanation and example of what Quickstart does.</p>
+      <p class="fs-5">To use Quickstart, you will need at least a Plex URL & Token, and a TMDb API Key.</p>
+      <p class="fs-5">Review the Config Data section below and press the arrow button above when you are ready to begin.</p>
+    </div><br>
+    <label class="form-label">
+      <h6>Config Data</h6>
+    </label>
     <div class="form-text" id="name-info">
-      <p class="fs-6">The config name below is used for saving your config and progress on the server. You can change it if you wish before getting started.</p>
-      <div class="alert alert-warning" role="alert">
-        <strong>Note:</strong> Please write down the config name for future reference. This will help you to retrieve and modify your configuration later.
-      </div>
+      <p class="fs-6">The config name below is used for saving your config and progress within the Quickstart database. You can change it if you wish before getting started, or choose one of your previously-created configs from the drop-down.</p>
     </div>
 
     <div class="form-floating mb-3">
