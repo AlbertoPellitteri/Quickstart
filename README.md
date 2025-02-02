@@ -1,48 +1,52 @@
-### WIP - Not Fully Functional
+# Quickstart
 
-![image](./static/images/header.png)
+![Quickstart Logo](https://github.com/Kometa-Team/Quickstart/blob/main/static/images/logo.webp)
 
-![image](./static/images/logo.webp)
+Welcome to Kometa Quickstart! This Web UI tool will guide you through creating a Configuration File to use with Kometa.
 
-Welcome to Kometa Quickstart. Let's get started.
+Special Thanks to [bullmoose20](https://github.com/bullmoose20) and [chazlarson](https://github.com/chazlarson) for the time spent developing this tool.
+
+## Installing Quickstart
+
+We recommend running Quickstart on a system as a Python script
+
+These are high-level steps which assume the user has knowledge of python and pip, and the general ability to troubleshoot issues.
 
 > **We strongly recommend running this yourself rather than relying on someone else to host Quickstart.**
 >
 > This ensures that connection attempts are made exclusively to services and machines accessible only to you. Additionally, all credentials are stored locally, safeguarding your sensitive information from being stored on someone else's machine.
 
-After having cloned the repo and assuming you are on Windows and you have a folder on your machine called `pyprogs` where you cloned Quickstart, open a powershell prompt into the `pyprogs` folder and then:
+1. Clone or download and unzip the repo.
 
+```shell
+git clone https://github.com/Kometa-Team/Quickstart
 ```
+2. move into the Quickstart directory.
+
+```shell
 cd Quickstart
-python -m venv venv
-.\venv\scripts\activate.ps1
-python -m pip install --upgrade pip
-pip install -r .\requirements.txt
-pre-commit install
-pre-commit autoupdate
 ```
-Now you are ready to run it (with the venv activated)
 
-`python quickstart.py`
+3. Install dependencies (it is recommended to do this is a virtual environment):
 
-Or how to call it to run from the venv if you have closed the powershell prompt. Navigating to `pyprogs\Quickstart`
+```shell
+pip install -r requirements.txt
+```
 
-`.\venv\scripts\python quickstart.py`
+4. If the above command fails, run the following command:
 
-Which will look like this and then open up your favorite browser and navigate to the listed URLs:
+```shell
+pip install -r requirements.txt --ignore-installed
+```
+
+At this point Quickstart has been installed, and you can verify installation by running:
+
+```shell
+python Quickstart.py
+```
+
+You should see something similar to this:
+
 ![image](./static/images/running-in-pwsh.png)
 
-Note: Updates can then be performed pretty easily by opening up your Windows powershell prompt into the `pyprogs` directory and performing the following commands:
-```
-cd Quickstart
-git checkout main
-git stash
-git stash clear
-git pull
-.\venv\scripts\activate.ps1
-python -m pip install --upgrade pip
-pip install -r .\requirements.txt
-pre-commit autoupdate
-```
-
-There is a `.envrc` in the project, so if you are using a linux-alike and install `direnv`, then just entering the project directory in your shell will do all the above for you and leave you ready to run `python quickstart.py`.
+Navigate to one of the http addresses that you are presented with, and you should be taken to the Quickstart Welcome Page.
