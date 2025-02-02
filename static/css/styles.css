@@ -84,6 +84,25 @@ code {
     transform: translateY(-50%);
 }
 
+/* Remove underline and make text faded when disabled */
+#navbarDropdownMenuLink[disabled] {
+    color: #a0a0a0 !important;  /* Light gray text */
+    text-decoration: none !important; /* Remove underline */
+    opacity: 0.6;               /* Make it appear faded */
+    pointer-events: none;       /* Prevent clicking */
+}
+
+/* Remove Bootstrap's dropdown caret when disabled */
+#navbarDropdownMenuLink[disabled]::after {
+    display: none !important;  /* Hide the dropdown arrow */
+}
+
+/* Ensure no hover effect */
+#navbarDropdownMenuLink[disabled]:hover,
+#navbarDropdownMenuLink[disabled]:focus {
+    text-decoration: none !important;
+}
+
 /* -------------------- */
 /* FORM STYLES          */
 /* -------------------- */
