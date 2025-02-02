@@ -1,6 +1,6 @@
 # Quickstart
 
-![Quickstart Logo](https://github.com/Kometa-Team/Quickstart/blob/main/static/images/logo.webp)
+![Quickstart Logo](https://raw.githubusercontent.com/Kometa-Team/Quickstart/refs/heads/main/static/images/logo.webp)
 
 Welcome to Kometa Quickstart! This Web UI tool will guide you through creating a Configuration File to use with Kometa.
 
@@ -47,6 +47,6 @@ python Quickstart.py
 
 You should see something similar to this:
 
-![image](./static/images/running-in-pwsh.png)
+![image](https://raw.githubusercontent.com/Kometa-Team/Quickstart/refs/heads/main/static/images/running-in-pwsh.png)
 
 Navigate to one of the http addresses that you are presented with, and you should be taken to the Quickstart Welcome Page.
