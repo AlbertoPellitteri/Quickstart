@@ -5,6 +5,9 @@ $(document).ready(function () {
   const isValidated = document.getElementById('plex_validated').value.toLowerCase()
   const hiddenSection = document.getElementById('hidden')
   const plexDbCache = document.getElementById('plexDbCache')
+  const plexTokenInput = document.getElementById('plex_token')
+  const plexUrlInput = document.getElementById('plex_url')
+  const toggleButton = document.getElementById('toggleApikeyVisibility')
 
   validateButton.disabled = (isValidated === 'true')
 
@@ -15,10 +18,16 @@ $(document).ready(function () {
     plexDbCache.style.display = 'block'
   }
 
-  // Enable the validate button and set plex_validated to false if the Plex token or URL is changed
-  const plexTokenInput = document.getElementById('plex_token')
-  const plexUrlInput = document.getElementById('plex_url')
+  // 🔥 Set initial visibility based on token value
+  if (plexTokenInput.value.trim() === 'Enter Plex Token') {
+    plexTokenInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Set eye-slash icon
+  } else {
+    plexTokenInput.setAttribute('type', 'password') // Hide actual token
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Set eye icon
+  }
 
+  // Enable validate button and reset validation when token or URL changes
   plexTokenInput.addEventListener('input', function () {
     validateButton.disabled = false
     document.getElementById('plex_validated').value = 'false'
@@ -30,6 +39,7 @@ $(document).ready(function () {
   })
 })
 
+// Toggle password visibility
 document.getElementById('toggleApikeyVisibility').addEventListener('click', function () {
   const apikeyInput = document.getElementById('plex_token')
   const currentType = apikeyInput.getAttribute('type')

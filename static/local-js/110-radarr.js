@@ -1,9 +1,24 @@
 /* global $, initialRadarrRootFolderPath, initialRadarrQualityProfile, showSpinner, hideSpinner */
 
 $(document).ready(function () {
+  const apiKeyInput = document.getElementById('radarr_token')
+  const toggleButton = document.getElementById('toggleApikeyVisibility')
+  const validateButton = document.getElementById('validateButton')
   const isValidated = document.getElementById('radarr_validated').value.toLowerCase()
 
   console.log('Validated: ' + isValidated)
+
+  // Set initial visibility based on API key value
+  if (apiKeyInput.value.trim() === 'Enter Radarr API Key') {
+    apiKeyInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Show eye-slash
+  } else {
+    apiKeyInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Show eye
+  }
+
+  // Disable validate button if already validated
+  validateButton.disabled = isValidated === 'true'
 
   if (isValidated === 'true') {
     document.getElementById('validateButton').disabled = true

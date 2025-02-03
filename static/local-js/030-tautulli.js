@@ -1,23 +1,33 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('tautulli_validated').value.toLowerCase()
+  const apiKeyInput = document.getElementById('tautulli_apikey')
+  const urlInput = document.getElementById('tautulli_url')
   const validateButton = document.getElementById('validateButton')
+  const toggleButton = document.getElementById('toggleApikeyVisibility')
+  const isValidated = document.getElementById('tautulli_validated').value.toLowerCase()
 
   console.log('Validated: ' + isValidated)
 
-  if (isValidated === 'true') {
-    validateButton.disabled = true
+  // Set initial visibility based on API key value
+  if (apiKeyInput.value.trim() === 'Enter Tautulli API Key') {
+    apiKeyInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Set eye icon
   } else {
-    validateButton.disabled = false
+    apiKeyInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Set eye-slash icon
   }
 
-  document.getElementById('tautulli_apikey').addEventListener('input', function () {
+  // Disable validate button if already validated
+  validateButton.disabled = isValidated === 'true'
+
+  // Reset validation status when user types
+  apiKeyInput.addEventListener('input', function () {
     document.getElementById('tautulli_validated').value = 'false'
     validateButton.disabled = false
   })
 
-  document.getElementById('tautulli_url').addEventListener('input', function () {
+  urlInput.addEventListener('input', function () {
     document.getElementById('tautulli_validated').value = 'false'
     validateButton.disabled = false
   })
@@ -78,7 +88,7 @@ document.getElementById('validateButton').addEventListener('click', function () 
     })
 })
 
-document.getElementById('configForm').addEventListener('submit', function (event) {
+document.getElementById('configForm').addEventListener('submit', function () {
   const apiKeyInput = document.getElementById('tautulli_apikey')
   const urlInput = document.getElementById('tautulli_url')
   if (!apiKeyInput.value) {

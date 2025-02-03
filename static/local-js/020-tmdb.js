@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const validateButton = document.getElementById('validateButton')
   const apiKeyInput = document.getElementById('tmdb_apikey')
+  const toggleButton = document.getElementById('toggleApikeyVisibility')
   const tmdbValidatedInput = document.getElementById('tmdb_validated')
   const statusMessage = document.getElementById('statusMessage')
   const languageDropdown = document.getElementById('tmdb_language')
@@ -11,6 +12,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const regionStatusMessage = document.getElementById('regionStatusMessage')
   const nextButton = document.querySelector('button[onclick*="next"]')
   const jumpToButton = document.querySelector('.dropdown-toggle')
+
+  console.log('Validated: ' + tmdbValidatedInput.value)
+
+  // Set initial visibility based on API key value
+  if (apiKeyInput.value.trim() === 'Enter TMDb API Key') {
+    apiKeyInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Set eye-slash icon
+  } else {
+    apiKeyInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Set eye icon
+  }
+
+  // Disable validate button if already validated
+  validateButton.disabled = tmdbValidatedInput.value.toLowerCase() === 'true'
 
   // Check if API key is validated
   const isApiKeyValidated = () => tmdbValidatedInput.value.toLowerCase() === 'true'
@@ -95,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Toggle visibility of the API key input
-  document.getElementById('toggleApikeyVisibility').addEventListener('click', function () {
+  toggleButton.addEventListener('click', function () {
     const currentType = apiKeyInput.getAttribute('type')
     apiKeyInput.setAttribute('type', currentType === 'password' ? 'text' : 'password')
     this.innerHTML = currentType === 'password'

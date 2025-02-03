@@ -476,7 +476,7 @@ tautulli:                        # Can be individually specified per library as 
   url: http://192.168.1.12:8181
   apikey: Enter Tautulli API Key
 github:
-  token: Enter GitHub personal access token
+  token: Enter GitHub Personal Access Token
 omdb:
   apikey: Enter OMDb API Key
   cache_expiration: 60
@@ -487,7 +487,7 @@ notifiarr:
   apikey: Enter Notifiarr API Key
 gotify:
   url: http://192.168.1.12:80
-  token: Enter Gotify token
+  token: Enter Gotify Token
 ntfy:
   url: http://192.168.1.12:80
   token: Enter ntfy Access Token

@@ -1,18 +1,27 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('github_validated').value.toLowerCase() === 'true'
+  const apiKeyInput = document.getElementById('github_token')
   const validateButton = document.getElementById('validateButton')
+  const toggleButton = document.getElementById('toggleApikeyVisibility')
+  const isValidated = document.getElementById('github_validated').value.toLowerCase() === 'true'
 
   console.log('Validated: ' + isValidated)
 
-  if (isValidated) {
-    validateButton.disabled = true
+  // Set initial visibility based on API key value
+  if (apiKeyInput.value.trim() === 'Enter GitHub Personal Access Token') {
+    apiKeyInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Set eye-slash icon
   } else {
-    validateButton.disabled = false
+    apiKeyInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Set eye icon
   }
 
-  document.getElementById('github_token').addEventListener('input', function () {
+  // Disable validate button if already validated
+  validateButton.disabled = isValidated
+
+  // Reset validation status when user types
+  apiKeyInput.addEventListener('input', function () {
     document.getElementById('github_validated').value = 'false'
     validateButton.disabled = false
   })
@@ -69,7 +78,7 @@ document.getElementById('validateButton').addEventListener('click', function () 
     })
 })
 
-document.getElementById('configForm').addEventListener('submit', function (event) {
+document.getElementById('configForm').addEventListener('submit', function () {
   const apiKeyInput = document.getElementById('github_token')
   if (!apiKeyInput.value) {
     apiKeyInput.value = ''

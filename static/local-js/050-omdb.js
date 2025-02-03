@@ -1,18 +1,27 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('omdb_validated').value.toLowerCase()
+  const apiKeyInput = document.getElementById('omdb_apikey')
   const validateButton = document.getElementById('validateButton')
+  const toggleButton = document.getElementById('toggleApikeyVisibility')
+  const isValidated = document.getElementById('omdb_validated').value.toLowerCase()
 
   console.log('Validated: ' + isValidated)
 
-  if (isValidated === 'true') {
-    validateButton.disabled = true
+  // Set initial visibility based on API key value
+  if (apiKeyInput.value.trim() === 'Enter OMDb API Key') {
+    apiKeyInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Set eye-slash icon
   } else {
-    validateButton.disabled = false
+    apiKeyInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Set eye icon
   }
 
-  document.getElementById('omdb_apikey').addEventListener('input', function () {
+  // Disable validate button if already validated
+  validateButton.disabled = isValidated === 'true'
+
+  // Reset validation status when user types
+  apiKeyInput.addEventListener('input', function () {
     document.getElementById('omdb_validated').value = 'false'
     validateButton.disabled = false
   })

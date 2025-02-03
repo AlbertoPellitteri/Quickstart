@@ -1,7 +1,7 @@
 {% extends "000-base.html" %} {% block content %}
 {% include "001-navigation.html" %}
 {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
-    <div class="input-group input-group-lg form-floating">
+    <div class="input-group form-floating">
       <input type="password" class="form-control" id="github_token" name="github_token" value="{{ data['github']['token'] }}" title="GitHub Token" aria-label="GitHub Token">
       <label for="github_token">GitHub Personal Access Token</label>
       <button class="btn btn-secondary" id="toggleApikeyVisibility" type="button">
