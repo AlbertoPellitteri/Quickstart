@@ -230,6 +230,37 @@ def build_config(header_style="ascii"):
         # Replace in config_data
         config_data["playlist_files"] = formatted_playlist_files
 
+    if "webhooks" in config_data:
+        webhooks_data = config_data["webhooks"]
+
+        # Handle case where `webhooks` is nested inside itself
+        if isinstance(webhooks_data, dict) and "webhooks" in webhooks_data:
+            webhooks_data = webhooks_data["webhooks"]  # 🔥 Fix: Handle extra nesting
+
+        # ✅ Remove empty values
+        cleaned_webhooks = {
+            key: value
+            for key, value in webhooks_data.items()
+            if value is not None and value != "" and value != [] and value != {}
+        }
+
+        # ✅ If no valid webhooks exist, remove the "webhooks" section entirely
+        if cleaned_webhooks:
+            config_data["webhooks"] = {
+                "webhooks": cleaned_webhooks
+            }  # 🔥 Preserve webhooks key
+        else:
+            config_data.pop("webhooks", None)  # 🚀 Fully remove empty webhooks
+
+        # 🔍 Debugging: Ensure webhooks are correctly cleaned
+        if app.config["QS_DEBUG"]:
+            print(
+                "[DEBUG] Cleaned Webhooks Data AFTER Removing Empty Values:",
+                cleaned_webhooks,
+            )
+            if "webhooks" not in config_data:
+                print("[DEBUG] Webhooks section completely removed.")
+
     # Process the libraries section
     if "libraries" in config_data and "libraries" in config_data["libraries"]:
         nested_libraries_data = config_data["libraries"]["libraries"]
