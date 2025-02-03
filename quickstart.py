@@ -75,11 +75,6 @@ app = Flask(__name__)
 # Use booler() for FLASK_DEBUG conversion
 app.config["QS_DEBUG"] = booler(os.getenv("QS_DEBUG", "0"))
 
-if app.config["QS_DEBUG"]:
-    print("[DEBUG] Quickstart Debugging is enabled.")
-else:
-    print("[INFO] Quickstart Debugging is disabled.")
-
 app.config["SESSION_TYPE"] = "cachelib"
 app.config["SESSION_CACHELIB"] = FileSystemCache(
     cache_dir="flask_session", threshold=500
@@ -429,8 +424,27 @@ def validate_notifiarr():
 
 
 if __name__ == "__main__":
-    port = 5000  # Default port
-    # Check for a `--port` argument
-    if len(sys.argv) > 1 and sys.argv[1].startswith("--port="):
-        port = int(sys.argv[1].split("=")[1])
-    app.run(host="0.0.0.0", port=port, debug=True)
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Run Quickstart Flask App")
+    parser.add_argument(
+        "--port", type=int, help="Specify the port number to run the server"
+    )
+    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
+    args = parser.parse_args()
+
+    # Load port and debug settings from `.env`
+    env_port = os.getenv("QS_PORT", "5000")
+    env_debug = booler(
+        os.getenv("QS_DEBUG", "0")
+    )  # Use booler() to handle boolean conversion
+
+    # Determine final settings with precedence: CLI > .env > default
+    port = args.port if args.port else int(env_port)
+    debug_mode = args.debug if args.debug else env_debug
+
+    print(
+        f"[INFO] Running on port {port} | Debug Mode: {'Enabled' if debug_mode else 'Disabled'}"
+    )
+
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
