@@ -385,6 +385,13 @@
               </div>
 
               <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="show_unfiltered" name="show_unfiltered" value="true" {%
+                  if data['settings']['show_unfiltered']|string|lower=='true' %}checked{% endif %}>
+                <input type="hidden" name="show_unfiltered" value="false">
+                <label class="form-check-label" for="show_unfiltered">Show Unfiltered</label>
+              </div>
+
+              <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="only_filter_missing" name="only_filter_missing"
                   value="true" {% if data['settings']['only_filter_missing']|string|lower=='true' %}checked{% endif %}>
                 <input type="hidden" name="only_filter_missing" value="false">
