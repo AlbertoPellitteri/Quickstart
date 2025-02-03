@@ -1,18 +1,47 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('mal_validated').value
+  const clientSecretInput = document.getElementById('mal_client_secret')
+  const toggleButton = document.getElementById('toggleClientSecretVisibility')
+  const validateButton = document.getElementById('validate_mal_url')
+  const isValidatedElement = document.getElementById('mal_validated')
+  const isValidated = isValidatedElement ? isValidatedElement.value.toLowerCase() : 'false'
 
-  console.log('Validated: ' + isValidated)
+  console.log('Validated:', isValidated)
 
-  // if (isValidated) {
-  // }
+  // Ensure initial visibility based on input value
+  if (clientSecretInput.value.trim() === 'Enter MyAnimeList Client Secret') {
+    clientSecretInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Show eye-slash
+  } else {
+    clientSecretInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Show eye
+  }
+
+  // Disable validate button if already validated
+  if (isValidated === 'true') {
+    validateButton.disabled = true
+  }
+
+  // Reset validation status when user types
+  const inputFields = ['mal_client_id', 'mal_client_secret', 'mal_code_verifier', 'mal_localhost_url']
+  inputFields.forEach(field => {
+    const inputElement = document.getElementById(field)
+    if (inputElement) {
+      inputElement.addEventListener('input', function () {
+        isValidatedElement.value = 'false'
+        validateButton.disabled = false
+      })
+    } else {
+      console.warn(`Warning: Element with ID '${field}' not found.`)
+    }
+  })
 })
 
 document.getElementById('toggleClientSecretVisibility').addEventListener('click', function () {
-  const apikeyInput = document.getElementById('mal_client_secret')
-  const currentType = apikeyInput.getAttribute('type')
-  apikeyInput.setAttribute('type', currentType === 'password' ? 'text' : 'password')
+  const clientSecretInput = document.getElementById('mal_client_secret')
+  const currentType = clientSecretInput.getAttribute('type')
+  clientSecretInput.setAttribute('type', currentType === 'password' ? 'text' : 'password')
   this.innerHTML = currentType === 'password' ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>'
 })
 
@@ -71,7 +100,6 @@ document.getElementById('validate_mal_url').addEventListener('click', function (
   const malSecret = document.getElementById('mal_client_secret').value
   const malVerifier = document.getElementById('mal_code_verifier').value
   const malLocalhostURL = document.getElementById('mal_localhost_url').value
-
   const statusMessage = document.getElementById('statusMessage')
 
   if (!malClient || !malSecret || !malVerifier || !malLocalhostURL) {
@@ -82,6 +110,7 @@ document.getElementById('validate_mal_url').addEventListener('click', function (
 
   showSpinner('validate')
   hideSpinner('retrieve')
+
   fetch('/validate_mal', {
     method: 'POST',
     headers: {

@@ -1,18 +1,45 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('trakt_validated').value
+  const traktClientSecretInput = document.getElementById('trakt_client_secret')
+  const toggleButton = document.getElementById('toggleClientSecretVisibility')
+  const validateButton = document.getElementById('validate_trakt_pin')
+  const isValidatedElement = document.getElementById('trakt_validated')
+  const isValidated = isValidatedElement.value.toLowerCase()
 
-  console.log('Validated: ' + isValidated)
+  console.log('Validated:', isValidated)
 
-  // if (isValidated) {
-  // }
+  // Set initial visibility based on Client Secret value
+  if (traktClientSecretInput.value.trim() === 'Enter Trakt Client Secret') {
+    traktClientSecretInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Show eye-slash
+  } else {
+    traktClientSecretInput.setAttribute('type', 'password') // Hide actual secret
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Show eye
+  }
+
+  // Disable validate button if already validated
+  validateButton.disabled = isValidated === 'true'
+
+  // Reset validation status when user types
+  const inputFields = ['trakt_client_id', 'trakt_client_secret', 'trakt_pin']
+  inputFields.forEach(field => {
+    const inputElement = document.getElementById(field)
+    if (inputElement) {
+      inputElement.addEventListener('input', function () {
+        isValidatedElement.value = 'false'
+        validateButton.disabled = false
+      })
+    } else {
+      console.warn(`Warning: Element with ID '${field}' not found.`)
+    }
+  })
 })
 
 document.getElementById('toggleClientSecretVisibility').addEventListener('click', function () {
-  const apikeyInput = document.getElementById('trakt_client_secret')
-  const currentType = apikeyInput.getAttribute('type')
-  apikeyInput.setAttribute('type', currentType === 'password' ? 'text' : 'password')
+  const traktClientSecretInput = document.getElementById('trakt_client_secret')
+  const currentType = traktClientSecretInput.getAttribute('type')
+  traktClientSecretInput.setAttribute('type', currentType === 'password' ? 'text' : 'password')
   this.innerHTML = currentType === 'password' ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>'
 })
 
@@ -68,12 +95,14 @@ document.getElementById('validate_trakt_pin').addEventListener('click', function
   const statusMessage = document.getElementById('statusMessage')
 
   if (!traktClient || !traktSecret || !traktPin) {
-    statusMessage.textContent = 'ID, secret, and PIN and all required.'
+    statusMessage.textContent = 'ID, secret, and PIN are all required.'
     statusMessage.style.display = 'block'
     return
   }
+
   showSpinner('validate')
   hideSpinner('retrieve')
+
   fetch('/validate_trakt', {
     method: 'POST',
     headers: {

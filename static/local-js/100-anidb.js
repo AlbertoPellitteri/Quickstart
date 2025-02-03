@@ -1,21 +1,38 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('anidb_validated').value.toLowerCase()
+  const passwordInput = document.getElementById('anidb_password')
+  const toggleButton = document.getElementById('togglePasswordVisibility')
+  const validateButton = document.getElementById('validateButton')
+  const isValidatedElement = document.getElementById('anidb_validated')
+  const isValidated = isValidatedElement.value.toLowerCase()
 
-  console.log('Validated: ' + isValidated)
+  console.log('Validated:', isValidated)
 
-  if (isValidated === 'true') {
-    document.getElementById('validateButton').disabled = true
+  // Set initial visibility based on password value
+  if (passwordInput.value.trim() === 'Enter AniDB Password') {
+    passwordInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Show eye-slash
   } else {
-    document.getElementById('validateButton').disabled = false
+    passwordInput.setAttribute('type', 'password') // Hide actual password
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Show eye
   }
-});
 
-['anidb_client', 'anidb_version', 'anidb_username', 'anidb_password'].forEach(field => {
-  document.getElementById(field).addEventListener('input', function () {
-    document.getElementById('anidb_validated').value = 'false'
-    document.getElementById('validateButton').disabled = false
+  // Disable validate button if already validated
+  validateButton.disabled = isValidated === 'true'
+
+  // Reset validation status when user types
+  const inputFields = ['anidb_client', 'anidb_version', 'anidb_username', 'anidb_password']
+  inputFields.forEach(field => {
+    const inputElement = document.getElementById(field)
+    if (inputElement) {
+      inputElement.addEventListener('input', function () {
+        isValidatedElement.value = 'false'
+        validateButton.disabled = false
+      })
+    } else {
+      console.warn(`Warning: Element with ID '${field}' not found.`)
+    }
   })
 })
 
@@ -32,6 +49,7 @@ document.getElementById('validateButton').addEventListener('click', function () 
   const client = document.getElementById('anidb_client').value
   const clientver = document.getElementById('anidb_version').value
   const statusMessage = document.getElementById('statusMessage')
+  const validateButton = document.getElementById('validateButton')
 
   if (!username || !password || !client || !clientver) {
     statusMessage.textContent = 'Please enter all required fields.'
@@ -53,24 +71,23 @@ document.getElementById('validateButton').addEventListener('click', function () 
       if (data.valid) {
         hideSpinner('validate')
         document.getElementById('anidb_validated').value = 'true'
-        statusMessage.textContent = 'AniDb credentials are valid.'
+        statusMessage.textContent = 'AniDB credentials are valid.'
         statusMessage.style.color = '#75b798'
-        document.getElementById('validateButton').disabled = 'true'
+        validateButton.disabled = true
       } else {
-        hideSpinner('validate')
         document.getElementById('anidb_validated').value = 'false'
         statusMessage.textContent = `Error: ${data.error}`
         statusMessage.style.color = '#ea868f'
-        document.getElementById('validateButton').disabled = 'false'
+        validateButton.disabled = false
       }
       statusMessage.style.display = 'block'
     })
     .catch((error) => {
       hideSpinner('validate')
       console.error('Error:', error)
-      statusMessage.textContent = 'Error validating AniDb credentials.'
+      statusMessage.textContent = 'Error validating AniDB credentials.'
       statusMessage.style.color = '#ea868f'
       statusMessage.style.display = 'block'
-      document.getElementById('validateButton').disabled = false
+      validateButton.disabled = false
     })
 })

@@ -1,18 +1,27 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('gotify_validated').value.toLowerCase()
+  const gotifyTokenInput = document.getElementById('gotify_token')
   const validateButton = document.getElementById('validateButton')
+  const toggleButton = document.getElementById('toggleTokenVisibility')
+  const isValidated = document.getElementById('gotify_validated').value.toLowerCase()
 
   console.log('Validated: ' + isValidated)
 
-  if (isValidated === 'true') {
-    validateButton.disabled = true
+  // Set initial visibility based on API key value
+  if (gotifyTokenInput.value.trim() === 'Enter Gotify Token') {
+    gotifyTokenInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Set eye icon
   } else {
-    validateButton.disabled = false
+    gotifyTokenInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Set eye-slash icon
   }
 
-  document.getElementById('gotify_token').addEventListener('input', function () {
+  // Disable validate button if already validated
+  validateButton.disabled = isValidated === 'true'
+
+  // Reset validation status when user types
+  gotifyTokenInput.addEventListener('input', function () {
     document.getElementById('gotify_validated').value = 'false'
     validateButton.disabled = false
   })

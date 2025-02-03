@@ -1,10 +1,21 @@
 /* global $, showSpinner, hideSpinner */
 
 $(document).ready(function () {
+  const tokenInput = document.getElementById('ntfy_token')
+  const toggleButton = document.getElementById('toggleTokenVisibility')
   const isValidated = document.getElementById('ntfy_validated').value.toLowerCase()
   const validateButton = document.getElementById('validateButton')
 
   console.log('Validated: ' + isValidated)
+
+  // Set initial visibility based on API key value
+  if (tokenInput.value.trim() === 'Enter ntfy Access Token') {
+    tokenInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Set eye-slash icon
+  } else {
+    tokenInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Set eye icon
+  }
 
   if (isValidated === 'true') {
     validateButton.disabled = true
@@ -12,7 +23,7 @@ $(document).ready(function () {
     validateButton.disabled = false
   }
 
-  document.getElementById('ntfy_token').addEventListener('input', function () {
+  tokenInput.addEventListener('input', function () {
     document.getElementById('ntfy_validated').value = 'false'
     validateButton.disabled = false
   })

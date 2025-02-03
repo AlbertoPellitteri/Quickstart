@@ -1,9 +1,27 @@
 /* global $, initialSonarrRootFolderPath, initialSonarrQualityProfile, initialSonarrLanguageProfile, showSpinner, hideSpinner */
 
 $(document).ready(function () {
-  const isValidated = document.getElementById('sonarr_validated').value.toLowerCase()
+  const apiKeyInput = document.getElementById('sonarr_token')
+  const toggleButton = document.getElementById('toggleApikeyVisibility')
+  const validateButton = document.getElementById('validateButton')
+  const isValidatedElement = document.getElementById('sonarr_validated')
+  const isValidated = isValidatedElement ? isValidatedElement.value.toLowerCase() : 'false'
 
-  console.log('Validated: ' + isValidated)
+  console.log('Validated:', isValidated)
+
+  // Set initial visibility based on API key value
+  if (apiKeyInput.value.trim() === 'Enter Sonarr API Key') {
+    apiKeyInput.setAttribute('type', 'text') // Show placeholder text
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>' // Show eye-slash
+  } else {
+    apiKeyInput.setAttribute('type', 'password') // Hide actual key
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>' // Show eye
+  }
+
+  // Disable validate button if already validated
+  if (isValidatedElement) {
+    validateButton.disabled = isValidated === 'true'
+  }
 
   if (isValidated === 'true') {
     document.getElementById('validateButton').disabled = true
