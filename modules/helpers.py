@@ -120,7 +120,7 @@ def user_visible_name(raw_name):
     elif raw_name == "anidb":
         formatted_name = "AniDB"
     elif raw_name == "playlist_files":
-        formatted_name = "Playlist"
+        formatted_name = "Playlists"
     elif raw_name == "libraries":
         formatted_name = "Libraries"
     elif raw_name == "final":
