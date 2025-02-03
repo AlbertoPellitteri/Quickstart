@@ -11,7 +11,7 @@
         <option value="custom" {% if (data and data.webhooks[webhook] and data.webhooks[webhook].startswith('http')) %}selected{% endif %}>Custom</option>
       </select>
       <label for="webhooks_{{ webhook }}">{{ webhook|replace("_", " ")|title }} Webhook Details</label>
-      <div class="input-group input-group-lg custom-webhook" id="webhooks_{{ webhook }}_custom" style="display: none;">
+      <div class="input-group custom-webhook" id="webhooks_{{ webhook }}_custom" style="display: none;">
         <div class="input-group input-group-lg">
           <input type="text" class="form-control custom-webhook-url" placeholder="Enter webhook URL ({{ webhook|replace("_", " ")|title }})"
             value="{% if (data and data.webhooks[webhook] and data.webhooks[webhook].startswith('http')) %}{{ data.webhooks[webhook] }}{% endif %}"
