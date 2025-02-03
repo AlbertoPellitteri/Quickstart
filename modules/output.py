@@ -135,7 +135,7 @@ def build_libraries_section(
 
         # Add entry only if it has data
         if entry:
-            libraries_section[library_name] = entry
+            libraries_section[library_name] = reorder_library_section(entry)
 
     # Process movie libraries
     for library_key, library_name in movie_libraries.items():
@@ -148,6 +148,44 @@ def build_libraries_section(
         add_entry(library_name, "sho", show_collections, show_overlays, show_attributes)
 
     return {"libraries": libraries_section}
+
+
+def reorder_library_section(library_data):
+    """
+    Reorders library data so that:
+    - `template_variables` appears just below the library name.
+    - `remove_overlays` and `reset_overlays` appear above `overlay_files`.
+    - Other keys remain in their default order.
+    """
+    ordered_keys = [
+        "template_variables",
+        "remove_overlays",
+        "reset_overlays",
+        "overlay_files",
+    ]
+
+    reordered_data = {}
+
+    # Ensure template_variables is placed first (if it exists)
+    if "template_variables" in library_data:
+        reordered_data["template_variables"] = library_data.pop("template_variables")
+
+    # Add all remaining keys except overlay_files (keep existing order)
+    for key, value in list(library_data.items()):
+        if key not in ordered_keys:
+            reordered_data[key] = value
+
+    # Ensure remove_overlays and reset_overlays appear before overlay_files
+    if "remove_overlays" in library_data:
+        reordered_data["remove_overlays"] = library_data.pop("remove_overlays")
+    if "reset_overlays" in library_data:
+        reordered_data["reset_overlays"] = library_data.pop("reset_overlays")
+
+    # Finally, add overlay_files at the correct position
+    if "overlay_files" in library_data:
+        reordered_data["overlay_files"] = library_data.pop("overlay_files")
+
+    return reordered_data
 
 
 def build_config(header_style="ascii"):
