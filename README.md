@@ -1,5 +1,3 @@
-# Quickstart
-
 ![Quickstart Logo](https://raw.githubusercontent.com/Kometa-Team/Quickstart/refs/heads/main/static/images/logo.webp)
 
 Welcome to Kometa Quickstart! This Web UI tool will guide you through creating a Configuration File to use with Kometa.
