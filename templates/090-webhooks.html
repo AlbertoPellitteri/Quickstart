@@ -2,7 +2,7 @@
 {% include "001-navigation.html" %}
 {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
     {% for webhook in ["error", "run_start", "run_end", "changes", "version", "delete"] %}
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <select class="form-select" id="webhooks_{{ webhook }}" name="webhooks_{{ webhook }}" onchange="showCustomInput(this)">
         <option value="">None</option>
         <option value="notifiarr" {% if page_info['notifiarr_available'] %}enabled{% else %}disabled{% endif %} {% if data.webhooks[webhook] == 'notifiarr' %}selected{% endif %}>Notifiarr</option>

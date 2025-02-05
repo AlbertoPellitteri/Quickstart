@@ -4,8 +4,8 @@
     <div class="input-group mb-2">
       <div class="form-floating flex-grow-1">
         <input type="password" class="form-control" id="notifiarr_apikey" name="notifiarr_apikey"
-               value="{{ data['notifiarr']['apikey'] }}" title="Notifiarr API Key"
-               aria-label="Notifiarr API Key" required="">
+               value="" title="Notifiarr API Key"
+               aria-label="Notifiarr API Key">
         <label for="notifiarr_apikey">Notifiarr API Key</label>
       </div>
       <button class="btn btn-secondary" id="toggleApikeyVisibility" type="button">
@@ -15,6 +15,7 @@
         Validate <i id="spinner_validate" class="spinner-border spinner-border-sm" style="display:none;"></i>
       </button>
     </div>
+
 
     <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="notifiarr_validated" name="notifiarr_validated" value="{{ data['validated'] }}" title="">
