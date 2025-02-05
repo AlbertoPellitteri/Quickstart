@@ -2,8 +2,9 @@
 {% include "001-navigation.html" %}
 {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
     <div class="form-floating">
-      <input type="text" class="form-control" id="plex_url" name="plex_url" value="" title="http://127.0.0.1:32400" required="">
-      <label for="plex_url">Plex URL</label>
+      <input type="text" class="form-control" id="plex_url" name="plex_url" value="" title="Plex URL" required="">
+
+      <label for="plex_url">Plex URL<span class="text-info ms-2">(e.g. http://127.0.0.1:32400)</span></label>
     </div>
     <div class="input-group form-floating">
       <input type="password" class="form-control" id="plex_token" name="plex_token" value="" title="Token" aria-label="Plex Token" required="">
@@ -27,7 +28,7 @@
     <div class="hidden" id="hidden" style="display:none">
       <div class="form-floating">
         <input type="number" class="form-control" id="plex_db_cache" name="plex_db_cache" value="{{ data['plex']['db_cache'] }}" title="Set the size of the Plex Database Cache (in Megabytes), default is 40" min="40" required="">
-        <label for="plex_db_cache">Database Cache Size (in mb)</label>
+        <label for="plex_db_cache">Database Cache Size (in mb)<span class="text-info ms-2">(value obtained automatically from Plex)</span></label>
       </div>
       <div id="plexDbCache" class="status-message"></div>
       <div class="form-floating">

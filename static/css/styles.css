@@ -148,6 +148,9 @@ label {
     position: relative;
 }
 
+.text-info {
+    color: rgb(0 152 183) !important;
+}
 /* -------------------- */
 /* FORM COMPONENTS      */
 /* -------------------- */
