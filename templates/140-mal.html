@@ -1,15 +1,20 @@
 {% extends "000-base.html" %} {% block content %}
 {% include "001-navigation.html" %}
 {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="text" class="form-control" id="mal_client_id" name="mal_client_id" value="{{ data['mal']['client_id'] }}" oninput="updateMALTargetURL(this)">
       <label for="mal_client_id">Client ID</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="hidden" class="form-control" id="mal_code_verifier" name="mal_code_verifier" value="{{ data['code_verifier']}}">
     </div>
-    <div class="input-group form-floating">
-      <input type="password" class="form-control" id="mal_client_secret" name="mal_client_secret" value="{{ data['mal']['client_secret'] }}" title="Client Secret" aria-label="Client Secret" oninput="updateMALTargetURL(this)"><label for="client_secret">Client Secret</label>
+    <div class="input-group mb-2">
+      <div class="form-floating flex-grow-1">
+        <input type="password" class="form-control" id="mal_client_secret" name="mal_client_secret"
+               value="{{ data['mal']['client_secret'] }}" title="Client Secret"
+               aria-label="Client Secret" oninput="updateMALTargetURL(this)" required="">
+        <label for="mal_client_secret">Client Secret</label>
+      </div>
       <button class="btn btn-secondary" id="toggleClientSecretVisibility" type="button">
         <i class="fas fa-eye"></i>
       </button>
@@ -18,7 +23,7 @@
       </button>
     </div>
     <input type="hidden" class="form-control" id="mal_url" name="mal_url" readonly oninput="enableLocalURLButton(this)">
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
     </div>
     <div class="form-group" id="localhost_url">
       <div class="input-group">

@@ -3,7 +3,7 @@
 {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
     <div id="validation-messages" class="alert alert-danger" role="alert" style="display: none;">
     </div>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <div class="accordion" id="accordionExample">
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -14,7 +14,7 @@
           </h2>
           <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <div id="asset_directory_container">
                   <label>Asset Directory</label>
                   {% for directory in data['settings']['asset_directory'] %}
@@ -45,7 +45,7 @@
                 <label class="form-check-label" for="create_asset_folders">Create Asset Folders</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="number" class="form-control" id="asset_depth" name="asset_depth" placeholder="" min="0"
                   value="{{ data['settings']['asset_depth'] }}">
                 <label for="asset_depth">Asset Depth</label>
@@ -103,7 +103,7 @@
                 <label class="form-check-label" for="show_asset_not_needed">Show Asset Not Needed</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <select class="form-select" id="overlay_artwork_filetype" name="overlay_artwork_filetype">
                   <option value="jpg" {% if data['settings']['overlay_artwork_filetype']=='jpg' %}selected{% endif %}>
                     JPG</option>
@@ -117,7 +117,7 @@
                 <label for="overlay_artwork_filetype">Overlay Artwork Filetype</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="number" class="form-control" id="overlay_artwork_quality" name="overlay_artwork_quality" min="1" max="100"
                   placeholder="" value="{{ data['settings']['overlay_artwork_quality'] }}">
                 <label for="overlay_artwork_quality">Overlay Artwork Quality</label>
@@ -141,7 +141,7 @@
                 <input type="hidden" name="cache" value="false">
                 <label class="form-check-label" for="cache">Cache</label>
               </div>
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="number" class="form-control" id="cache_expiration" name="cache_expiration" placeholder="" min="1"
                   value="{{ data['settings']['cache_expiration'] }}">
                 <label for="cache_expiration">Cache Expiration (days)</label>
@@ -160,7 +160,7 @@
           <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <select class="form-select" id="sync_mode" name="sync_mode">
                   <option value="append" {% if data['settings']['sync_mode']=='append' %}selected{% endif %}>Append
                     (default)</option>
@@ -169,7 +169,7 @@
                 <label for="sync_mode">Sync Mode</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <select class="form-select" id="default_collection_order" name="default_collection_order">
                   <option value="added.asc" {% if data['settings']['default_collection_order']=='added.asc' %}selected{% endif %}>Added (Ascending)</option>
                   <option value="added.desc" {% if data['settings']['default_collection_order']=='added.desc' %}selected{% endif %}>Added (Descending)</option>
@@ -209,14 +209,14 @@
                 <label for="default_collection_order">Default Collection Order</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="number" class="form-control" id="item_refresh_delay" name="item_refresh_delay" min="0"
                   placeholder="" value="{{ data['settings']['item_refresh_delay'] }}">
                 <label for="item_refresh_delay">Item Refresh Delay (seconds)</label>
                 <div class="error-message text-danger"></div>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="number" class="form-control" id="minimum_items" name="minimum_items" placeholder="" min="1"
                   value="{{ data['settings']['minimum_items'] }}">
                 <label for="minimum_items">Minimum Items</label>
@@ -244,7 +244,7 @@
                 <label class="form-check-label" for="delete_not_scheduled">Delete Not Scheduled</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="number" class="form-control" id="run_again_delay" name="run_again_delay" min="0"
                   value="{{ data['settings']['run_again_delay'] }}">
                 <label for="run_again_delay">Run Again Delay (minutes)</label>
@@ -324,12 +324,12 @@
               </div>
 
               <!-- Form inputs to display selected users -->
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="text" class="form-control" id="playlist_sync_to_users" name="playlist_sync_to_users" value="{{ data['settings']['playlist_sync_to_users'] }}" readonly>
                 <label for="playlist_sync_to_users">Playlist Sync to Users (all, or comma-separated)</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="text" class="form-control" id="playlist_exclude_users" name="playlist_exclude_users" value="{{ data['settings']['playlist_exclude_users'] }}" readonly>
                 <label for="playlist_exclude_users">Playlist Exclude Users (comma-separated)</label>
               </div>
@@ -419,7 +419,7 @@
           <div id="CollapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <select class="form-select" id="tvdb_language" name="tvdb_language">
                   {% for code, language in data['iso_639_2_languages'] | sort(attribute='1') %}
                   <option value="{{ code }}" {% if code==data['settings']['tvdb_language'] %}selected{% endif %}>{{
@@ -429,14 +429,14 @@
                 <label for="tvdb_language">TVDB Language</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="text" class="form-control" id="ignore_ids" name="ignore_ids" placeholder=""
                 value="{{ data['settings']['ignore_ids'] }}">
                 <label for="ignore_ids">Ignore IDs (TMDb/TVDb IDs e.g., 1,12345678)</label>
                 <div class="error-message text-danger"></div>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="text" class="form-control" id="ignore_imdb_ids" name="ignore_imdb_ids" placeholder=""
                 value="{{ data['settings']['ignore_imdb_ids'] }}">
                 <label for="ignore_imdb_ids">Ignore IMDb IDs (e.g., tt1234567, tt12345678)</label>
@@ -463,7 +463,7 @@
                 <label class="form-check-label" for="show_options">Show Options</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <select class="form-select" id="run_order" name="run_order">
                   <option value="operations metadata collections overlays" {% if ' ' .join(data['settings']['run_order'])=='operations metadata collections overlays' %}selected{% endif %}>(default) operations metadata collections overlays</option>
                   <option value="operations metadata overlays collections" {% if ' ' .join(data['settings']['run_order'])=='operations metadata overlays collections' %}selected{% endif %}>operations metadata overlays collections</option>
@@ -482,7 +482,7 @@
                 <label class="form-check-label" for="verify_ssl">Verify SSL</label>
               </div>
 
-              <div class="form-floating mb-3">
+              <div class="form-floating mb-2">
                 <input type="text" class="form-control" id="custom_repo" name="custom_repo" placeholder=""
                 value="{{ data['settings']['custom_repo'] }}">
                 <label for="custom_repo">Custom Repo</label>
