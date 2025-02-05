@@ -1,13 +1,18 @@
 {% extends "000-base.html" %} {% block content %}
 {% include "001-navigation.html" %}
 {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
-    <div class="form-floating">
+    <div class="form-floating mb-2">
       <input type="text" class="form-control" id="plex_url" name="plex_url" value="{{ data['plex']['url'] }}" title="http://127.0.0.1:32400" required="">
       <label for="plex_url">Plex URL</label>
     </div>
-    <div class="input-group form-floating">
-      <input type="password" class="form-control" id="plex_token" name="plex_token" value="{{ data['plex']['token'] }}" title="Token" aria-label="Plex Token" required="">
-      <label for="plex_token">Plex Token</label>
+
+    <div class="input-group mb-2">
+      <div class="form-floating flex-grow-1">
+        <input type="password" class="form-control" id="plex_token" name="plex_token"
+               value="{{ data['plex']['token'] }}" title="Token"
+               aria-label="Plex Token" required="">
+        <label for="plex_token">Plex Token</label>
+      </div>
       <button class="btn btn-secondary" id="toggleApikeyVisibility" type="button">
         <i class="fas fa-eye"></i>
       </button>
@@ -15,6 +20,9 @@
         Validate <i id="spinner_validate" class="spinner-border spinner-border-sm" style="display:none;"></i>
       </button>
     </div>
+
+
+
     <input type="hidden" class="form-control" id="tmp_user_list" name="tmp_user_list" value="{{ data['plex']['tmp_user_list'] }}" title="">
     <input type="hidden" class="form-control" id="tmp_music_libraries" name="tmp_music_libraries" value="{{ data['plex']['tmp_music_libraries'] }}" title="">
     <input type="hidden" class="form-control" id="tmp_movie_libraries" name="tmp_movie_libraries" value="{{ data['plex']['tmp_movie_libraries'] }}" title="">
@@ -25,12 +33,12 @@
     </div>
     <div id="statusMessage" class="status-message"></div>
     <div class="hidden" id="hidden" style="display:none">
-      <div class="form-floating">
+      <div class="form-floating mb-2">
         <input type="number" class="form-control" id="plex_db_cache" name="plex_db_cache" value="{{ data['plex']['db_cache'] }}" title="Set the size of the Plex Database Cache (in Megabytes), default is 40" min="40" required="">
         <label for="plex_db_cache">Database Cache Size (in mb)</label>
       </div>
       <div id="plexDbCache" class="status-message"></div>
-      <div class="form-floating">
+      <div class="form-floating  mb-2">
         <input type="number" class="form-control" id="plex_timeout" name="plex_timeout" value="{{ data['plex']['timeout'] }}" title="Amount of seconds to wait for Plex to respond, default is 60" min="60" required="">
         <label for="plex_timeout">Timeout (in seconds)</label>
       </div>

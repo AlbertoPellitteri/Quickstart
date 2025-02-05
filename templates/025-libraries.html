@@ -1346,7 +1346,7 @@
                     </p>
 
                     <!-- Dropdown for Separator Styles -->
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-2">
                       <select class="form-select" id="mov-attribute_use_separators" name="mov-template_variables[use_separators]">
                         <option value="none"
                           {% if data['libraries'].get('mov-template_variables', {}).get('use_separators', None) in ['false', None] %}selected{% endif %}>
@@ -1412,7 +1412,7 @@
                     </p>
 
                     <!-- Reset Overlays Dropdown -->
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-2">
                       <select class="form-select" id="mov-attribute_reset_overlays" name="mov-attribute_reset_overlays">
                         <option value="" {% if data['libraries'].get('mov-attribute_reset_overlays')=="" %}selected{% endif %}>
                           None
@@ -2596,7 +2596,7 @@
                     </p>
 
                     <!-- Dropdown for Separator Styles -->
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-2">
                       <select class="form-select" id="sho-attribute_use_separators" name="sho-template_variables[use_separators]">
                         <option value="none"
                           {% if data['libraries'].get('sho-template_variables', {}).get('use_separators', None) in ['false', None] %}selected{% endif %}>
@@ -2663,7 +2663,7 @@
                     </p>
 
                     <!-- Reset Overlays Dropdown -->
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-2">
                       <select class="form-select" id="sho-attribute_reset_overlays" name="sho-attribute_reset_overlays">
                         <option value="" {% if data['libraries'].get('sho-attribute_reset_overlays')=="" %}selected{% endif %}>
                           None

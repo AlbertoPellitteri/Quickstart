@@ -126,12 +126,6 @@ form, #final-form {
     margin: auto;
 }
 
-.form-floating {
-    position: relative;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
 #final-yaml {
     width: 100%;
     min-height: 400px;
@@ -168,10 +162,6 @@ label {
     padding-bottom: 10px;
 }
 
-.form-select,
-.form-floating > .form-select {
-    margin-top: 1rem;
-}
 
 .mb-3.small {
     margin-bottom: 0rem !important;

@@ -69,7 +69,7 @@
       <p class="fs-6">The config name below is used for saving your config and progress within the Quickstart database. You can change it if you wish before getting started, or choose one of your previously-created configs from the drop-down.</p>
     </div>
 
-    <div class="form-floating mb-3">
+    <div class="form-floating mb-2">
       <select id="configSelector" name="configSelector" class="form-select" onchange="toggleConfigInput(this)">
         <option value="add_config" {% if page_info['config_name'] not in available_configs %}selected{% endif %}>
           Add Config
