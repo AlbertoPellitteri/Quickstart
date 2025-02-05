@@ -13,12 +13,13 @@
         Validate <i id="spinner_validate" class="spinner-border spinner-border-sm" style="display:none;"></i>
       </button>
     </div>
+
     <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="sonarr_validated" name="sonarr_validated" value="{{ data['validated'] }}" title="">
       <label for="sonarr_validated">Sonarr Validated</label>
     </div>
     <div id="statusMessage" class="status-message"></div><br>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <select class="form-select" id="sonarr_root_folder_path" name="sonarr_root_folder_path">
         <option value="">
           Select Root Folder Path
@@ -27,7 +28,7 @@
       <label for="sonarr_root_folder_path">Root Folder Path</label>
     </div>
 
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <select class="form-select" id="sonarr_monitor" name="sonarr_monitor">
         <option value="" {% if data['sonarr']['monitor'] == '' %}selected{% endif %} disabled>Select Monitor Preference</option>
         <option value="all" {% if data['sonarr']['monitor'] == 'all' %}selected{% endif %}>
@@ -57,7 +58,7 @@
       </select>
       <label for="sonarr_monitor">Monitor</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <select class="form-select" id="sonarr_quality_profile" name="sonarr_quality_profile">
         <option value="">
           Select Quality Profile
@@ -66,7 +67,7 @@
       <label for="sonarr_quality_profile">Quality Profile</label>
     </div>
 
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
         <select class="form-select" id="sonarr_language_profile" name="sonarr_language_profile">
         <option value="">
           Select Language Profile
@@ -75,7 +76,7 @@
       <label for="sonarr_language_profile">Language Profile</label>
     </div>
 
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <select class="form-select" id="sonarr_series_type" name="sonarr_series_type">
         <option value="" {% if data['sonarr']['series_type'] == '' %}selected{% endif %} disabled>Select Series Type</option>
         <option value="standard" {% if data['sonarr']['series_type'] == 'standard' %}selected{% endif %}>
@@ -91,13 +92,13 @@
       <label for="sonarr_series_type">Series Type</label>
     </div>
 
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="text" class="form-control" id="sonarr_tag" name="sonarr_tag" value="{{ data['sonarr']['tag'] }}" placeholder=""> <label for="sonarr_tag">Tag to apply to added media</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="text" class="form-control" id="sonarr_sonarr_path" name="sonarr_sonarr_path" value="{{ data['sonarr']['sonarr_path'] }}" placeholder=""> <label for="sonarr_sonarr_path">Sonarr Path</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="text" class="form-control" id="sonarr_plex_path" name="sonarr_plex_path" value="{{ data['sonarr']['plex_path'] }}" placeholder=""> <label for="sonarr_plex_path">Plex Path</label>
     </div>
     <div class="form-check form-switch">

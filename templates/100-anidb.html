@@ -4,7 +4,7 @@
     <div class="form-floating">
       <input type="text" class="form-control" id="anidb_client" name="anidb_client" value="" title=""><label for="anidb_client">AniDb Client</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="number" class="form-control" id="anidb_version" name="anidb_version" value="{{ data['anidb']['version'] }}" min="1" max="1"><label for="anidb_version">Client Version</label>
     </div>
     <div class="form-floating">
@@ -19,12 +19,13 @@
         Validate <i id="spinner_validate" class="spinner-border spinner-border-sm" style="display:none;"></i>
       </button>
     </div>
+
     <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="anidb_validated" name="anidb_validated" value="{{ data['validated'] }}" title="">
       <label for="anidb_validated">AniDB Validated</label>
     </div>
     <div id="statusMessage" class="status-message"></div><br>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <select class="form-select" id="anidb_language" name="anidb_language">
         <option value="">Select Language</option>
         {% for code, language in data['iso_639_1_languages'] %}
@@ -33,7 +34,7 @@
       </select>
       <label for="anidb_language">Language</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="number" class="form-control" id="anidb_cache_expiration" name="anidb_cache_expiration" value="{{ data['anidb']['cache_expiration'] }}" min="0"><label for="anidb_cache_expiration">Cache Expiration (in days)</label>
     </div>
   </div>

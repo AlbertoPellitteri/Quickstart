@@ -11,13 +11,14 @@
         Validate <i id="spinner_validate" class="spinner-border spinner-border-sm" style="display:none;"></i>
       </button>
     </div>
+
     <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="mdblist_validated" name="mdblist_validated" value="{{ data['validated'] }}" title="">
       <label for="mdblist_validated">MDBList Validated</label>
     </div>
     <div id="statusMessage" class="status-message"></div>
     <br>
-    <div class="form-floating">
+    <div class="form-floating  mb-2">
       <input type="number" class="form-control" id="mdblist_cache_expiration" name="mdblist_cache_expiration" value="{{ data['mdblist']['cache_expiration'] }}" min="0">
       <label for="mdblist_cache_expiration">Cache Expiration (in days)</label>
     </div>

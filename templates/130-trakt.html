@@ -9,10 +9,12 @@
       <input type="password" class="form-control" id="trakt_client_secret" name="trakt_client_secret" value="" title="Client Secret" aria-label="Client Secret" oninput="updateTraktURL(this)"><label for="client_secret">Client Secret</label>
       <button class="btn btn-secondary" id="toggleClientSecretVisibility" type="button">
         <i class="fas fa-eye"></i>
-      </button><button class="btn btn-success" id="trakt_open_url" type="button" onclick="openTraktUrl()">
+      </button>
+      <button class="btn btn-success" id="trakt_open_url" type="button" onclick="openTraktUrl()">
         Retrieve PIN <i id="spinner_retrieve" class="spinner-border spinner-border-sm" style="display:none;"></i>
       </button>
     </div>
+
     <input type="hidden" class="form-control" id="trakt_url" name="trakt_url" readonly oninput="checkURLStart(this)">
     <div class="form-text" id="pin-info">
       When you click "Retrieve PIN" above, you will be taken to a Trakt web page. Log in and allow your application access to your Trakt account. Trakt will display a PIN. Copy that PIN and paste it into the "Trakt PIN" field below.<br>
