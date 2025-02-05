@@ -46,7 +46,7 @@
 
     <hr class="hr">
     {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <select id="header-style" name="header_style" class="form-select">
         <option value="ascii" {% if page_info['header_style'] == 'ascii' %}selected{% endif %}>With ASCII Art</option>
         <option value="divider" {% if page_info['header_style'] == 'divider' %}selected{% endif %}>With Simple Divider</option>
@@ -61,14 +61,14 @@
       The inputs you entered <b>did not</b> pass validation, a valid config
       <b>could not</b> be generated. Please try again.
     </div>
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <div class="form-text" id="yaml-warnings">
         <h5>These error(s) occurred while validating your config:</h5><br>
       </div>
       <textarea class="form-control" placeholder="Leave a comment here" id="validation-error" style="height: 300px">{{ validation_error }}</textarea>
     </div>
     </div>
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <div class="form-text" id="yaml-content">
         <br><h5>Here is the YAML that was generated as a result of your inputs.</h5><br>
 

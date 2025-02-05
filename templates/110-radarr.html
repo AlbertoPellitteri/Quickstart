@@ -5,10 +5,13 @@
       <input type="text" class="form-control" id="radarr_url" name="radarr_url" title="Radarr URL"
         value=""><label for="radarr_url">Radarr URL (including URL Base if set)<span class="text-info ms-2">(e.g. http://192.168.1.100:7878)</span></label>
     </div>
-    <div class="input-group form-floating">
-      <input type="password" class="form-control" id="radarr_token" name="radarr_token"
-        value="" title="Token" aria-label="Token"><label for="radarr_token">Radarr API
-        Key</label>
+    <div class="input-group mb-2">
+      <div class="form-floating flex-grow-1">
+        <input type="password" class="form-control" id="radarr_token" name="radarr_token"
+               value="" title="Token"
+               aria-label="Token">
+        <label for="radarr_token">Radarr API Key</label>
+      </div>
       <button class="btn btn-secondary" id="toggleApikeyVisibility" type="button">
         <i class="fas fa-eye"></i>
       </button>
@@ -16,6 +19,7 @@
         Validate <i id="spinner_validate" class="spinner-border spinner-border-sm" style="display:none;"></i>
       </button>
     </div>
+
     <div class="form-floating" style="display:none;">
       <input type="text" class="form-control" id="radarr_validated" name="radarr_validated"
         value="{{ data['validated'] }}" title="">
@@ -24,7 +28,7 @@
     <div id="statusMessage" class="status-message"></div>
     <br>
 
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <select class="form-select" id="radarr_root_folder_path" name="radarr_root_folder_path">
         <option value="">
           Select Root Folder Path
@@ -33,7 +37,7 @@
       <label for="radarr_root_folder_path">Root Folder Path</label>
     </div>
 
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <select class="form-select" id="radarr_quality_profile" name="radarr_quality_profile">
         <option value="">
           Select Quality Profile
@@ -42,7 +46,7 @@
       <label for="radarr_quality_profile">Quality Profile</label>
     </div>
 
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <select class="form-select" id="radarr_availability" name="radarr_availability">
         <option value="" selected disabled>Select Availability</option>
         <option value="announced" {% if data['radarr']['availability']=='announced' %}selected{% endif %}>Announced
@@ -55,17 +59,17 @@
       <label for="radarr_availability">Select Availability</label>
     </div>
 
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <input type="text" class="form-control" id="radarr_tag" name="radarr_tag" value="{{ data['radarr']['tag'] }}"
         placeholder="">
       <label for="radarr_tag">Tag to apply to added media</label>
     </div>
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <input type="text" class="form-control" id="radarr_radarr_path" name="radarr_radarr_path"
         value="{{ data['radarr']['radarr_path'] }}" placeholder="">
       <label for="radarr_radarr_path">Radarr Path</label>
     </div>
-    <div class="form-floating  mb-2">
+    <div class="form-floating mb-2">
       <input type="text" class="form-control" id="radarr_plex_path" name="radarr_plex_path"
         value="{{ data['radarr']['plex_path'] }}" placeholder="">
       <label for="radarr_plex_path">Plex Path</label>

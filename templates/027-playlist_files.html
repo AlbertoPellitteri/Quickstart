@@ -4,7 +4,7 @@
     <div id="validation-messages" class="alert alert-danger" role="alert" style="display: none;">
     </div>
     <div id="libraries-container" style="display: none;">
-      <div class="form-floating  mb-2">
+      <div class="form-floating mb-2">
         <label for="libraries">Select Movie Libraries:</label><br><br>
         {% set movie_libraries = plex_data['plex']['tmp_movie_libraries'].split(',')|sort if plex_data['plex']['tmp_movie_libraries'] else [] %}
         {% for library in movie_libraries %}
@@ -14,7 +14,7 @@
         </div>
         {% endfor %}
       </div>
-      <div class="form-floating  mb-2">
+      <div class="form-floating mb-2">
         <label for="libraries">Select Show Libraries:</label><br><br>
         {% set show_libraries = plex_data['plex']['tmp_show_libraries'].split(',')|sort if plex_data['plex']['tmp_show_libraries'] else [] %}
         {% for library in show_libraries %}
