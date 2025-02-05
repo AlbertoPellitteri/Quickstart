@@ -2,19 +2,19 @@
   <div id="{{ page_info['title'] }}Section">
     <!-- Navigation Bar -->
     <div class="container mt-4">
-      <nav class="navbar p-3 rounded shadow bg-transparent">
-        <div class="d-flex align-items-center w-100">
+      <nav class="navbar p-3 rounded shadow">
+        <div class="d-flex align-items-center justify-content-between w-100">
           <!-- Back Button -->
-          <button type="submit" class="btn btn-secondary me-auto" onclick="loading('prev')" formaction="/step/{{ page_info['prev_page'] }}">
+          <button type="submit" class="btn btn-secondary" onclick="loading('prev')" formaction="/step/{{ page_info['prev_page'] }}">
             <i id="prev-spinner-icon" class="fa fa-arrow-left"></i>
           </button>
 
           <!-- Page Title as Dropdown -->
-          <div class="dropdown text-center flex-grow-1">
-            <button class="btn btn-link dropdown-toggle fs-3 text-white fw-bold" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="dropdown position-relative">
+            <button class="btn btn-link dropdown-toggle fs-3 text-white fw-bold" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" data-bs-display="static">
               {{ page_info['title'] }}
             </button>
-            <ul class="dropdown-menu text-center" style="left: 50%; transform: translateX(-50%);" aria-labelledby="navbarDropdownMenuLink">
+            <ul class="dropdown-menu" style="left: 50%; transform: translateX(-50%);">
               {% for file, name in template_list %}
                 {% if name == 'Final Validation' %}
                   <li><hr class="dropdown-divider"></li>
@@ -30,7 +30,7 @@
           </div>
 
           <!-- Next Button -->
-          <button type="submit" class="btn btn-success ms-auto" onclick="loading('next')" formaction="/step/{{ page_info['next_page'] }}">
+          <button type="submit" class="btn btn-success" onclick="loading('next')" formaction="/step/{{ page_info['next_page'] }}">
             <i id="next-spinner-icon" class="fa fa-arrow-right"></i>
           </button>
         </div>
@@ -39,8 +39,9 @@
 
     <!-- Progress Bar -->
     <div class="container text-center mt-3">
-      <div class="progress" role="progressbar" aria-valuenow="{{ page_info['progress'] }}" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar bg-success" style="width: {{ page_info['progress'] }}%">
+      <div class="progress" role="progressbar">
+        <div class="progress-bar bg-success" style="width: {{ page_info['progress'] }}%"
+             aria-valuenow="{{ page_info['progress'] }}" aria-valuemin="0" aria-valuemax="100">
           {{ page_info['progress'] }}%
         </div>
       </div>
