@@ -1,7 +1,7 @@
 {% extends "000-base.html" %} {% block content %}
 {% include "001-navigation.html" %}
 {% include "modals/" + page_info['template_name'] + ".html" ignore missing %}
-    <div class="form-floating">
+    <div class="form-floating mb-2">
       <input type="text" class="form-control" id="trakt_client_id" name="trakt_client_id" value="" oninput="updateTraktURL(this)">
       <label for="trakt_client_id">Client ID</label>
     </div>
