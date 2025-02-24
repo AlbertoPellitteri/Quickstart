@@ -1,61 +1,299 @@
-/* global $, showToast , localStorage, generatePreview */
+/* global $, showToast , localStorage, generatePreview, bootstrap */
+
+function storeSelectedImage (isMovie) {
+  const movieDropdown = document.getElementById('mov-library-image-dropdown')
+  const showDropdown = document.getElementById('sho-library-image-dropdown')
+
+  const selectedImage = isMovie ? movieDropdown.value : showDropdown.value
+  localStorage.setItem(`${isMovie ? 'mov' : 'sho'}-selected-image`, selectedImage)
+}
+
+function loadAvailableImages (isMovie, selectedImage = null) {
+  fetch(`/list_uploaded_images?type=${isMovie ? 'movie' : 'show'}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'error') {
+        console.error('Error fetching images:', data.message)
+        showToast('error', data.message)
+        return
+      }
+
+      const movieDropdown = document.getElementById('mov-library-image-dropdown')
+      const showDropdown = document.getElementById('sho-library-image-dropdown')
+
+      const dropdown = isMovie ? movieDropdown : showDropdown
+      if (!dropdown) {
+        console.error(`Dropdown ${isMovie ? 'mov' : 'sho'}-library-image-dropdown not found!`)
+        return
+      }
+
+      dropdown.innerHTML = "<option value='default'>Default Kometa</option>"
+
+      data.images.forEach(img => {
+        const option = document.createElement('option')
+        option.value = img
+        option.textContent = img
+        dropdown.appendChild(option)
+      })
+
+      // Restore last selected image OR keep renamed file selected
+      const storedImage = selectedImage || localStorage.getItem(`${isMovie ? 'mov' : 'sho'}-selected-image`)
+      if (storedImage && [...dropdown.options].some(option => option.value === storedImage)) {
+        dropdown.value = storedImage
+        storeSelectedImage(isMovie)
+      }
+
+      generatePreview(isMovie)
+
+      // ✅ Now that dropdown is updated, toggle delete button visibility
+      toggleDeleteButton(isMovie)
+    })
+    .catch(error => {
+      console.error('Error loading images:', error)
+      showToast('error', 'Failed to load available images.')
+    })
+}
+
+function openRenameModal (isMovie) {
+  console.log(`[DEBUG] Open Rename Modal for ${isMovie ? 'Movies' : 'Shows'}`)
+
+  const section = isMovie ? 'movie' : 'show'
+
+  // Get the selected checkbox
+  const selectedCheckbox = document.querySelector(`#${section}-libraries-container .library-checkbox:checked`)
+  if (!selectedCheckbox) {
+    console.error(`[ERROR] No library selected for renaming ${section} image.`)
+    showToast('warning', 'Please select a library first.')
+    return
+  }
+
+  console.log(`[DEBUG] Selected Library ID: ${selectedCheckbox.id}`)
+
+  // Get the selected image filename from the dropdown
+  const movieDropdown = document.getElementById('mov-library-image-dropdown')
+  const showDropdown = document.getElementById('sho-library-image-dropdown')
+
+  const dropdown = isMovie ? movieDropdown : showDropdown
+  const selectedImage = dropdown ? dropdown.value : ''
+
+  if (!selectedImage) {
+    console.error(`[ERROR] No image selected for ${isMovie ? 'movie' : 'show'} library.`)
+    showToast('warning', 'Please select an image first.')
+    return
+  }
+
+  console.log(`[DEBUG] Selected Image: ${selectedImage}`)
+
+  // Ensure modal elements exist before updating
+  const renameImagePreview = document.getElementById('rename-image-preview')
+  const renameCurrentName = document.getElementById('rename-current-name')
+  const renameNewNameMovie = document.getElementById('mov-image-name')
+  const renameNewNameShow = document.getElementById('sho-image-name')
+  const renameModalElement = document.getElementById('renameModal')
+
+  if (!renameImagePreview || !renameCurrentName || !renameNewNameMovie || !renameNewNameShow || !renameModalElement) {
+    console.error('[ERROR] Missing modal elements.')
+    return
+  }
+
+  console.log('[DEBUG] All required modal elements exist.')
+
+  // Toggle visibility of input fields based on selection
+  renameNewNameMovie.style.display = isMovie ? 'block' : 'none'
+  renameNewNameShow.style.display = isMovie ? 'none' : 'block'
+
+  // Update modal content
+  const imagePath = isMovie
+    ? `/config/uploads/movies/${selectedImage}`
+    : `/config/uploads/shows/${selectedImage}`
+
+  renameImagePreview.src = imagePath
+  renameCurrentName.textContent = `Current Name: ${selectedImage}`
+  renameNewNameMovie.value = '' // Clear previous input
+  renameNewNameShow.value = ''
+
+  console.log('[DEBUG] Showing modal now...')
+
+  // Show modal
+  const renameModal = new bootstrap.Modal(renameModalElement)
+  renameModal.show()
+
+  // Store necessary information for later
+  document.getElementById('rename-confirm-btn').dataset.selectedLibraryId = selectedCheckbox.id
+  document.getElementById('rename-confirm-btn').dataset.selectedImage = selectedImage
+  document.getElementById('rename-confirm-btn').dataset.isMovie = isMovie
+}
+
+function renameSelectedImage (isMovie, selectedLibraryId, newName) {
+  console.log(`[DEBUG] Renaming ${isMovie ? 'movie' : 'show'} image for: ${selectedLibraryId}`)
+
+  const dropdown = document.getElementById(isMovie ? 'mov-library-image-dropdown' : 'sho-library-image-dropdown')
+
+  if (!dropdown) {
+    console.error(`[ERROR] Missing dropdown for renaming ${isMovie ? 'movie' : 'show'} image.`)
+    return
+  }
+
+  const oldFilename = dropdown.value
+
+  if (oldFilename === 'default') {
+    showToast('warning', 'You cannot rename the default image.')
+    return
+  }
+
+  // Preserve file extension
+  const newFilename = newName + oldFilename.substring(oldFilename.lastIndexOf('.'))
+
+  console.log(`[DEBUG] Renaming ${isMovie ? 'movie' : 'show'} image: ${oldFilename} -> ${newFilename}`)
+
+  // Send request to Flask to rename the file
+  fetch('/rename_library_image', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      old_name: oldFilename,
+      new_name: newFilename,
+      type: isMovie ? 'movie' : 'show'
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        showToast('success', `Successfully renamed to ${newFilename}`)
+        document.getElementById(isMovie ? 'mov-image-name' : 'sho-image-name').value = '' // Clear input
+
+        // Close the modal
+        const renameModal = bootstrap.Modal.getInstance(document.getElementById('renameModal'))
+        if (renameModal) {
+          renameModal.hide()
+        }
+
+        // Reload dropdown and select the renamed image
+        loadAvailableImages(isMovie, newFilename)
+      } else {
+        showToast('error', `Rename failed: ${data.message}`)
+      }
+    })
+    .catch(error => console.error('Rename error:', error))
+}
+
+function toggleDeleteButton (isMovie) {
+  const dropdown = document.getElementById(isMovie ? 'mov-library-image-dropdown' : 'sho-library-image-dropdown')
+  const deleteBtn = document.getElementById(isMovie ? 'mov-delete-image-btn' : 'sho-delete-image-btn')
+  const renameBtn = document.getElementById(isMovie ? 'mov-rename-image-btn' : 'sho-rename-image-btn')
+
+  if (!dropdown || !deleteBtn || !renameBtn) {
+    console.error(`[ERROR] Missing dropdown or delete button or rename button for ${isMovie ? 'movie' : 'show'}`)
+    return
+  }
+
+  const isDefaultSelected = dropdown.value === 'default'
+  const onlyDefaultExists = dropdown.options.length === 1 && isDefaultSelected
+
+  // ✅ Show the delete/rename button if a non-default image is selected
+  // ❌ Hide the delete/rename button if "default" is selected or if it's the only available option
+  deleteBtn.style.display = (isDefaultSelected || onlyDefaultExists) ? 'none' : 'block'
+  renameBtn.style.display = (isDefaultSelected || onlyDefaultExists) ? 'none' : 'block'
+}
+
+document.getElementById('renameModal').addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    event.preventDefault() // Prevent default form submission
+    document.getElementById('rename-confirm-btn').click() // Trigger OK button
+  }
+})
 
 document.addEventListener('DOMContentLoaded', function () {
   console.log('[DEBUG] Document fully loaded')
 
   console.log('[DEBUG] Restoring selected libraries for 025-libraries')
 
-  function renameSelectedImage (isMovie) {
-    const dropdown = document.getElementById(isMovie ? 'mov-library-image-dropdown' : 'sho-library-image-dropdown')
+  // Handle Rename Button Click (For both Movies and Shows)
+  document.querySelectorAll('.rename-image-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      console.log('[DEBUG] Rename button clicked!')
+
+      const isMovie = this.id.includes('mov-')
+      const section = isMovie ? 'movie' : 'show'
+
+      // Get the selected checkbox
+      const selectedCheckbox = document.querySelector(`#${section}-libraries-container .library-checkbox:checked`)
+      if (!selectedCheckbox) {
+        console.error(`[ERROR] No library selected for renaming ${section} image.`)
+        showToast('warning', 'Please select a library first.')
+        return
+      }
+
+      console.log(`[DEBUG] Selected Library ID: ${selectedCheckbox.id}`)
+
+      // Get the selected image and current name
+      const selectedLabel = document.querySelector(`label[for="${selectedCheckbox.id}"]`)
+      if (!selectedLabel) {
+        console.error(`[ERROR] No label found for selected library: ${selectedCheckbox.id}`)
+        return
+      }
+
+      const currentName = selectedLabel.textContent.trim()
+      console.log(`[DEBUG] Current Name: ${currentName}`)
+
+      const imagePath = '/static/images/sample-placeholder.png' // Update dynamically if needed
+
+      // Ensure modal elements exist before updating
+      const renameImagePreview = document.getElementById('rename-image-preview')
+      const renameCurrentName = document.getElementById('rename-current-name')
+      const renameNewNameMovie = document.getElementById('mov-image-name')
+      const renameNewNameShow = document.getElementById('sho-image-name')
+      const renameModalElement = document.getElementById('renameModal')
+
+      if (!renameImagePreview || !renameCurrentName || !renameNewNameMovie || !renameNewNameShow || !renameModalElement) {
+        console.error('[ERROR] Missing modal elements.')
+        return
+      }
+
+      console.log('[DEBUG] All required modal elements exist.')
+
+      // Toggle visibility of input fields based on selection
+      renameNewNameMovie.style.display = isMovie ? 'block' : 'none'
+      renameNewNameShow.style.display = isMovie ? 'none' : 'block'
+
+      // Update modal content
+      renameImagePreview.src = imagePath
+      renameCurrentName.textContent = `Current Name: ${currentName}`
+      renameNewNameMovie.value = '' // Clear previous input
+      renameNewNameShow.value = ''
+
+      console.log('[DEBUG] Showing modal now...')
+
+      // Show modal
+      const renameModal = new bootstrap.Modal(renameModalElement)
+      renameModal.show()
+
+      // Store necessary information for later
+      document.getElementById('rename-confirm-btn').dataset.selectedLibraryId = selectedCheckbox.id
+      document.getElementById('rename-confirm-btn').dataset.isMovie = isMovie
+    })
+  })
+
+  // Confirm Rename Button Click Handler
+  document.getElementById('rename-confirm-btn').addEventListener('click', function () {
+    console.log('[DEBUG] Rename Confirm Clicked')
+
+    const isMovie = this.dataset.isMovie === 'true'
+    const selectedLibraryId = this.dataset.selectedLibraryId
     const inputField = document.getElementById(isMovie ? 'mov-image-name' : 'sho-image-name')
-
-    if (!dropdown || !inputField) {
-      console.error(`[ERROR] Missing elements for renaming ${isMovie ? 'movie' : 'show'} image.`)
-      return
-    }
-
-    const oldFilename = dropdown.value
-    const newName = inputField.value.trim()
+    const newName = inputField ? inputField.value.trim() : null
 
     if (!newName) {
       showToast('warning', 'Please enter a new name.')
       return
     }
 
-    if (oldFilename === 'default') {
-      showToast('warning', 'You cannot rename the default image.')
-      return
-    }
+    console.log(`[DEBUG] New Name Entered: ${newName}`)
 
-    // Preserve file extension
-    const newFilename = newName + oldFilename.substring(oldFilename.lastIndexOf('.'))
+    renameSelectedImage(isMovie, selectedLibraryId, newName)
+  })
 
-    console.log(`[DEBUG] Renaming ${isMovie ? 'movie' : 'show'} image: ${oldFilename} -> ${newFilename}`)
-
-    // Send request to Flask to rename the file
-    fetch('/rename_library_image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        old_name: oldFilename,
-        new_name: newFilename,
-        type: isMovie ? 'movie' : 'show'
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'success') {
-          showToast('success', `Successfully renamed to ${newFilename}`)
-          inputField.value = '' // Clear input
-
-          // Reload dropdown and select the renamed image
-          loadAvailableImages(isMovie, newFilename)
-        } else {
-          showToast('error', `Rename failed: ${data.message}`)
-        }
-      })
-      .catch(error => console.error('Rename error:', error))
-  }
+  console.log('Rename functionality initialized.')
 
   // Read preselected libraries from the hidden input field
   const libraryInput = document.getElementById('libraries')
@@ -147,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return
         }
 
-        dropdown.innerHTML = "<option value='default'>Default Grey</option>"
+        dropdown.innerHTML = "<option value='default'>Default Kometa</option>"
 
         data.images.forEach(img => {
           const option = document.createElement('option')
@@ -160,10 +398,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const storedImage = selectedImage || localStorage.getItem(`${isMovie ? 'mov' : 'sho'}-selected-image`)
         if (storedImage && [...dropdown.options].some(option => option.value === storedImage)) {
           dropdown.value = storedImage
-          storeSelectedImage(isMovie) // Store in localStorage
+          storeSelectedImage(isMovie)
         }
 
         generatePreview(isMovie)
+
+        // ✅ Now that dropdown is updated, toggle delete button visibility
+        toggleDeleteButton(isMovie)
       })
       .catch(error => {
         console.error('Error loading images:', error)
@@ -268,7 +509,9 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(response => response.json())
       .then(data => {
         showToast(data.status === 'success' ? 'success' : 'error', data.message)
-        loadAvailableImages(isMovie)
+        if (data.status === 'success') {
+          loadAvailableImages(isMovie, data.filename)
+        }
       })
       .catch(error => {
         console.error('Upload error:', error)
@@ -293,7 +536,9 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(response => response.json())
       .then(data => {
         showToast(data.status === 'success' ? 'success' : 'error', data.message)
-        loadAvailableImages(isMovie)
+        if (data.status === 'success') {
+          loadAvailableImages(isMovie, data.filename)
+        }
       })
       .catch(error => {
         console.error('Fetch error:', error)
@@ -301,13 +546,22 @@ document.addEventListener('DOMContentLoaded', function () {
       })
   }
 
+  // ✅ Automatically trigger upload when a file is selected
+  document.getElementById('mov-upload-library-image')?.addEventListener('change', () => uploadLibraryImage(true))
+  document.getElementById('sho-upload-library-image')?.addEventListener('change', () => uploadLibraryImage(false))
+
+  document.getElementById('mov-library-image-dropdown')?.addEventListener('change', () => toggleDeleteButton(true))
+  document.getElementById('sho-library-image-dropdown')?.addEventListener('change', () => toggleDeleteButton(false))
+
   // ✅ Bind event listeners correctly
-  document.getElementById('mov-delete-image-btn').addEventListener('click', () => deleteCustomImage(true))
-  document.getElementById('sho-delete-image-btn').addEventListener('click', () => deleteCustomImage(false))
-  document.getElementById('mov-upload-btn').addEventListener('click', () => uploadLibraryImage(true))
-  document.getElementById('sho-upload-btn').addEventListener('click', () => uploadLibraryImage(false))
-  document.getElementById('mov-fetch-url-btn').addEventListener('click', () => fetchLibraryImage(true))
-  document.getElementById('sho-fetch-url-btn').addEventListener('click', () => fetchLibraryImage(false))
+  document.getElementById('mov-delete-image-btn')?.addEventListener('click', () => deleteCustomImage(true))
+  document.getElementById('sho-delete-image-btn')?.addEventListener('click', () => deleteCustomImage(false))
+
+  document.getElementById('mov-rename-image-btn')?.addEventListener('click', () => openRenameModal(true))
+  document.getElementById('sho-rename-image-btn')?.addEventListener('click', () => openRenameModal(false))
+
+  document.getElementById('mov-fetch-url-btn')?.addEventListener('click', () => fetchLibraryImage(true))
+  document.getElementById('sho-fetch-url-btn')?.addEventListener('click', () => fetchLibraryImage(false))
 
   movieDropdown.addEventListener('change', function () {
     storeSelectedImage(true)
@@ -317,15 +571,6 @@ document.addEventListener('DOMContentLoaded', function () {
   showDropdown.addEventListener('change', function () {
     storeSelectedImage(false)
     generatePreview(false)
-  })
-
-  // Attach event listeners to rename buttons
-  document.getElementById('mov-rename-image').addEventListener('click', function () {
-    renameSelectedImage(true)
-  })
-
-  document.getElementById('sho-rename-image').addEventListener('click', function () {
-    renameSelectedImage(false)
   })
 
   document.querySelectorAll('#movieOverlays input, #showOverlays input').forEach(input => {
@@ -342,6 +587,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // Run on page load to update any previously selected items
   loadAvailableImages(true)
   loadAvailableImages(false)
+  toggleDeleteButton(true) // Movies
+  toggleDeleteButton(false) // Shows
   updateAccordionHighlights()
   updateValidationState()
 })
@@ -554,12 +801,10 @@ $(document).ready(function () {
   document.querySelectorAll('input[type="radio"][name$="-content-rating-group"]').forEach(radio => {
     radio.addEventListener('click', function () {
       console.log(`[DEBUG] Radio button clicked: ${this.name} -> ${this.value}`)
-
       const isMovie = this.id.startsWith('mov-') // Determine if it's a movie or show
-      const wasChecked = this.dataset.wasChecked === 'true'
 
-      if (wasChecked) {
-        this.checked = false // Allow unchecking the radio button
+      if (this.checked && this.dataset.wasChecked === 'true') {
+        this.checked = false
         this.dataset.wasChecked = 'false'
 
         const hiddenInputName = this.name.replace('-content-rating-group', '-attribute_selected_content_rating')
@@ -567,20 +812,29 @@ $(document).ready(function () {
         if (hiddenInput) {
           hiddenInput.value = ''
         }
-
         console.log('[DEBUG] Unselected radio button:', this.name)
       } else {
         document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => { r.dataset.wasChecked = 'false' })
         this.dataset.wasChecked = 'true'
+
+        let selectedValue = this.value
+
+        // 🔥 Fix: Ensure Common Sense gets stored as 'commonsense' instead of 'content_rating_commonsense'
+        if (selectedValue === 'content_rating_commonsense') {
+          selectedValue = 'commonsense'
+        }
+
+        const hiddenInputName = this.name.replace('-content-rating-group', '-attribute_selected_content_rating')
+        const hiddenInput = document.querySelector(`input[name="${hiddenInputName}"]`)
+        if (hiddenInput) {
+          hiddenInput.value = selectedValue
+        }
+        console.log(`[DEBUG] Selected radio button: ${this.name} -> ${selectedValue}`)
       }
 
       // Force `generatePreview()` to run regardless of select/unselect
       generatePreview(isMovie)
-    })
-
-    radio.addEventListener('change', function () {
-      const isMovie = this.id.startsWith('mov-')
-      generatePreview(isMovie)
+      updateValidationState() // Ensure validation updates when radio selection changes
     })
   })
 
