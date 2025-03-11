@@ -26,10 +26,28 @@ from flask import (
     send_file,
     send_from_directory,
 )
-from waitress import serve
+from flask_session import Session
+from cachelib.file import FileSystemCache
+
+import argparse
+import io
+import os
+import re
+import requests
+import pystray
+import shutil
+import signal
+import stat
+import sys
+import threading
+from threading import Thread
+from dotenv import load_dotenv
+import namesgenerator
+from io import BytesIO
 from werkzeug.utils import secure_filename
 
 from flask_session import Session
+from waitress import serve
 from modules.database import reset_data, get_unique_config_names
 from modules.helpers import (
     get_template_list,
@@ -41,6 +59,8 @@ from modules.helpers import (
     booler,
     ensure_json_schema,
     get_pyfiglet_fonts,
+    is_valid_aspect_ratio,
+    normalize_id,
 )
 from modules.output import build_config
 from modules.persistence import (
@@ -49,7 +69,11 @@ from modules.persistence import (
     check_minimum_settings,
     flush_session_storage,
     notification_systems_available,
+    get_stored_plex_credentials,
+    update_stored_plex_libraries,
 )
+
+from PIL import Image, ImageDraw
 from modules.validations import (
     validate_plex_server,
     validate_tautulli_server,
@@ -84,7 +108,7 @@ os.makedirs(CONFIG_DIR, exist_ok=True)
 for source, dest_dir in [
     ("VERSION", BASE_DIR),
     (os.path.join("config", ".env.example"), CONFIG_DIR),
-    (os.path.join("static", "favicon.ico"), BASE_DIR)
+    (os.path.join("static", "favicon.ico"), BASE_DIR),
 ]:
     filename = os.path.basename(source)
     src_path = os.path.join(MEIPASS_DIR, source)  # File location in _MEIPASS
@@ -162,28 +186,21 @@ server_thread = None
 # Ensure json-schema files are up to date at startup
 ensure_json_schema()
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "gif", "bmp"}
 
 parser = argparse.ArgumentParser(description="Run Quickstart Flask App")
-parser.add_argument("--port", type=int, help="Specify the port number to run the server")
+parser.add_argument(
+    "--port", type=int, help="Specify the port number to run the server"
+)
 parser.add_argument("--debug", action="store_true", help="Enable debug mode")
 args = parser.parse_args()
 
 port = args.port if args.port else int(os.getenv("QS_PORT", "5000"))
 debug_mode = args.debug if args.debug else booler(os.getenv("QS_DEBUG", "0"))
 
-print(f"[INFO] Running on port: {port} | Debug Mode: {'Enabled' if debug_mode else 'Disabled'}")
-
-
-def allowed_file(filename):
-    """Check if the file has an allowed extension."""
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def is_valid_aspect_ratio(image):
-    """Check if the image has an aspect ratio of approximately 1:1.5."""
-    width, height = image.size
-    return abs((width / height) - (2 / 3)) < 0.01  # Ensure it's approximately 1000x1500
+print(
+    f"[INFO] Running on port: {port} | Debug Mode: {'Enabled' if debug_mode else 'Disabled'}"
+)
 
 
 @app.route("/rename_library_image", methods=["POST"])
@@ -198,11 +215,23 @@ def rename_library_image():
 
     save_folder = UPLOAD_FOLDER_MOVIE if image_type == "movie" else UPLOAD_FOLDER_SHOW
     old_path = os.path.join(save_folder, old_name)
-    new_path = os.path.join(save_folder, new_name)
 
+    # Ensure old file exists
     if not os.path.exists(old_path):
         return jsonify({"status": "error", "message": "File not found"}), 404
 
+    # Extract original extension
+    old_ext = os.path.splitext(old_name)[1]  # e.g., ".jpg"
+
+    # Ensure new name has correct extension
+    if "." not in new_name:  # No extension provided
+        new_name += old_ext  # Append original extension
+    elif not new_name.endswith(old_ext):  # Wrong extension provided
+        new_name += old_ext  # Append original extension
+
+    new_path = os.path.join(save_folder, new_name)
+
+    # Check if the new file name already exists
     if os.path.exists(new_path):
         return (
             jsonify(
@@ -232,16 +261,24 @@ def serve_previews(filename):
 def generate_preview():
     data = request.json
     overlays = data.get("overlays", [])
-    img_type = data.get("type", "movie")
-    selected_image = data.get("selected_image")
-
+    img_type = data.get("type", "movie")  # "movie" or "show"
+    selected_image = data.get("selected_image", "default.png")
+    library_id = data.get(
+        "library_id", "default-library"
+    )  # Unique identifier for each library
     upload_folder = UPLOAD_FOLDER_MOVIE if img_type == "movie" else UPLOAD_FOLDER_SHOW
-    preview_folder = "config/previews"
-    preview_filename = f"{img_type}_preview.png"
-    preview_path = os.path.join(preview_folder, preview_filename)
 
-    # Ensure preview folder exists
-    os.makedirs(preview_folder, exist_ok=True)
+    print(
+        f"[DEBUG] Generating preview for {library_id}, Type: {img_type}, Overlays: {overlays}"
+    )
+
+    # Ensure preview directory exists
+    if not os.path.exists(PREVIEW_FOLDER):
+        os.makedirs(PREVIEW_FOLDER)
+
+    # Generate a unique preview filename per library
+    preview_filename = f"{library_id}-{img_type}_preview.png"
+    preview_filepath = os.path.join(PREVIEW_FOLDER, preview_filename)
 
     # ✅ First, check if `default.png` exists in `IMAGES_FOLDER`
     default_image_path = os.path.join(IMAGES_FOLDER, "default.png")
@@ -250,7 +287,7 @@ def generate_preview():
         if os.path.exists(default_image_path):
             base_image_path = default_image_path  # ✅ Use existing `default.png`
         else:
-            base_image_path = os.path.join(preview_folder, "default.png")
+            base_image_path = os.path.join(PREVIEW_FOLDER, "default.png")
 
             # ✅ Only create grey image if both locations are missing
             if not os.path.exists(base_image_path):
@@ -281,12 +318,28 @@ def generate_preview():
             base_img.paste(overlay_img, (0, 0), overlay_img)
 
     # Save the generated preview
-    base_img.save(preview_path)
+    base_img.save(preview_filepath)
 
     if app.config["QS_DEBUG"]:
-        print(f"[DEBUG] Preview saved at {preview_path}")
+        print(f"[DEBUG] Preview saved at {preview_filepath}")
 
-    return jsonify({"status": "success", "preview_url": f"/{preview_path}"})
+    return jsonify({"status": "success", "preview_url": f"/{preview_filepath}"})
+
+
+@app.route("/config/previews/<filename>")
+def serve_preview_image(filename):
+    """
+    Serves the requested preview image. If not found, returns a default placeholder.
+    """
+    filepath = os.path.join(PREVIEW_FOLDER, filename)
+
+    if os.path.exists(filepath):
+        return send_file(filepath, mimetype="image/png")
+    else:
+        print(
+            f"[WARNING] Requested preview image '{filename}' not found. Returning default."
+        )
+        return send_file("static/images/default.png", mimetype="image/png")
 
 
 @app.route("/get_preview_image/<img_type>", methods=["GET"])
@@ -572,6 +625,9 @@ def step(name):
         save_settings(request.referrer, request.form)
         header_style = request.form.get("header_style", "standard")
 
+    # ✅ Call `refresh_plex_libraries()` BEFORE retrieving Plex settings
+    refresh_plex_libraries()
+
     # Retrieve available fonts (ensuring "none" and "single line" are always included)
     available_fonts = get_pyfiglet_fonts()
 
@@ -667,6 +723,53 @@ def step(name):
         print(f"[DEBUG] Raw data retrieved for {name}: {data}")
 
     plex_data = retrieve_settings("010-plex")
+    # Fetch Plex settings
+    all_libraries = retrieve_settings("010-plex")
+
+    # Debug: Print entire structure
+    print("[DEBUG] all_libraries content:", all_libraries)
+
+    # Ensure 'plex' key exists before accessing sub-keys
+    plex_data = all_libraries.get("plex", {})
+
+    # Extract the movie and show libraries
+    movie_libraries_raw = plex_data.get("tmp_movie_libraries", "")
+    show_libraries_raw = plex_data.get("tmp_show_libraries", "")
+
+    # Debugging extracted values
+    print("[DEBUG] Extracted movie libraries:", movie_libraries_raw)
+    print("[DEBUG] Extracted show libraries:", show_libraries_raw)
+
+    # Ensure it's a string before splitting
+    if not isinstance(movie_libraries_raw, str):
+        print("[ERROR] tmp_movie_libraries is not a string!")
+        movie_libraries_raw = ""
+
+    if not isinstance(show_libraries_raw, str):
+        print("[ERROR] tmp_show_libraries is not a string!")
+        show_libraries_raw = ""
+
+    existing_ids = set()  # Track used IDs to prevent duplicates
+
+    movie_libraries = [
+        {
+            "id": f"mov-library_{normalize_id(lib.strip(), existing_ids)}",
+            "name": lib.strip(),
+            "type": "movie",
+        }
+        for lib in movie_libraries_raw.split(",")
+        if lib.strip()
+    ]
+
+    show_libraries = [
+        {
+            "id": f"sho-library_{normalize_id(lib.strip(), existing_ids)}",
+            "name": lib.strip(),
+            "type": "show",
+        }
+        for lib in show_libraries_raw.split(",")
+        if lib.strip()
+    ]
 
     # Ensure `libraries` dictionary exists
     if "libraries" not in data:
@@ -704,6 +807,28 @@ def step(name):
     if "sho-template_variables" not in data:
         data["sho-template_variables"] = {}
 
+    # Ensure these are lists
+    plex_data["tmp_movie_libraries"] = (
+        plex_data.get("tmp_movie_libraries", "").split(",")
+        if isinstance(plex_data.get("tmp_movie_libraries"), str)
+        else []
+    )
+    plex_data["tmp_show_libraries"] = (
+        plex_data.get("tmp_show_libraries", "").split(",")
+        if isinstance(plex_data.get("tmp_show_libraries"), str)
+        else []
+    )
+    plex_data["tmp_music_libraries"] = (
+        plex_data.get("tmp_music_libraries", "").split(",")
+        if isinstance(plex_data.get("tmp_music_libraries"), str)
+        else []
+    )
+    plex_data["tmp_user_list"] = (
+        plex_data.get("tmp_user_list", "").split(",")
+        if isinstance(plex_data.get("tmp_user_list"), str)
+        else []
+    )
+
     # Ensure correct rendering for the final validation page
     config_name = session.get("config_name") or page_info.get("config_name", "default")
     if name == "900-final":
@@ -730,6 +855,8 @@ def step(name):
             page_info=page_info,
             data=data,
             plex_data=plex_data,
+            movie_libraries=movie_libraries,
+            show_libraries=show_libraries,
             template_list=file_list,
             available_configs=available_configs,
         )
@@ -783,6 +910,51 @@ def validate_ntfy():
 def validate_plex():
     data = request.json
     return validate_plex_server(data)
+
+
+@app.route("/refresh_plex_libraries", methods=["POST"])
+def refresh_plex_libraries():
+    try:
+        # ✅ Get stored Plex credentials from DB
+        config_name = session.get("config_name")  # Ensure the session has config_name
+        if not config_name:
+            return jsonify({"valid": False, "error": "Missing config_name"}), 400
+
+        plex_url, plex_token = get_stored_plex_credentials("010-plex")  # Fetch from DB
+        if not plex_url or not plex_token:
+            return jsonify({"valid": False, "error": "Plex credentials missing"}), 400
+
+        # ✅ Fetch latest libraries from Plex
+        plex_response = validate_plex_server(
+            {"plex_url": plex_url, "plex_token": plex_token}
+        )
+
+        # ✅ Fix: Convert Flask response object to JSON before accessing data
+        if isinstance(plex_response, Flask.response_class):
+            plex_data = plex_response.get_json()  # ✅ Extract JSON data correctly
+        else:
+            plex_data = plex_response  # If already a dict, use as-is
+
+        if not plex_data.get("validated"):
+            return jsonify({"valid": False, "error": "Plex validation failed"}), 500
+
+        # ✅ Extract new library data
+        updated_movie_libraries = plex_data.get("movie_libraries", [])
+        updated_show_libraries = plex_data.get("show_libraries", [])
+        updated_music_libraries = plex_data.get("music_libraries", [])
+
+        # ✅ Update the DB with the latest libraries
+        update_stored_plex_libraries(
+            "010-plex",
+            updated_movie_libraries,
+            updated_show_libraries,
+            updated_music_libraries,
+        )
+
+        return jsonify(plex_data)  # Return refreshed data
+
+    except Exception as e:
+        return jsonify({"valid": False, "error": f"Server error: {str(e)}"}), 500
 
 
 @app.route("/validate_tautulli", methods=["POST"])
@@ -891,6 +1063,10 @@ def validate_notifiarr():
     else:
         return jsonify(result.get_json()), 400
 
+
+server_thread = None
+
+
 def start_flask_app():
     global server_thread
     serve(app, host="0.0.0.0", port=port)
@@ -911,12 +1087,28 @@ def exit_action(icon):
     if server_thread and server_thread.is_alive():
         server_thread.join()
 
+
 if __name__ == "__main__":
     if debug_mode:
         app.run(host="0.0.0.0", port=port, debug=debug_mode)
     elif app.config["QUICKSTART_DOCKER"]:
         start_flask_app()
     else:
+        image = Image.open(
+            "favicon.ico"
+            if os.path.exists("favicon.ico")
+            else os.path.join("static", "favicon.ico")
+        )
+
+        icon = pystray.Icon(
+            "Flask App",
+            image,
+            menu=pystray.Menu(
+                pystray.MenuItem("Open Quickstart", open_quickstart),
+                pystray.MenuItem("Quickstart GitHub", open_github),
+                pystray.MenuItem("Exit", exit_action),
+            ),
+        )
         import pystray
 
         image = Image.open("favicon.ico" if os.path.exists("favicon.ico") else os.path.join("static", "favicon.ico"))

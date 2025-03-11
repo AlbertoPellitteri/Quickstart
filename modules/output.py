@@ -2,19 +2,35 @@ import io
 from datetime import datetime
 
 import jsonschema
+import json
 import pyfiglet
-from flask import current_app as app
+import re
+import yaml
 from ruamel.yaml import YAML
 
-from modules.helpers import (
+from flask import current_app as app
+
+from .persistence import (
+    save_settings,
+    retrieve_settings,
+    check_minimum_settings,
+    flush_session_storage,
+    notification_systems_available,
+)
+from .helpers import (
+    build_config_dict,
     get_template_list,
+    get_bits,
     check_for_update,
     enforce_string_fields,
     ensure_json_schema,
+    extract_library_name,
+    STRING_FIELDS,
 )
-from modules.persistence import (
-    retrieve_settings,
-)
+                                 
+                      
+               
+ 
 
 
 def add_border_to_ascii_art(art):
@@ -69,107 +85,128 @@ def build_libraries_section(
     show_overlays,
     movie_attributes,
     show_attributes,
+    movie_templates,
+    show_templates,
 ):
     libraries_section = {}
 
-    def add_entry(library_name, library_type, collections, overlays, attributes):
+    def add_entry(
+        library_key,
+        library_name,
+        library_type,
+        collections,
+        overlays,
+        attributes,
+        templates,
+    ):
+        """Processes a single library and adds valid data to the output."""
         entry = {}
+        if app.config["QS_DEBUG"]:
+            print(f"[DEBUG] Processing Library: {library_key} -> {library_name}")
 
-        # Ensure overlay_files are added if any are selected
-        overlay_files = [
-            {"default": overlay.replace(f"{library_type}-overlay_", "")}
-            for overlay, selected in overlays.items()
-            if selected
-        ]
+        # ✅ Process Collections
+        collection_key = extract_library_name(library_key)
+        if collection_key and collection_key in collections:
+            collection_files = [
+                {
+                    "default": key.split(
+                        f"{library_type}-library_{collection_key}-collection_"
+                    )[-1]
+                }
+                for key, selected in collections[collection_key].items()
+                if selected is True
+            ]
+            if collection_files:
+                entry["collection_files"] = collection_files
 
-        # Add selected_content_rating to overlays
-        selected_content_rating_key = (
-            f"{library_type}-attribute_selected_content_rating"
-        )
-        selected_content_rating = attributes.get(selected_content_rating_key)
+        # ✅ Process Overlays
+        overlay_key = extract_library_name(library_key)
+        if overlay_key and overlay_key in overlays:
+            overlay_files = [
+                {
+                    "default": key.split(
+                        f"{library_type}-library_{overlay_key}-overlay_"
+                    )[-1]
+                }
+                for key, selected in overlays[overlay_key].items()
+                if selected is True
+            ]
+            if overlay_files:
+                entry["overlay_files"] = overlay_files  # ✅ Ensures overlays are added
 
-        if selected_content_rating not in [None, "", "None", False]:
-            if selected_content_rating == "commonsense":
-                overlay_files.append({"default": "commonsense"})
-            else:
-                overlay_files.append(
-                    {"default": f"content_rating_{selected_content_rating}"}
-                )
-
-            if app.config["QS_DEBUG"]:
-                print(
-                    f"[DEBUG] Added selected_content_rating: {overlay_files[-1]['default']} to overlay_files"
-                )
-
-        if overlay_files:
-            entry["overlay_files"] = overlay_files
-
-        # Ensure collection_files are added if any are selected
-        collection_files = [
-            {"default": collection.replace(f"{library_type}-collection_", "")}
-            for collection, selected in collections.items()
-            if selected
-        ]
-        if collection_files:
-            entry["collection_files"] = collection_files
-
-        # Retrieve template variables properly
+        # ✅ Process Template Variables
         template_vars = {}
+        template_data = templates.get(library_name, {})
 
-        # Ensure we correctly access `mov-template_variables` or `sho-template_variables`
-        template_data = attributes.get(f"{library_type}-template_variables", {})
+        if isinstance(template_data, dict):
+            use_separators = template_data.get(
+                f"{library_type}-library_{library_name}-template_variables[use_separators]",
+                False,
+            )
+            if use_separators not in [None, "None", ""]:
+                template_vars["use_separators"] = bool(use_separators)
 
-        # Normalize `use_separators`
-        use_separators = template_data.get("use_separators", False)
-        if use_separators in [
-            None,
-            "None",
-            "",
-        ]:  # Convert None, "None", and empty string to False
-            use_separators = False
-        elif isinstance(use_separators, str):  # Convert non-empty string values to True
-            use_separators = True
-        elif not isinstance(use_separators, bool):  # Ensure it's either True or False
-            use_separators = False
-
-        template_vars["use_separators"] = use_separators  # Always include this key
-
-        # Normalize `sep_style`
-        sep_style = template_data.get("sep_style", "")
-        if sep_style not in [
-            None,
-            "None",
-            "",
-        ]:  # Ignore None, "None", and empty string values
-            template_vars["sep_style"] = sep_style.strip()
-
-        # Only add `template_variables` if it contains valid keys
         if template_vars:
             entry["template_variables"] = template_vars
+        else:
+            entry["template_variables"] = {"use_separators": False}
 
-        # Ensure remove_overlays & reset_overlays appear at the correct level
-        remove_overlays_key = f"{library_type}-attribute_remove_overlays"
-        reset_overlays_key = f"{library_type}-attribute_reset_overlays"
+        # ✅ Process Attributes
+        if library_name in attributes:
+            remove_overlays = attributes[library_name].get(
+                f"{library_type}-library_{library_name}-attribute_remove_overlays",
+                False,
+            )
+            reset_overlays = attributes[library_name].get(
+                f"{library_type}-library_{library_name}-attribute_reset_overlays"
+            )
 
-        if attributes.get(remove_overlays_key, False):  # Only add if True
-            entry["remove_overlays"] = True
+            if remove_overlays:
+                entry["remove_overlays"] = True
 
-        if attributes.get(reset_overlays_key):  # Only add if value is not empty
-            entry["reset_overlays"] = attributes[reset_overlays_key]
+            if reset_overlays not in [None, "None", ""]:
+                entry["reset_overlays"] = reset_overlays
 
-        # Add entry only if it has data
+        if app.config["QS_DEBUG"]:
+            print(f"[DEBUG] Entry for {library_name}: {entry}")
+
+        # ✅ Apply `reorder_library_section()` before storing the entry
         if entry:
             libraries_section[library_name] = reorder_library_section(entry)
 
     # Process movie libraries
     for library_key, library_name in movie_libraries.items():
         add_entry(
-            library_name, "mov", movie_collections, movie_overlays, movie_attributes
+            library_key,
+            library_name,
+            "mov",
+            movie_collections,
+            movie_overlays,
+            movie_attributes,
+            movie_templates,
         )
 
     # Process show libraries
     for library_key, library_name in show_libraries.items():
-        add_entry(library_name, "sho", show_collections, show_overlays, show_attributes)
+        add_entry(
+            library_key,
+            library_name,
+            "sho",
+            show_collections,
+            show_overlays,
+            show_attributes,
+            show_templates,
+        )
+
+    if app.config["QS_DEBUG"]:
+        print("[DEBUG] Generated YAML Output:\n")
+        print(
+            yaml.dump(
+                {"libraries": libraries_section},
+                default_flow_style=False,
+                sort_keys=False,
+            )
+        )
 
     return {"libraries": libraries_section}
 
@@ -333,6 +370,20 @@ def build_config(header_style="standard", config_name=None):
             if "webhooks" not in config_data:
                 print("[DEBUG] Webhooks section completely removed.")
 
+    def group_by_library(data_dict, prefix):
+        """
+        Groups collection, overlay, and attribute data by library.
+        """
+        grouped = {}
+
+        for key, value in data_dict.items():
+            library_name = extract_library_name(key)
+            if library_name:
+                if library_name not in grouped:
+                    grouped[library_name] = {}
+                grouped[library_name][key] = value
+        return grouped
+
     # Process the libraries section
     if "libraries" in config_data and "libraries" in config_data["libraries"]:
         nested_libraries_data = config_data["libraries"]["libraries"]
@@ -341,47 +392,101 @@ def build_config(header_style="standard", config_name=None):
         if app.config["QS_DEBUG"]:
             print("[DEBUG] Raw nested libraries data:", nested_libraries_data)
 
-        # Separate data by prefix
+        # Extract selected libraries
         movie_libraries = {
             key: value
             for key, value in nested_libraries_data.items()
-            if key.startswith("mov-library_")
+            if key.startswith("mov-library_") and key.endswith("-library")
         }
         show_libraries = {
             key: value
             for key, value in nested_libraries_data.items()
-            if key.startswith("sho-library_")
+            if key.startswith("sho-library_") and key.endswith("-library")
         }
-        movie_collections = {
-            key: value
-            for key, value in nested_libraries_data.items()
-            if key.startswith("mov-collection_")
-        }
-        show_collections = {
-            key: value
-            for key, value in nested_libraries_data.items()
-            if key.startswith("sho-collection_")
-        }
-        movie_overlays = {
-            key: value
-            for key, value in nested_libraries_data.items()
-            if key.startswith("mov-overlay_")
-        }
-        show_overlays = {
-            key: value
-            for key, value in nested_libraries_data.items()
-            if key.startswith("sho-overlay_")
-        }
-        movie_attributes = {
-            key: value
-            for key, value in nested_libraries_data.items()
-            if key.startswith("mov-attribute_") or key == "mov-template_variables"
-        }
-        show_attributes = {
-            key: value
-            for key, value in nested_libraries_data.items()
-            if key.startswith("sho-attribute_") or key == "sho-template_variables"
-        }
+
+        # Extract **correct** movie and show library names
+        movie_library_names = {extract_library_name(k) for k in movie_libraries}
+        show_library_names = {extract_library_name(k) for k in show_libraries}
+
+        # Debugging
+        if app.config["QS_DEBUG"]:
+            print("[DEBUG] Movie Library Names:", movie_library_names)
+            print("[DEBUG] Show Library Names:", show_library_names)
+
+        # Group collections, overlays, attributes, and templates only for selected libraries
+        movie_collections = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "collection_" in k and extract_library_name(k) in movie_library_names
+            },
+            "mov",
+        )
+
+        show_collections = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "collection_" in k and extract_library_name(k) in show_library_names
+            },
+            "sho",
+        )
+
+        movie_overlays = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "overlay_" in k and extract_library_name(k) in movie_library_names
+            },
+            "mov",
+        )
+
+        show_overlays = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "overlay_" in k and extract_library_name(k) in show_library_names
+            },
+            "sho",
+        )
+
+        movie_attributes = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "attribute_" in k and extract_library_name(k) in movie_library_names
+            },
+            "mov",
+        )
+
+        show_attributes = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "attribute_" in k and extract_library_name(k) in show_library_names
+            },
+            "sho",
+        )
+
+        movie_templates = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "template_variables" in k
+                and extract_library_name(k) in movie_library_names
+            },
+            "mov",
+        )
+
+        show_templates = group_by_library(
+            {
+                k: v
+                for k, v in nested_libraries_data.items()
+                if "template_variables" in k
+                and extract_library_name(k) in show_library_names
+            },
+            "sho",
+        )
 
         # Debugging
         if app.config["QS_DEBUG"]:
@@ -393,6 +498,8 @@ def build_config(header_style="standard", config_name=None):
             print("[DEBUG] Extracted Show Overlays:", show_overlays)
             print("[DEBUG] Extracted Movie Attributes:", movie_attributes)
             print("[DEBUG] Extracted Show Attributes:", show_attributes)
+            print("[DEBUG] Extracted Movie Templates:", movie_templates)
+            print("[DEBUG] Extracted Show Templates:", show_templates)
 
         # Build nested libraries structure
         libraries_section = build_libraries_section(
@@ -404,6 +511,8 @@ def build_config(header_style="standard", config_name=None):
             show_overlays,
             movie_attributes,
             show_attributes,
+            movie_templates,
+            show_templates,
         )
         config_data["libraries"] = libraries_section
         if app.config["QS_DEBUG"]:
@@ -536,7 +645,7 @@ def build_config(header_style="standard", config_name=None):
         authorization_data.pop("code_verifier", None)  # ✅ Remove safely
 
     # Apply enforce_string_fields to ensure proper formatting
-    config_data = enforce_string_fields(config_data)
+    config_data = enforce_string_fields(config_data, STRING_FIELDS)
 
     for section_key, section_stem in ordered_sections:
         if section_key in config_data:
