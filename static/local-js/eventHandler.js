@@ -168,7 +168,7 @@ const EventHandler = {
       if (separatorDropdown && !separatorDropdown.dataset.listenerAdded) {
         console.log(`[DEBUG] Found separator dropdown: ${separatorDropdown.id}`)
         separatorDropdown.addEventListener('change', () => {
-          OverlayHandler.updateHiddenInputs(libraryId, isMovie) // 🚀 Now delegated
+          OverlayHandler.updateHiddenInputs(libraryId, isMovie)
         })
         separatorDropdown.dataset.listenerAdded = true
         OverlayHandler.updateHiddenInputs(libraryId, isMovie)
@@ -241,7 +241,6 @@ const EventHandler = {
         // Ensure the **IMMEDIATE PARENT** gets highlighted before moving up
         EventHandler.highlightParentAccordions(accordionHeader)
       } else {
-        // console.log(`❌ [DEBUG] Removing highlight: ${headerText}`)
         EventHandler.removeHighlightIfEmpty(accordionHeader)
       }
     })
@@ -267,7 +266,7 @@ const EventHandler = {
 
           if (!isPreviewChild && child.querySelector("input:checked, input[type='radio']:checked")) {
             console.log(`✅ [DEBUG] Valid selection found under: ${childText}`)
-            childHeader.classList.add('selected') // Ensure child is highlighted first
+            childHeader.classList.add('selected')
             return true
           }
           return false
@@ -313,7 +312,7 @@ const EventHandler = {
 
         if (!hasValidChild) {
           console.log(`🚫 [DEBUG] Preventing Overlays from inheriting highlight due to only Preview Overlays: ${parentText}`)
-          return // Stop if Overlays only contain Preview Overlays
+          return
         }
       }
 
