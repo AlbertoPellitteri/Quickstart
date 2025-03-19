@@ -1,6 +1,7 @@
 import hashlib
 import os
 import re
+import socket
 import sys
 from pathlib import Path
 
@@ -25,6 +26,35 @@ CONFIG_DIR = os.path.join(WORKING_DIR, "config")
 os.makedirs(CONFIG_DIR, exist_ok=True)
 HASH_FILE = os.path.join(JSON_SCHEMA_DIR, "file_hashes.txt")
 VERSION_FILE = os.path.join(MEIPASS_DIR, "VERSION")
+
+
+def find_available_port(starting_port=5000):
+    """Finds an available port, starting at the given port."""
+    port = starting_port
+    while True:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex(("localhost", port)) != 0:  # Port is free
+                return port
+        port += 1
+
+
+def update_env_variable(key, value, env_path=".env"):
+    """Update or add an environment variable in the .env file."""
+    env_lines = []
+    if os.path.exists(env_path):
+        with open(env_path, "r") as file:
+            env_lines = file.readlines()
+
+    with open(env_path, "w") as file:
+        key_found = False
+        for line in env_lines:
+            if line.startswith(f"{key}="):
+                file.write(f"{key}={value}\n")
+                key_found = True
+            else:
+                file.write(line)
+        if not key_found:
+            file.write(f"{key}={value}\n")  # Add variable if not found
 
 
 def normalize_id(name, existing_ids):
