@@ -33,14 +33,14 @@ def clean_form_data(form_data):
             value_list = form_data.getlist(key)
             clean_data[key] = [v.strip() for v in value_list if v.strip()]
 
-        # Handle use_separators & sep_style correctly for both mov & sho
-        elif key.endswith("use_separators"):
+        # Handle use_separator & sep_style correctly for both mov & sho
+        elif key.endswith("use_separator"):
             prefix = "mov" if key.startswith("mov") else "sho"
-            clean_data.setdefault(f"{prefix}-template_variables", {})["use_separators"] = value if value != "none" else None  # noqa
+            clean_data.setdefault(f"{prefix}-template_variables", {})["use_separator"] = value if value != "none" else None  # noqa
 
         elif key.endswith("sep_style"):
             prefix = "mov" if key.startswith("mov") else "sho"
-            if form_data.get(f"{prefix}-template_variables[use_separators]", "false") != "none":
+            if form_data.get(f"{prefix}-template_variables[use_separator]", "false") != "none":
                 clean_data.setdefault(f"{prefix}-template_variables", {})["sep_style"] = value.strip()  # noqa
 
         # Standard processing for other string values
@@ -129,9 +129,9 @@ def get_stored_plex_credentials(name):
     """Retrieve stored Plex URL & token from the database."""
     try:
         settings = retrieve_settings(name)  # Fetch full settings
-        plex_settings = settings.get("plex", {})  # ✅ Extract nested 'plex' dictionary
-        plex_url = plex_settings.get("url")  # ✅ Correct key inside 'plex'
-        plex_token = plex_settings.get("token")  # ✅ Correct key inside 'plex'
+        plex_settings = settings.get("plex", {})  # Extract nested 'plex' dictionary
+        plex_url = plex_settings.get("url")  # Correct key inside 'plex'
+        plex_token = plex_settings.get("token")  # Correct key inside 'plex'
 
         if plex_url and plex_token:
             return plex_url, plex_token
@@ -146,7 +146,7 @@ def get_stored_plex_credentials(name):
 def update_stored_plex_libraries(name, movie_libraries, show_libraries, music_libraries):
     """Update the stored Plex libraries in the database and preserve `validated`."""
     try:
-        # ✅ Fetch existing settings from DB before updating
+        # Fetch existing settings from DB before updating
         settings_before = retrieve_settings(name)
         if app.config["QS_DEBUG"]:
             print("[DEBUG] Settings before update:", settings_before)
@@ -154,27 +154,27 @@ def update_stored_plex_libraries(name, movie_libraries, show_libraries, music_li
         if "plex" not in settings_before:
             settings_before["plex"] = {}
 
-        # ✅ Preserve `validated` status
+        # Preserve `validated` status
         validated_before = settings_before.get("validated", True)
 
-        # ✅ Update library data
+        # Update library data
         settings_before["plex"]["tmp_movie_libraries"] = ",".join(movie_libraries) if movie_libraries else ""
         settings_before["plex"]["tmp_show_libraries"] = ",".join(show_libraries) if show_libraries else ""
         settings_before["plex"]["tmp_music_libraries"] = ",".join(music_libraries) if music_libraries else ""
 
-        # ✅ Convert to a format that `save_settings()` expects
-        settings_formatted = settings_before["plex"]  # ✅ Pass only the `plex` section
+        # Convert to a format that `save_settings()` expects
+        settings_formatted = settings_before["plex"]  # Pass only the `plex` section
 
-        # ✅ Restore `validated` before saving
-        settings_formatted["validated"] = validated_before  # 🔥 Prevents losing validation state
+        # Restore `validated` before saving
+        settings_formatted["validated"] = validated_before  # Prevents losing validation state
 
         if app.config["QS_DEBUG"]:
             print(f"[DEBUG] Sending updated Plex settings to save_settings(): {settings_formatted}")
 
-        # ✅ Corrected function call (use "010-plex" as the raw_source)
-        save_settings("010-plex", settings_formatted)  # 🔥 Pass only `plex` settings, not full config
+        # Corrected function call (use "010-plex" as the raw_source)
+        save_settings("010-plex", settings_formatted)  # Pass only `plex` settings, not full config
 
-        # ✅ Fetch updated settings from DB after updating
+        # Fetch updated settings from DB after updating
         settings_after = retrieve_settings(name)
         if app.config["QS_DEBUG"]:
             print("[DEBUG] Settings after update:", settings_after)
@@ -214,7 +214,7 @@ def retrieve_settings(target):
         for key in list(data[source_name].keys()):
             if key.startswith("mov-template_variables[") or key.startswith("sho-template_variables["):
                 prefix, variable = key.split("[")
-                variable = variable.strip("]")  # Extract 'use_separators' or 'sep_style'
+                variable = variable.strip("]")  # Extract 'use_separator' or 'sep_style'
                 data[source_name][prefix][variable] = data[source_name].pop(key)
 
     data["code_verifier"] = secrets.token_urlsafe(100)[:128]

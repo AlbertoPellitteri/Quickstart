@@ -1,0 +1,1663 @@
+{
+  "sections": [
+    {
+      "prefix": "use_separator",
+      "type": "select",
+      "accordion": "separators",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Separator Style",
+      "wiki": "https://kometa.wiki/en/nightly/defaults/separators/#separators-default-collection-files",
+      "description": "Separators are like index cards at a library, to categorize Collections in your library.<br><br> To enable Separators for the Defaults Collections, select your style from the drop-down.<br><br><b>Warning</b>: Plex does not officially support blank collections, which is what separators are. You may experience bugs if you enable Separators.",
+      "tooltip_variant": "danger",
+      "container_class": "",
+      "options": [
+        [
+          "none",
+          "None"
+        ],
+        [
+          "amethyst",
+          "Amethyst"
+        ],
+        [
+          "aqua",
+          "Aqua"
+        ],
+        [
+          "blue",
+          "Blue"
+        ],
+        [
+          "stb",
+          "Brown"
+        ],
+        [
+          "forest",
+          "Forest"
+        ],
+        [
+          "fuchsia",
+          "Fuchsia"
+        ],
+        [
+          "gold",
+          "Gold"
+        ],
+        [
+          "gray",
+          "Gray"
+        ],
+        [
+          "green",
+          "Green"
+        ],
+        [
+          "navy",
+          "Navy"
+        ],
+        [
+          "ocean",
+          "Ocean"
+        ],
+        [
+          "olive",
+          "Olive"
+        ],
+        [
+          "orchid",
+          "Orchid"
+        ],
+        [
+          "orig",
+          "Original"
+        ],
+        [
+          "pink",
+          "Pink"
+        ],
+        [
+          "plum",
+          "Plum"
+        ],
+        [
+          "purple",
+          "Purple"
+        ],
+        [
+          "red",
+          "Red"
+        ],
+        [
+          "rust",
+          "Rust"
+        ],
+        [
+          "salmon",
+          "Salmon"
+        ],
+        [
+          "sand",
+          "Sand"
+        ],
+        [
+          "tan",
+          "Tan"
+        ]
+      ],
+      "preview_image": true,
+      "yml_location": "template_variables"
+    },
+    {
+      "prefix": "top_level_remove_overlays",
+      "type": "boolean_toggle",
+      "accordion": "overlays",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Remove Overlays",
+      "wiki": "https://kometa.wiki/en/nightly/config/libraries/#remove-overlays",
+      "description": "Remove Overlays will remove all overlays from your library. This toggle will take priority over any previous selections.",
+      "tooltip_variant": "info",
+      "container_class": "",
+      "yml_location": "top_level"
+    },
+    {
+      "prefix": "top_level_reset_overlays",
+      "type": "select",
+      "accordion": "overlays",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Reset Overlays",
+      "wiki": "https://kometa.wiki/en/nightly/config/libraries/#reset-overlays",
+      "description": "Reset Overlays will grab a new base image from the source that you choose, and then use that as the source for applying your overlays.<br><br><b>Warning:</b> Once you have done a run with Reset Overlays, you should then set this value to None or remove the reset_overlays line(s) from your config.yml. If you do not do this, you will end up in a loop of your overlays being removed, a new image grabbed, and your overlays reapplying.",
+      "tooltip_variant": "danger",
+      "container_class": "",
+      "options": [
+        [
+          "",
+          "None"
+        ],
+        [
+          "tmdb",
+          "TMDb"
+        ],
+        [
+          "plex",
+          "Plex"
+        ]
+      ],
+      "yml_location": "top_level"
+    },
+    {
+      "prefix": "assets_for_all",
+      "type": "boolean_toggle",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Assets for All",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#assets-for-all",
+      "description": "Searches asset directories for images for all items in the library.",
+      "tooltip_variant": "info",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "delete_collections",
+      "type": "toggle_with_number",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Delete Collections",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#delete-collections",
+      "description": "Deletes collections based on a set of given attributes. The Collection must match all set attributes to be deleted.",
+      "tooltip_variant": "info",
+      "container_class": "accordion",
+      "toggles": [
+        {
+          "key": "delete_collections_managed",
+          "label": "Managed Collections",
+          "tooltip": "When enabled: Only collections <strong>with the <code>Kometa</code> label</strong> (Managed) will be deleted."
+        },
+        {
+          "key": "delete_collections_configured",
+          "label": "Configured Collections",
+          "tooltip": "When enabled: Only collections <strong>defined in the current config file</strong> will be eligible for deletion."
+        },
+        {
+          "key": "delete_collections_ignore_empty_smart_collections",
+          "label": "Ignore Empty Smart Collections",
+          "tooltip": "When enabled: Excludes empty smart collections from being affected by the <code>less</code> item count check. This allows retaining things like smart collections that show movies without subtitles or the like."
+        }
+      ],
+      "number_input": {
+        "key": "delete_collections_less",
+        "label": "Less Than (item count)",
+        "tooltip": "Only collections with <strong>fewer than this number of items</strong> will be deleted. Optional value which if undefined means collections will be deleted regardless of how many items they have.",
+        "min": 1
+      },
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_genre_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Genre Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-genre-update",
+      "description": "Updates every item's genres using selected sources or strings.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "List of Strings for Genres",
+      "custom_string_placeholder": "e.g. Thriller",
+      "custom_string_behavior": "list",
+      "sources": [
+        [
+          "tmdb",
+          "Use TMDb for Genres",
+          "Fetch genres from <b>TMDb</b>. Recommended for most media types."
+        ],
+        [
+          "tvdb",
+          "Use TVDb for Genres",
+          "Fetch genres from <b>TVDb</b>. Alternative for TV content."
+        ],
+        [
+          "imdb",
+          "Use IMDb for Genres",
+          "Fetch genres directly from <b>IMDb</b>."
+        ],
+        [
+          "omdb",
+          "Use IMDb through OMDb for Genres",
+          "Fetch genres via <b>OMDb API</b> (IMDb-backed)."
+        ],
+        [
+          "anidb",
+          "Use AniDB Main Tags for Genres",
+          "Use only <b>Main Tags</b> from AniDB."
+        ],
+        [
+          "anidb_3_0",
+          "AniDB Main Tags & 3\u2605+",
+          "AniDB Main Tags and all <b>3-star and higher</b> tags."
+        ],
+        [
+          "anidb_2_5",
+          "AniDB Main Tags & 2.5\u2605+",
+          "AniDB Main Tags and all <b>2.5-star and higher</b> tags."
+        ],
+        [
+          "anidb_2_0",
+          "AniDB Main Tags & 2\u2605+",
+          "AniDB Main Tags and all <b>2-star and higher</b> tags."
+        ],
+        [
+          "anidb_1_5",
+          "AniDB Main Tags & 1.5\u2605+",
+          "AniDB Main Tags and all <b>1.5-star and higher</b> tags."
+        ],
+        [
+          "anidb_1_0",
+          "AniDB Main Tags & 1\u2605+",
+          "AniDB Main Tags and all <b>1-star and higher</b> tags."
+        ],
+        [
+          "anidb_0_5",
+          "AniDB Main Tags & 0.5\u2605+",
+          "AniDB Main Tags and all <b>0.5-star and higher</b> tags."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList for Genres",
+          "Fetch genres from <b>MyAnimeList</b> (MAL)."
+        ],
+        [
+          "lock",
+          "Lock all Genre Field",
+          "Prevent genre field from being modified after this operation."
+        ],
+        [
+          "unlock",
+          "Unlock all Genre Field",
+          "Allow genre field to be modified after this operation."
+        ],
+        [
+          "remove",
+          "Remove all Genres and Lock all Field",
+          "Clear all genres and <b>lock</b> the field."
+        ],
+        [
+          "reset",
+          "Remove all Genres and Unlock all Field",
+          "Clear all genres and <b>unlock</b> the field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_content_rating_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Content Rating Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-content-rating-update",
+      "description": "Update the content rating (PG, R, etc.) from various sources.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any String for Content Ratings",
+      "custom_string_placeholder": "e.g. NR",
+      "custom_string_validation": "string",
+      "sources": [
+        [
+          "mdb",
+          "Use MDB for Content Rating",
+          "Fetch content rating from <b>MDB</b>."
+        ],
+        [
+          "mdb_commonsense",
+          "Use MDB CommonSense",
+          "Use <b>Common Sense Media</b> rating from MDB (string)."
+        ],
+        [
+          "mdb_commonsense0",
+          "Use MDB CommonSense (0)",
+          "Use <b>Common Sense Media</b> rating from MDB (number)."
+        ],
+        [
+          "omdb",
+          "Use OMDb for Content Rating",
+          "Fetch rating from <b>OMDb</b> API (IMDb-backed)."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList",
+          "Fetch rating from <b>MyAnimeList</b>."
+        ],
+        [
+          "lock",
+          "Lock Content Rating Field",
+          "Prevent content rating from being modified after this operation."
+        ],
+        [
+          "unlock",
+          "Unlock Content Rating Field",
+          "Allow future updates to the content rating field."
+        ],
+        [
+          "remove",
+          "Remove Content Rating and Lock Field",
+          "Clear content rating and lock the field."
+        ],
+        [
+          "reset",
+          "Remove Content Rating and Unlock Field",
+          "Clear content rating and unlock the field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_original_title_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Original Title Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-original-title-update",
+      "description": "Update original title fields for items.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any String for Original Title",
+      "custom_string_placeholder": "e.g. Unknown",
+      "custom_string_validation": "string",
+      "sources": [
+        [
+          "anidb_official",
+          "Use AniDB Official",
+          "Fetch the official <b>AniDB title</b> for anime."
+        ],
+        [
+          "anidb",
+          "Use AniDB (User Preferred)",
+          "Use the <b>preferred AniDB title</b> as set by the user."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList",
+          "Fetch the title from <b>MyAnimeList</b>."
+        ],
+        [
+          "mal_english",
+          "Use MyAnimeList English",
+          "Use the <b>English title</b> from MAL."
+        ],
+        [
+          "mal_japanese",
+          "Use MyAnimeList Japanese",
+          "Use the <b>Japanese title</b> from MAL."
+        ],
+        [
+          "lock",
+          "Lock Original Title Field",
+          "Prevent original title from being modified after this operation."
+        ],
+        [
+          "unlock",
+          "Unlock Original Title Field",
+          "Allow future updates to the original title field."
+        ],
+        [
+          "remove",
+          "Remove Original Title and Lock Field",
+          "Clear original title and lock the field."
+        ],
+        [
+          "reset",
+          "Remove Original Title and Unlock Field",
+          "Clear original title and unlock the field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_studio_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Studio Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-studio-update",
+      "description": "Updates the studio tag using selected sources.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any String for Studio",
+      "custom_string_placeholder": "e.g. Indie",
+      "custom_string_validation": "string",
+      "sources": [
+        [
+          "anidb",
+          "Use AniDB",
+          "Fetch studio from <b>AniDB</b>."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList",
+          "Fetch studio from <b>MyAnimeList</b>."
+        ],
+        [
+          "tmdb",
+          "Use TMDb",
+          "Fetch studio from <b>TMDb</b>."
+        ],
+        [
+          "lock",
+          "Lock Studio Field",
+          "Prevent the studio field from being modified after this operation."
+        ],
+        [
+          "unlock",
+          "Unlock Studio Field",
+          "Allow future updates to the studio field."
+        ],
+        [
+          "remove",
+          "Remove Studio and Lock Field",
+          "Clear studio value and lock the field."
+        ],
+        [
+          "reset",
+          "Remove Studio and Unlock Field",
+          "Clear studio value and unlock the field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_originally_available_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Originally Available Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-originally-available-update",
+      "description": "Update the <code>originally available</code> date for items.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Originally Available Date (YYYY-MM-DD)",
+      "custom_string_placeholder": "YYYY-MM-DD",
+      "custom_string_validation": "date",
+      "sources": [
+        [
+          "tmdb",
+          "Use TMDb",
+          "Fetch the originally available date from <b>TMDb</b>."
+        ],
+        [
+          "tvdb",
+          "Use TVDb",
+          "Fetch the originally available date from <b>TVDb</b>."
+        ],
+        [
+          "omdb",
+          "Use IMDb Release Date through OMDb",
+          "Fetch the originally available date from <b>OMDb</b> (IMDb API)."
+        ],
+        [
+          "mdb",
+          "Use Use MDBList Release Date",
+          "Fetch the originally available date from <b>MDBList</b>."
+        ],
+        [
+          "mdb_digital",
+          "Use Use MDBList Digital Release Date",
+          "Fetch the originally available digital release date from <b>MDBList</b>."
+        ],
+        [
+          "anidb",
+          "Use AniDB",
+          "Fetch the originally available date from <b>AniDB</b>."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList",
+          "Fetch the originally available date from <b>MyAnimeList</b>."
+        ],
+        [
+          "lock",
+          "Lock Date Field",
+          "Prevent the originally available date from being modified after this operation."
+        ],
+        [
+          "unlock",
+          "Unlock Date Field",
+          "Allow future updates to the originally available date field."
+        ],
+        [
+          "remove",
+          "Remove Date and Lock Field",
+          "Clear the originally available date and lock the field."
+        ],
+        [
+          "reset",
+          "Remove Date and Unlock Field",
+          "Clear the originally available date and unlock the field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_added_at_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Added At Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-added-at-update",
+      "description": "Updates the <code>added_at</code> field of items in your library using selected sources. This field controls where the item appears in Recently Added views.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Added At Date (YYYY-MM-DD)",
+      "custom_string_placeholder": "YYYY-MM-DD",
+      "custom_string_validation": "date",
+      "sources": [
+        [
+          "tmdb",
+          "Use TMDb",
+          "Fetch the originally available date from <b>TMDb</b>."
+        ],
+        [
+          "tvdb",
+          "Use TVDb",
+          "Fetch the originally available date from <b>TVDb</b>."
+        ],
+        [
+          "omdb",
+          "Use IMDb Release Date through OMDb",
+          "Fetch the originally available date from <b>OMDb</b> (IMDb API)."
+        ],
+        [
+          "mdb",
+          "Use Use MDBList Release Date",
+          "Fetch the originally available date from <b>MDBList</b>."
+        ],
+        [
+          "mdb_digital",
+          "Use Use MDBList Digital Release Date",
+          "Fetch the originally available digital release date from <b>MDBList</b>."
+        ],
+        [
+          "anidb",
+          "Use AniDB",
+          "Fetch the originally available date from <b>AniDB</b>."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList",
+          "Fetch the originally available date from <b>MyAnimeList</b>."
+        ],
+        [
+          "lock",
+          "Lock Date Field",
+          "Prevent the originally available date from being modified after this operation."
+        ],
+        [
+          "unlock",
+          "Unlock Date Field",
+          "Allow future updates to the originally available date field."
+        ],
+        [
+          "remove",
+          "Remove Date and Lock Field",
+          "Clear the originally available date and lock the field."
+        ],
+        [
+          "reset",
+          "Remove Date and Unlock Field",
+          "Clear the originally available date and unlock the field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_audience_rating_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Audience Rating Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-star-rating-update",
+      "description": "Update audience rating from different sources.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any Number between 0.0-10.0 for Audience Ratings",
+      "custom_string_placeholder": "e.g. 9.0",
+      "custom_string_validation": "rating",
+      "sources": [
+        [
+          "anidb_average",
+          "Use AniDB Average",
+          "Use <b>AniDB average rating</b>."
+        ],
+        [
+          "anidb_rating",
+          "Use AniDB Rating",
+          "Use <b>AniDB rating</b>."
+        ],
+        [
+          "anidb_score",
+          "Use AniDB Review Score",
+          "Use <b>AniDB review score</b>."
+        ],
+        [
+          "imdb",
+          "Use IMDb Rating",
+          "Use <b>IMDb rating</b> directly."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList Score",
+          "Use <b>MyAnimeList score</b>."
+        ],
+        [
+          "mdb_average",
+          "Use MDBList Average Score",
+          "Use <b>average score</b> from MDBList."
+        ],
+        [
+          "mdb_imdb",
+          "Use IMDb via MDBList",
+          "Use <b>IMDb rating</b> via MDBList."
+        ],
+        [
+          "mdb_letterboxd",
+          "Use Letterboxd via MDBList",
+          "Use <b>Letterboxd rating</b> via MDBList."
+        ],
+        [
+          "mdb_metacritic",
+          "Use Metacritic via MDBList",
+          "Use <b>Metacritic critic rating</b> via MDBList."
+        ],
+        [
+          "mdb_metacriticuser",
+          "Use Metacritic User via MDBList",
+          "Use <b>Metacritic user score</b> via MDBList."
+        ],
+        [
+          "mdb_myanimelist",
+          "Use MyAnimeList via MDBList",
+          "Use <b>MAL score</b> via MDBList."
+        ],
+        [
+          "mdb_tmdb",
+          "Use TMDb via MDBList",
+          "Use <b>TMDb rating</b> via MDBList."
+        ],
+        [
+          "mdb_tomatoes",
+          "Use Rotten Tomatoes via MDBList",
+          "Use <b>Rotten Tomatoes rating</b> via MDBList."
+        ],
+        [
+          "mdb_tomatoesaudience",
+          "Use RT Audience via MDBList",
+          "Use <b>Rotten Tomatoes audience rating</b> via MDBList."
+        ],
+        [
+          "mdb_trakt",
+          "Use Trakt via MDBList",
+          "Use <b>Trakt score</b> via MDBList."
+        ],
+        [
+          "mdb",
+          "Use MDBList Score",
+          "Use the <b>combined MDBList score</b>."
+        ],
+        [
+          "omdb_metascore",
+          "Use Metacritic Metascore via OMDb",
+          "Use <b>Metacritic metascore</b> from OMDb."
+        ],
+        [
+          "omdb_tomatoes",
+          "Use RT via OMDb",
+          "Use <b>Rotten Tomatoes rating</b> from OMDb."
+        ],
+        [
+          "omdb",
+          "Use IMDb via OMDb",
+          "Use <b>IMDb rating</b> from OMDb."
+        ],
+        [
+          "plex_imdb",
+          "Use IMDb via Plex",
+          "Use <b>IMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tmdb",
+          "Use TMDb via Plex",
+          "Use <b>TMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tomatoes",
+          "Use RT via Plex",
+          "Use <b>Rotten Tomatoes rating</b> from Plex."
+        ],
+        [
+          "plex_tomatoesaudience",
+          "Use RT Audience via Plex",
+          "Use <b>RT audience score</b> from Plex."
+        ],
+        [
+          "tmdb",
+          "Use TMDb Rating",
+          "Use <b>TMDb rating</b> directly."
+        ],
+        [
+          "trakt_user",
+          "Use Trakt User Rating",
+          "Use your <b>personal Trakt user rating</b>."
+        ],
+        [
+          "trakt",
+          "Use Trakt Rating",
+          "Use <b>Trakt global rating</b>."
+        ],
+        [
+          "lock",
+          "Lock Rating Field",
+          "Prevent rating field from being modified."
+        ],
+        [
+          "unlock",
+          "Unlock Rating Field",
+          "Allow rating field to be updated."
+        ],
+        [
+          "remove",
+          "Remove Rating and Lock Field",
+          "Clear and <b>lock</b> the rating field."
+        ],
+        [
+          "reset",
+          "Remove Rating and Unlock Field",
+          "Clear and <b>unlock</b> the rating field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_critic_rating_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass Critic Rating Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-star-rating-update",
+      "description": "Update critic rating from different sources.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any Number between 0.0-10.0 for Critic Ratings",
+      "custom_string_placeholder": "e.g. 8.3",
+      "custom_string_validation": "rating",
+      "sources": [
+        [
+          "anidb_average",
+          "Use AniDB Average",
+          "Use <b>AniDB average rating</b>."
+        ],
+        [
+          "anidb_rating",
+          "Use AniDB Rating",
+          "Use <b>AniDB rating</b>."
+        ],
+        [
+          "anidb_score",
+          "Use AniDB Review Score",
+          "Use <b>AniDB review score</b>."
+        ],
+        [
+          "imdb",
+          "Use IMDb Rating",
+          "Use <b>IMDb rating</b> directly."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList Score",
+          "Use <b>MyAnimeList score</b>."
+        ],
+        [
+          "mdb_average",
+          "Use MDBList Average Score",
+          "Use <b>average score</b> from MDBList."
+        ],
+        [
+          "mdb_imdb",
+          "Use IMDb via MDBList",
+          "Use <b>IMDb rating</b> via MDBList."
+        ],
+        [
+          "mdb_letterboxd",
+          "Use Letterboxd via MDBList",
+          "Use <b>Letterboxd rating</b> via MDBList."
+        ],
+        [
+          "mdb_metacritic",
+          "Use Metacritic via MDBList",
+          "Use <b>Metacritic critic rating</b> via MDBList."
+        ],
+        [
+          "mdb_metacriticuser",
+          "Use Metacritic User via MDBList",
+          "Use <b>Metacritic user score</b> via MDBList."
+        ],
+        [
+          "mdb_myanimelist",
+          "Use MyAnimeList via MDBList",
+          "Use <b>MAL score</b> via MDBList."
+        ],
+        [
+          "mdb_tmdb",
+          "Use TMDb via MDBList",
+          "Use <b>TMDb rating</b> via MDBList."
+        ],
+        [
+          "mdb_tomatoes",
+          "Use Rotten Tomatoes via MDBList",
+          "Use <b>Rotten Tomatoes rating</b> via MDBList."
+        ],
+        [
+          "mdb_tomatoesaudience",
+          "Use RT Audience via MDBList",
+          "Use <b>Rotten Tomatoes audience rating</b> via MDBList."
+        ],
+        [
+          "mdb_trakt",
+          "Use Trakt via MDBList",
+          "Use <b>Trakt score</b> via MDBList."
+        ],
+        [
+          "mdb",
+          "Use MDBList Score",
+          "Use the <b>combined MDBList score</b>."
+        ],
+        [
+          "omdb_metascore",
+          "Use Metacritic Metascore via OMDb",
+          "Use <b>Metacritic metascore</b> from OMDb."
+        ],
+        [
+          "omdb_tomatoes",
+          "Use RT via OMDb",
+          "Use <b>Rotten Tomatoes rating</b> from OMDb."
+        ],
+        [
+          "omdb",
+          "Use IMDb via OMDb",
+          "Use <b>IMDb rating</b> from OMDb."
+        ],
+        [
+          "plex_imdb",
+          "Use IMDb via Plex",
+          "Use <b>IMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tmdb",
+          "Use TMDb via Plex",
+          "Use <b>TMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tomatoes",
+          "Use RT via Plex",
+          "Use <b>Rotten Tomatoes rating</b> from Plex."
+        ],
+        [
+          "plex_tomatoesaudience",
+          "Use RT Audience via Plex",
+          "Use <b>RT audience score</b> from Plex."
+        ],
+        [
+          "tmdb",
+          "Use TMDb Rating",
+          "Use <b>TMDb rating</b> directly."
+        ],
+        [
+          "trakt_user",
+          "Use Trakt User Rating",
+          "Use your <b>personal Trakt user rating</b>."
+        ],
+        [
+          "trakt",
+          "Use Trakt Rating",
+          "Use <b>Trakt global rating</b>."
+        ],
+        [
+          "lock",
+          "Lock Rating Field",
+          "Prevent rating field from being modified."
+        ],
+        [
+          "unlock",
+          "Unlock Rating Field",
+          "Allow rating field to be updated."
+        ],
+        [
+          "remove",
+          "Remove Rating and Lock Field",
+          "Clear and <b>lock</b> the rating field."
+        ],
+        [
+          "reset",
+          "Remove Rating and Unlock Field",
+          "Clear and <b>unlock</b> the rating field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_user_rating_update",
+      "type": "mass_update",
+      "media_types": ["movie", "show"],
+      "accordion": "library",
+      "title": "Mass User Rating Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-star-rating-update",
+      "description": "Update user rating from different sources.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any Number between 0.0-10.0 for User Ratings",
+      "custom_string_placeholder": "e.g. 7.5",
+      "custom_string_validation": "rating",
+      "sources": [
+        [
+          "anidb_average",
+          "Use AniDB Average",
+          "Use <b>AniDB average rating</b>."
+        ],
+        [
+          "anidb_rating",
+          "Use AniDB Rating",
+          "Use <b>AniDB rating</b>."
+        ],
+        [
+          "anidb_score",
+          "Use AniDB Review Score",
+          "Use <b>AniDB review score</b>."
+        ],
+        [
+          "imdb",
+          "Use IMDb Rating",
+          "Use <b>IMDb rating</b> directly."
+        ],
+        [
+          "mal",
+          "Use MyAnimeList Score",
+          "Use <b>MyAnimeList score</b>."
+        ],
+        [
+          "mdb_average",
+          "Use MDBList Average Score",
+          "Use <b>average score</b> from MDBList."
+        ],
+        [
+          "mdb_imdb",
+          "Use IMDb via MDBList",
+          "Use <b>IMDb rating</b> via MDBList."
+        ],
+        [
+          "mdb_letterboxd",
+          "Use Letterboxd via MDBList",
+          "Use <b>Letterboxd rating</b> via MDBList."
+        ],
+        [
+          "mdb_metacritic",
+          "Use Metacritic via MDBList",
+          "Use <b>Metacritic critic rating</b> via MDBList."
+        ],
+        [
+          "mdb_metacriticuser",
+          "Use Metacritic User via MDBList",
+          "Use <b>Metacritic user score</b> via MDBList."
+        ],
+        [
+          "mdb_myanimelist",
+          "Use MyAnimeList via MDBList",
+          "Use <b>MAL score</b> via MDBList."
+        ],
+        [
+          "mdb_tmdb",
+          "Use TMDb via MDBList",
+          "Use <b>TMDb rating</b> via MDBList."
+        ],
+        [
+          "mdb_tomatoes",
+          "Use Rotten Tomatoes via MDBList",
+          "Use <b>Rotten Tomatoes rating</b> via MDBList."
+        ],
+        [
+          "mdb_tomatoesaudience",
+          "Use RT Audience via MDBList",
+          "Use <b>Rotten Tomatoes audience rating</b> via MDBList."
+        ],
+        [
+          "mdb_trakt",
+          "Use Trakt via MDBList",
+          "Use <b>Trakt score</b> via MDBList."
+        ],
+        [
+          "mdb",
+          "Use MDBList Score",
+          "Use the <b>combined MDBList score</b>."
+        ],
+        [
+          "omdb_metascore",
+          "Use Metacritic Metascore via OMDb",
+          "Use <b>Metacritic metascore</b> from OMDb."
+        ],
+        [
+          "omdb_tomatoes",
+          "Use RT via OMDb",
+          "Use <b>Rotten Tomatoes rating</b> from OMDb."
+        ],
+        [
+          "omdb",
+          "Use IMDb via OMDb",
+          "Use <b>IMDb rating</b> from OMDb."
+        ],
+        [
+          "plex_imdb",
+          "Use IMDb via Plex",
+          "Use <b>IMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tmdb",
+          "Use TMDb via Plex",
+          "Use <b>TMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tomatoes",
+          "Use RT via Plex",
+          "Use <b>Rotten Tomatoes rating</b> from Plex."
+        ],
+        [
+          "plex_tomatoesaudience",
+          "Use RT Audience via Plex",
+          "Use <b>RT audience score</b> from Plex."
+        ],
+        [
+          "tmdb",
+          "Use TMDb Rating",
+          "Use <b>TMDb rating</b> directly."
+        ],
+        [
+          "trakt_user",
+          "Use Trakt User Rating",
+          "Use your <b>personal Trakt user rating</b>."
+        ],
+        [
+          "trakt",
+          "Use Trakt Rating",
+          "Use <b>Trakt global rating</b>."
+        ],
+        [
+          "lock",
+          "Lock Rating Field",
+          "Prevent rating field from being modified."
+        ],
+        [
+          "unlock",
+          "Unlock Rating Field",
+          "Allow rating field to be updated."
+        ],
+        [
+          "remove",
+          "Remove Rating and Lock Field",
+          "Clear and <b>lock</b> the rating field."
+        ],
+        [
+          "reset",
+          "Remove Rating and Unlock Field",
+          "Clear and <b>unlock</b> the rating field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_episode_audience_rating_update",
+      "type": "mass_update",
+      "media_types": ["show"],
+      "accordion": "library",
+      "title": "Mass Episode Audience Rating Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-episode-star-rating-update",
+      "description": "Updates the audience rating of all episodes in the library using the selected source(s).",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any Number between 0.0-10.0 for Episode Audience Ratings",
+      "custom_string_placeholder": "e.g. 8.2",
+      "custom_string_validation": "rating",
+      "sources": [
+        [
+          "imdb",
+          "Use IMDb Rating",
+          "Use <b>IMDb rating</b> directly."
+        ],
+        [
+          "plex_imdb",
+          "Use IMDb via Plex",
+          "Use <b>IMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tmdb",
+          "Use TMDb via Plex",
+          "Use <b>TMDb rating</b> from Plex metadata."
+        ],
+        [
+          "tmdb",
+          "Use TMDb Rating",
+          "Use <b>TMDb rating</b> directly."
+        ],
+        [
+          "trakt",
+          "Use Trakt Rating",
+          "Use <b>Trakt global rating</b>."
+        ],
+        [
+          "lock",
+          "Lock Rating Field",
+          "Prevent rating field from being modified."
+        ],
+        [
+          "unlock",
+          "Unlock Rating Field",
+          "Allow rating field to be updated."
+        ],
+        [
+          "remove",
+          "Remove Rating and Lock Field",
+          "Clear and <b>lock</b> the rating field."
+        ],
+        [
+          "reset",
+          "Remove Rating and Unlock Field",
+          "Clear and <b>unlock</b> the rating field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_episode_critic_rating_update",
+      "type": "mass_update",
+      "media_types": ["show"],
+      "accordion": "library",
+      "title": "Mass Episode Critic Rating Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-episode-star-rating-update",
+      "description": "Updates the critic rating of all episodes in the library using the selected source(s).",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any Number between 0.0-10.0 for Episode Critic Ratings",
+      "custom_string_placeholder": "e.g. 7.1",
+      "custom_string_validation": "rating",
+      "sources": [
+        [
+          "imdb",
+          "Use IMDb Rating",
+          "Use <b>IMDb rating</b> directly."
+        ],
+        [
+          "plex_imdb",
+          "Use IMDb via Plex",
+          "Use <b>IMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tmdb",
+          "Use TMDb via Plex",
+          "Use <b>TMDb rating</b> from Plex metadata."
+        ],
+        [
+          "tmdb",
+          "Use TMDb Rating",
+          "Use <b>TMDb rating</b> directly."
+        ],
+        [
+          "trakt",
+          "Use Trakt Rating",
+          "Use <b>Trakt global rating</b>."
+        ],
+        [
+          "lock",
+          "Lock Rating Field",
+          "Prevent rating field from being modified."
+        ],
+        [
+          "unlock",
+          "Unlock Rating Field",
+          "Allow rating field to be updated."
+        ],
+        [
+          "remove",
+          "Remove Rating and Lock Field",
+          "Clear and <b>lock</b> the rating field."
+        ],
+        [
+          "reset",
+          "Remove Rating and Unlock Field",
+          "Clear and <b>unlock</b> the rating field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_episode_user_rating_update",
+      "type": "mass_update",
+      "media_types": ["show"],
+      "accordion": "library",
+      "title": "Mass Episode User Rating Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-episode-star-rating-update",
+      "description": "Updates the user rating of all episodes in the library using the selected source(s).",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Any Number between 0.0-10.0 for Episode User Ratings",
+      "custom_string_placeholder": "e.g. 9.2",
+      "custom_string_validation": "rating",
+      "sources": [
+        [
+          "imdb",
+          "Use IMDb Rating",
+          "Use <b>IMDb rating</b> directly."
+        ],
+        [
+          "plex_imdb",
+          "Use IMDb via Plex",
+          "Use <b>IMDb rating</b> from Plex metadata."
+        ],
+        [
+          "plex_tmdb",
+          "Use TMDb via Plex",
+          "Use <b>TMDb rating</b> from Plex metadata."
+        ],
+        [
+          "tmdb",
+          "Use TMDb Rating",
+          "Use <b>TMDb rating</b> directly."
+        ],
+        [
+          "trakt",
+          "Use Trakt Rating",
+          "Use <b>Trakt global rating</b>."
+        ],
+        [
+          "trakt_user",
+          "Use Trakt User's Personal Rating",
+          "Use <b>your personal Trakt rating</b>."
+        ],
+        [
+          "lock",
+          "Lock Rating Field",
+          "Prevent user rating from being modified."
+        ],
+        [
+          "unlock",
+          "Unlock Rating Field",
+          "Allow user rating to be updated."
+        ],
+        [
+          "remove",
+          "Remove Rating and Lock Field",
+          "Clear and <b>lock</b> the user rating field."
+        ],
+        [
+          "reset",
+          "Remove Rating and Unlock Field",
+          "Clear and <b>unlock</b> the user rating field."
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_poster_update",
+      "type": "toggle_with_select",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Mass Poster Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-poster-update",
+      "description": "Updates the poster of each item in the library based on the selected source and optional toggles.",
+      "tooltip_variant": "info",
+      "container_class": "accordion",
+      "toggles": [
+        {
+          "key": "mass_poster_seasons",
+          "label": "Update Season Posters",
+          "tooltip": "Update season posters while updating shows."
+        },
+        {
+          "key": "mass_poster_episodes",
+          "label": "Update Episode Posters",
+          "tooltip": "Update episode posters while updating shows."
+        },
+        {
+          "key": "mass_poster_ignore_locked",
+          "label": "Ignore Locked Posters",
+          "tooltip": "Skip updating image if the poster field is locked."
+        },
+        {
+          "key": "mass_poster_ignore_overlays",
+          "label": "Ignore Overlaid Posters",
+          "tooltip": "Skip updating image if the current image has an Overlay."
+        }
+      ],
+      "select_input": {
+        "key": "mass_poster_source",
+        "label": "Poster Source",
+        "tooltip": "Choose the source to update the poster from.",
+        "options": [
+          [
+            "",
+            "None"
+          ],
+          [
+            "tmdb",
+            "TMDb"
+          ],
+          [
+            "plex",
+            "Plex"
+          ],
+          [
+            "lock",
+            "Lock Poster Field"
+          ],
+          [
+            "unlock",
+            "Unlock Poster Field"
+          ]
+        ]
+      },
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_background_update",
+      "type": "toggle_with_select",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Mass Background Update",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-background-update",
+      "description": "Updates the background of each item in the library based on the selected source and optional toggles.",
+      "tooltip_variant": "info",
+      "container_class": "accordion",
+      "toggles": [
+        {
+          "key": "mass_background_seasons",
+          "label": "Update Season Backgrounds",
+          "tooltip": "Update season backgrounds while updating shows."
+        },
+        {
+          "key": "mass_background_episodes",
+          "label": "Update Episode Backgrounds",
+          "tooltip": "Update episode backgrounds while updating shows."
+        },
+        {
+          "key": "mass_background_ignore_locked",
+          "label": "Ignore Locked Backgrounds",
+          "tooltip": "Skip updating image if the background field is locked."
+        }
+      ],
+      "select_input": {
+        "key": "mass_background_source",
+        "label": "Background Source",
+        "tooltip": "Choose the source to update the background image from.",
+        "options": [
+          [
+            "",
+            "None"
+          ],
+          [
+            "tmdb",
+            "TMDb"
+          ],
+          [
+            "plex",
+            "Plex"
+          ],
+          [
+            "lock",
+            "Lock Background Field"
+          ],
+          [
+            "unlock",
+            "Unlock Background Field"
+          ]
+        ]
+      },
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_imdb_parental_labels",
+      "type": "select",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Mass IMDb Parental Labels",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-imdb-parental-labels",
+      "description": "Adds IMDb Parental labels of every item in the library.",
+      "tooltip_variant": "info",
+      "options": [
+        [
+          "",
+          "None"
+        ],
+        [
+          "mild",
+          "Mild"
+        ],
+        [
+          "moderate",
+          "Moderate"
+        ],
+        [
+          "severe",
+          "Severe"
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "mass_collection_mode",
+      "type": "select",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Mass Collection Mode",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#mass-collection-mode",
+      "description": "Controls the collection mode behavior for all collections.",
+      "tooltip_variant": "info",
+      "options": [
+        [
+          "",
+          "None"
+        ],
+        [
+          "default",
+          "Default"
+        ],
+        [
+          "hide",
+          "Hide"
+        ],
+        [
+          "hide_items",
+          "Hide Items"
+        ],
+        [
+          "show_items",
+          "Show Items"
+        ]
+      ],
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "update_blank_track_titles",
+      "type": "boolean_toggle",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Update Blank Track Titles",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#update-blank-track-titles",
+      "description": "Updates blank track titles of every item in the library.",
+      "tooltip_variant": "info",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "remove_title_parentheses",
+      "type": "boolean_toggle",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Remove Title Parentheses",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#remove-title-parentheses",
+      "description": "Removes title parentheses of every item in the library.",
+      "tooltip_variant": "info",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "split_duplicates",
+      "type": "boolean_toggle",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Split Duplicates",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#split-duplicates",
+      "description": "Splits all duplicate items found in this library.",
+      "tooltip_variant": "info",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "radarr_add_all",
+      "type": "boolean_toggle",
+      "accordion": "library",
+      "media_types": [
+        "movie"
+      ],
+      "title": "Radarr Add All",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#radarr-add-all",
+      "description": "Adds every item in the library to Radarr.",
+      "tooltip_variant": "info",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "radarr_remove_by_tag",
+      "type": "mass_update",
+      "media_types": ["movie"],
+      "accordion": "library",
+      "title": "Radarr Remove by Tag",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#radarr-remove-by-tag",
+      "description": "Removes items from Radarr that are tagged with any of the specified tags.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Enter Radarr tag(s) to remove",
+      "custom_string_placeholder": "e.g. holiday, classic",
+      "custom_string_behavior": "list",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "sonarr_add_all",
+      "type": "boolean_toggle",
+      "accordion": "library",
+      "media_types": [
+        "show"
+      ],
+      "title": "Sonarr Add All",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#sonarr-add-all",
+      "description": "Adds every item in the library to Sonarr.",
+      "tooltip_variant": "info",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "sonarr_remove_by_tag",
+      "type": "mass_update",
+      "media_types": ["show"],
+      "accordion": "library",
+      "title": "Sonarr Remove by Tag",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#sonarr-remove-by-tag",
+      "description": "Removes items from Sonarr that are tagged with any of the specified tags.",
+      "tooltip_variant": "info",
+      "has_custom_string": true,
+      "container_class": "accordion",
+      "custom_string_label": "Enter Sonarr tag(s) to remove",
+      "custom_string_placeholder": "e.g. holiday, classic",
+      "custom_string_behavior": "list",
+      "yml_location": "attribute"
+    },
+    {
+      "prefix": "metadata_backup",
+      "type": "complex_group",
+      "accordion": "library",
+      "media_types": [
+        "movie",
+        "show"
+      ],
+      "title": "Metadata Backup",
+      "wiki": "https://kometa.wiki/en/nightly/config/operations/#metadata-backup",
+      "description": "Backs up metadata to a YAML file. You can optionally set the path, exclude attributes, sync tag metadata, or add placeholders for items with no changes.",
+      "tooltip_variant": "info",
+      "container_class": "accordion",
+      "text_input": {
+        "key": "path",
+        "label": "Backup File Path",
+        "placeholder": "<<library_name>>_Metadata_Backup.yml",
+        "tooltip": "Optional. Leave blank to use default: <code>&lt;&lt;library_name&gt;&gt;_Metadata_Backup.yml</code> in your config folder."
+      },
+      "custom_string_list": {
+        "key": "custom",
+        "field": "exclude",
+        "type": "custom_string_list",
+        "label": "Exclude Attributes",
+        "placeholder": "e.g. summary, title",
+        "tooltip": "List of attributes to exclude from the backup."
+      },
+      "toggles": [
+        {
+          "key": "sync_tags",
+          "label": "Sync Tag Attributes",
+          "tooltip": "If enabled, all tag attributes will include the <code>.sync</code> option and add blank entries for syncing."
+        },
+        {
+          "key": "add_blank_entries",
+          "label": "Add Blank Entries",
+          "tooltip": "Adds a line for metadata attributes with no changes. Recommended for consistency."
+        }
+      ],
+      "yml_location": "attribute"
+    }
+  ]
+}

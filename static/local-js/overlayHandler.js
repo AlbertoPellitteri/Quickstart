@@ -5,19 +5,21 @@ const OverlayHandler = {
     console.log(`[DEBUG] Initializing overlays for ${libraryId} - ${isMovie ? 'Movie' : 'Show'}`)
 
     // Attach event listener for separator dropdown
-    const separatorDropdown = document.getElementById(`${libraryId}-attribute_use_separators`)
+    const fieldId = `${libraryId}-template_variables[use_separator]`
+    const separatorDropdown = document.querySelector(`[name="${fieldId}"]`)
+
     if (separatorDropdown && !separatorDropdown.dataset.listenerAdded) {
       separatorDropdown.addEventListener('change', () => {
         const selectedStyle = separatorDropdown.value !== 'none'
         OverlayHandler.updateSeparatorToggles(libraryId, selectedStyle)
-        OverlayHandler.updateSeparatorPreview(libraryId, separatorDropdown.value)
+        OverlayHandler.updateSeparatorPreview(fieldId, separatorDropdown.value)
         EventHandler.updateAccordionHighlights()
       })
       separatorDropdown.dataset.listenerAdded = true
 
       // Apply separator toggle logic on page load
       OverlayHandler.updateSeparatorToggles(libraryId, separatorDropdown.value !== 'none')
-      OverlayHandler.updateSeparatorPreview(libraryId, separatorDropdown.value)
+      OverlayHandler.updateSeparatorPreview(fieldId, separatorDropdown.value)
       EventHandler.updateAccordionHighlights()
     }
   },
@@ -44,17 +46,22 @@ const OverlayHandler = {
     }
   },
 
-  updateSeparatorPreview: function (libraryId, selectedStyle) {
-    console.log(`[DEBUG] Updating Separator Preview for ${libraryId} - Style: ${selectedStyle}`)
-    const separatorPreviewContainer = document.getElementById(`${libraryId}-separatorPreviewContainer`)
-    const separatorPreviewImage = document.getElementById(`${libraryId}-separatorPreviewImage`)
+  updateSeparatorPreview: function (fieldId, selectedStyle) {
+    console.log(`[DEBUG] Updating Separator Preview for ${fieldId} - Style: ${selectedStyle}`)
+
+    const safeId = fieldId.replace('[', '_').replace(']', '')
+    const containerId = `${safeId}-separatorPreviewContainer`
+    const imageId = `${safeId}-separatorPreviewImage`
+
+    const separatorPreviewContainer = document.getElementById(containerId)
+    const separatorPreviewImage = document.getElementById(imageId)
 
     if (!separatorPreviewContainer || !separatorPreviewImage) {
-      console.error(`[ERROR] Separator preview elements missing for ${libraryId}`)
+      console.error(`[ERROR] Separator preview elements missing for ${fieldId}`)
       return
     }
 
-    if (selectedStyle !== 'none') {
+    if (selectedStyle && selectedStyle !== 'none') {
       const imageUrl = `https://github.com/Kometa-Team/Default-Images/blob/master/separators/${selectedStyle}/chart.jpg?raw=true`
       separatorPreviewImage.src = imageUrl
       separatorPreviewContainer.style.display = 'block'
@@ -73,8 +80,8 @@ const OverlayHandler = {
       return
     }
 
-    const useSeparatorsDropdown = document.getElementById(`${libraryId}-attribute_use_separators`)
-    let useSeparatorsInput = document.getElementById(`${libraryId}-template_variables_use_separators`)
+    const useSeparatorsDropdown = document.querySelector(`[name="${libraryId}-template_variables[use_separator]"]`)
+    let useSeparatorsInput = document.getElementById(`${libraryId}-template_variables_use_separator`)
     let sepStyleInput = document.getElementById(`${libraryId}-template_variables_sep_style`)
 
     const awardSeparatorToggle = document.getElementById(`${libraryId}-collection_separator_award`)
@@ -90,8 +97,8 @@ const OverlayHandler = {
     if (!useSeparatorsInput) {
       useSeparatorsInput = document.createElement('input')
       useSeparatorsInput.type = 'hidden'
-      useSeparatorsInput.name = `${libraryId}-template_variables[use_separators]`
-      useSeparatorsInput.id = `${libraryId}-template_variables_use_separators`
+      useSeparatorsInput.name = `${libraryId}-template_variables[use_separator]`
+      useSeparatorsInput.id = `${libraryId}-template_variables_use_separator`
       form.appendChild(useSeparatorsInput)
     }
     useSeparatorsInput.value = isEnabled ? 'true' : 'false'
@@ -115,7 +122,8 @@ const OverlayHandler = {
       chartSeparatorToggle.checked = isEnabled && chartTogglesChecked
     }
 
-    OverlayHandler.updateSeparatorPreview(libraryId, selectedValue)
+    const fieldId = `${libraryId}-template_variables[use_separator]`
+    OverlayHandler.updateSeparatorPreview(fieldId, selectedValue)
   }
 
 }

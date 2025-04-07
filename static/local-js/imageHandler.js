@@ -1,4 +1,4 @@
-/* global showToast , localStorage, bootstrap */
+/* global showToast , localStorage, bootstrap, updateFormData, refreshOverlayPreviewImage */
 
 const ImageHandler = {
   loadAvailableImages: function (libraryId, isMovie) {
@@ -106,7 +106,7 @@ const ImageHandler = {
       overlays = overlays.filter(overlay => !overlay.startsWith('content_rating'))
     }
 
-    // 🔥 **Fix: Strip out `library_<library_name>-` from overlay names**
+    // **Fix: Strip out `library_<library_name>-` from overlay names**
     overlays = overlays.map(overlay => overlay.replace(new RegExp(`^${libraryId}-`), `${isMovie ? 'mov' : 'sho'}-`))
 
     console.log(`[DEBUG] Overlays found for ${libraryId}:`, overlays)
@@ -391,3 +391,21 @@ const ImageHandler = {
       })
   }
 }
+
+// Global listener to refresh image preview only if toggle is in preview overlay section
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.form-check-input').forEach((input) => {
+    input.addEventListener('change', (event) => {
+      const target = event.target
+
+      // Always update the form model
+      updateFormData(target)
+
+      // Look for the overlay section specifically (e.g., mov-library_movies-overlays)
+      const isInOverlayAccordion = target.closest('[id$="-overlays"]')
+      if (isInOverlayAccordion) {
+        refreshOverlayPreviewImage(target)
+      }
+    })
+  })
+})

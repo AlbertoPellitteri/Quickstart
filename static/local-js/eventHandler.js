@@ -123,6 +123,17 @@ const EventHandler = {
 
       // Attach overlay selection listeners (CHANGE events)
       library.querySelectorAll('.accordion input').forEach((input) => {
+        library.querySelectorAll('.accordion select').forEach(select => {
+          if (!select.dataset.listenerAdded) {
+            select.addEventListener('change', () => {
+              console.log(`[DEBUG] Dropdown changed: ${select.id} -> ${select.value}`)
+              EventHandler.updateAccordionHighlights()
+              ValidationHandler.updateValidationState()
+            })
+            select.dataset.listenerAdded = 'true'
+          }
+        })
+
         if (input.id && !input.dataset.listenerAdded) {
           console.log(`[DEBUG] Attaching toggle listener for ${input.id}`)
           input.addEventListener('change', () => {
@@ -156,7 +167,7 @@ const EventHandler = {
       })
 
       // Automatically Update Preview When Overlay Toggles or Content Rating Changes
-      library.querySelectorAll('.accordion input[type="checkbox"], .accordion input[type="radio"]').forEach(input => {
+      library.querySelectorAll(`#${libraryId}-overlays input[type="checkbox"], #${libraryId}-overlays input[type="radio"]`).forEach(input => {
         input.addEventListener('change', () => {
           console.log(`[DEBUG] Overlay or Rating Changed: ${input.id} - Checked/Selected: ${input.checked || input.value}`)
           ImageHandler.generatePreview(libraryId, isMovie)
@@ -164,7 +175,7 @@ const EventHandler = {
       })
 
       // Attach separator preview logic (Now handled by OverlayHandler)
-      const separatorDropdown = library.querySelector("[id$='-attribute_use_separators']")
+      const separatorDropdown = library.querySelector("[id$='-attribute_use_separator']")
       if (separatorDropdown && !separatorDropdown.dataset.listenerAdded) {
         console.log(`[DEBUG] Found separator dropdown: ${separatorDropdown.id}`)
         separatorDropdown.addEventListener('change', () => {
@@ -191,6 +202,84 @@ const EventHandler = {
         )
         renameButton.dataset.listenerAdded = true
       }
+
+      // Attach listener for custom genre "Add" button
+      const listBasedPrefixes = ['mass_genre_update', 'radarr_remove_by_tag', 'sonarr_remove_by_tag', 'metadata_backup']
+
+      listBasedPrefixes.forEach(prefix => {
+        console.log(`[DEBUG] Setting up list-based input for prefix: ${prefix} in ${libraryId}`)
+        const customAddButton = document.getElementById(`${libraryId}-${prefix}_custom_add`)
+        if (customAddButton && !customAddButton.dataset.listenerAdded) {
+          console.log(`[DEBUG] Attaching custom string add listener for ${prefix} in ${libraryId}`)
+
+          const customList = document.getElementById(`${libraryId}-${prefix}_custom_list`)
+          const hiddenCustomInput = document.getElementById(`${libraryId}-${prefix}_custom_hidden`)
+
+          if (hiddenCustomInput && customList) {
+            try {
+              const savedItems = JSON.parse(hiddenCustomInput.value || '[]')
+              if (Array.isArray(savedItems)) {
+                savedItems.forEach(value => {
+                  const li = document.createElement('li')
+                  li.className = 'list-group-item d-flex justify-content-between align-items-center'
+                  li.textContent = value
+
+                  const removeBtn = document.createElement('button')
+                  removeBtn.type = 'button'
+                  removeBtn.className = 'btn btn-sm btn-danger'
+                  removeBtn.innerHTML = '<i class="bi bi-x-lg"></i>'
+                  removeBtn.addEventListener('click', function () {
+                    li.remove()
+                    updateHiddenInput(customList, hiddenCustomInput)
+                  })
+
+                  li.appendChild(removeBtn)
+                  customList.appendChild(li)
+                })
+              }
+            } catch (e) {
+              console.warn(`[WARN] Could not parse saved custom list for ${prefix} in ${libraryId}:`, e)
+            }
+          }
+
+          function updateHiddenInput (listElement, hiddenInput) {
+            const values = Array.from(listElement.children).map(item =>
+              item.firstChild.textContent.replace(/^"|"$/g, '')
+            )
+            hiddenInput.value = values.length ? JSON.stringify(values) : ''
+          }
+
+          customAddButton.addEventListener('click', function () {
+            const input = document.getElementById(`${libraryId}-${prefix}_custom_input`)
+            const list = document.getElementById(`${libraryId}-${prefix}_custom_list`)
+            const hidden = document.getElementById(`${libraryId}-${prefix}_custom_hidden`)
+
+            const value = input.value.trim()
+            if (!value) return
+
+            // Create the list item
+            const li = document.createElement('li')
+            li.className = 'list-group-item d-flex justify-content-between align-items-center'
+            li.textContent = value
+
+            const removeBtn = document.createElement('button')
+            removeBtn.type = 'button'
+            removeBtn.className = 'btn btn-sm btn-danger'
+            removeBtn.innerHTML = '<i class="bi bi-x-lg"></i>'
+            removeBtn.addEventListener('click', function () {
+              li.remove()
+              updateHiddenInput(list, hidden)
+            })
+
+            li.appendChild(removeBtn)
+            list.appendChild(li)
+            input.value = ''
+            updateHiddenInput(list, hidden)
+          })
+
+          customAddButton.dataset.listenerAdded = 'true'
+        }
+      })
     })
   },
 
@@ -235,7 +324,7 @@ const EventHandler = {
       ) !== null
 
       if (isCheckedOrSelected) {
-        console.log(`✅ [DEBUG] Highlighting: ${headerText}`)
+        console.log(`[DEBUG] Highlighting: ${headerText}`)
         accordionHeader.classList.add('selected')
 
         // Ensure the **IMMEDIATE PARENT** gets highlighted before moving up
@@ -265,7 +354,7 @@ const EventHandler = {
           const isPreviewChild = childText.toLowerCase().includes('preview overlays')
 
           if (!isPreviewChild && child.querySelector("input:checked, input[type='radio']:checked")) {
-            console.log(`✅ [DEBUG] Valid selection found under: ${childText}`)
+            console.log(`[DEBUG] Valid selection found under: ${childText}`)
             childHeader.classList.add('selected')
             return true
           }
@@ -276,7 +365,7 @@ const EventHandler = {
           console.log(`🚫 [DEBUG] Overlays should NOT highlight: ${headerText}`)
           accordionHeader.classList.remove('selected')
         } else {
-          console.log(`✅ [DEBUG] Highlighting Overlays: ${headerText}`)
+          console.log(`[DEBUG] Highlighting Overlays: ${headerText}`)
           accordionHeader.classList.add('selected')
         }
       }
