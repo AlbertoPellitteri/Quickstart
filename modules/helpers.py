@@ -4,6 +4,8 @@ import os
 import re
 import sys
 from pathlib import Path
+from plexapi.server import PlexServer
+from modules import persistence
 
 import requests
 from flask import current_app as app
@@ -114,9 +116,18 @@ def ensure_json_schema():
     new_hashes = {}
 
     for filename, url in [
-        ("prototype_config.yml", f"{GITHUB_BASE_URL}/{branch}/json-schema/prototype_config.yml"),
-        ("config-schema.json", f"{GITHUB_BASE_URL}/{branch}/json-schema/config-schema.json"),
-        ("config.yml.template", f"{GITHUB_BASE_URL}/{branch}/config/config.yml.template"),
+        (
+            "prototype_config.yml",
+            f"{GITHUB_BASE_URL}/{branch}/json-schema/prototype_config.yml",
+        ),
+        (
+            "config-schema.json",
+            f"{GITHUB_BASE_URL}/{branch}/json-schema/config-schema.json",
+        ),
+        (
+            "config.yml.template",
+            f"{GITHUB_BASE_URL}/{branch}/config/config.yml.template",
+        ),
     ]:
         file_path = os.path.join(JSON_SCHEMA_DIR, filename)  # Store everything in json-schema
 
@@ -250,7 +261,13 @@ def build_oauth_dict(source, form_data):
         final_key = key.replace(source + "_", "", 1)
         value = form_data[key]
 
-        if final_key in ["client_id", "client_secret", "pin", "cache_expiration", "localhost_url"]:
+        if final_key in [
+            "client_id",
+            "client_secret",
+            "pin",
+            "cache_expiration",
+            "localhost_url",
+        ]:
             data[source][final_key] = value  # Store outside authorization
         elif final_key == "validated":
             data[final_key] = value
@@ -476,3 +493,78 @@ def load_quickstart_sections():
     json_path = os.path.join(JSON_SETTINGS, "quickstart_sections.json")
     with open(json_path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def get_top_imdb_items(library_id, media_type, placeholder_id=None):
+    print(f"[DEBUG] Fetching Plex credentials for '010-plex'")
+    plex_url, plex_token = persistence.get_stored_plex_credentials("010-plex")
+
+    print(f"[DEBUG] Connecting to Plex with URL: {plex_url}")
+    plex = PlexServer(plex_url, plex_token)
+
+    for section in plex.library.sections():
+        print(f"[DEBUG] Section: key={section.key}, title={section.title}")
+
+    print(f"[DEBUG] Searching for section with ID or title: {library_id}")
+    section = next(
+        (s for s in plex.library.sections() if str(s.key) == str(library_id) or s.title.lower() == str(library_id).lower()),
+        None,
+    )
+
+    if not section:
+        raise ValueError(f"Library ID {library_id} not found.")
+
+    print(f"[DEBUG] Fetching items from '{section.title}' sorted by audienceRating")
+    items = section.search(sort="audienceRating:desc", maxresults=25)
+
+    imdb_items = []
+    for item in items:
+        imdb_id = None
+        for guid in item.guids:
+            if guid.id.startswith("imdb://"):
+                imdb_id = guid.id.replace("imdb://", "")
+                break
+        if imdb_id:
+            imdb_items.append({"id": imdb_id, "title": item.title})
+
+    saved_item = None
+    if placeholder_id and not any(x["id"] == placeholder_id for x in imdb_items):
+        saved_item = find_item_by_imdb_id(library_id, placeholder_id, media_type)
+        if saved_item:
+            print(f"[DEBUG] Saved placeholder found separately: {saved_item['title']}")
+
+    print(f"[DEBUG] Returning {len(imdb_items)} IMDb items")
+    return imdb_items, saved_item
+
+
+def get_plex_key_by_name(full_list, target_name):
+    """
+    Given a list of dicts with 'name' and 'plex_key', return the matching plex_key by name.
+    """
+    for lib in full_list:
+        if lib.get("name") == target_name:
+            return lib.get("plex_key")
+    return None  # Or raise an exception if you prefer
+
+
+def find_item_by_imdb_id(library_name, imdb_id, media_type):
+    from modules import plex_connection
+
+    if not imdb_id:
+        return None
+
+    plex = plex_connection.connect_to_plex()
+    if not plex:
+        return None
+
+    section = plex.library.section(library_name)
+    if not section:
+        return None
+
+    # Search by IMDb ID
+    results = section.search(guid=f"imdb://{imdb_id}")
+    if not results:
+        return None
+
+    item = results[0]
+    return {"id": imdb_id, "title": item.title}

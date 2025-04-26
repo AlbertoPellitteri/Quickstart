@@ -134,7 +134,10 @@ def rename_library_image():
 
     # Check if the new file name already exists
     if os.path.exists(new_path):
-        return jsonify({"status": "error", "message": "File with new name already exists"}), 400
+        return (
+            jsonify({"status": "error", "message": "File with new name already exists"}),
+            400,
+        )
 
     try:
         os.rename(old_path, new_path)
@@ -273,18 +276,37 @@ def upload_library_image():
     image_type = request.form.get("type")  # "movie" or "show"
 
     if not image or not image_type or image_type not in ["movie", "show"]:
-        return jsonify({"status": "error", "message": "Invalid request parameters"}), 400
+        return (
+            jsonify({"status": "error", "message": "Invalid request parameters"}),
+            400,
+        )
 
     # Validate file extension
     filename = secure_filename(image.filename)
     ext = filename.rsplit(".", 1)[-1].lower()
     if ext not in ALLOWED_EXTENSIONS:
-        return jsonify({"status": "error", "message": "Invalid file type. Allowed: png, jpg, jpeg, webp"}), 400
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Invalid file type. Allowed: png, jpg, jpeg, webp",
+                }
+            ),
+            400,
+        )
 
     # Open and validate image
     img = Image.open(image)  # noqa
     if not helpers.is_valid_aspect_ratio(img):
-        return jsonify({"status": "error", "message": "Image must have a 1:1.5 aspect ratio (e.g., 1000x1500)."}), 400
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Image must have a 1:1.5 aspect ratio (e.g., 1000x1500).",
+                }
+            ),
+            400,
+        )
 
     # Resize if needed
     img = img.resize((1000, 1500), Image.LANCZOS)  # noqa
@@ -307,7 +329,13 @@ def upload_library_image():
     # Save the validated and resized image
     img.save(save_path)
 
-    return jsonify({"status": "success", "message": f"Image uploaded and saved as {filename}", "filename": filename})
+    return jsonify(
+        {
+            "status": "success",
+            "message": f"Image uploaded and saved as {filename}",
+            "filename": filename,
+        }
+    )
 
 
 @app.route("/fetch_library_image", methods=["POST"])
@@ -317,7 +345,10 @@ def fetch_library_image():
     image_type = data.get("type")  # "movie" or "show"
 
     if not image_url or not image_type or image_type not in ["movie", "show"]:
-        return jsonify({"status": "error", "message": "Invalid request parameters"}), 400
+        return (
+            jsonify({"status": "error", "message": "Invalid request parameters"}),
+            400,
+        )
 
     try:
         response = requests.get(image_url, stream=True, timeout=5)
@@ -327,11 +358,27 @@ def fetch_library_image():
         # Validate file extension
         file_extension = img.format.lower()
         if file_extension not in ALLOWED_EXTENSIONS:
-            return jsonify({"status": "error", "message": "Invalid file type. Allowed: png, jpg, jpeg, webp"}), 400
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Invalid file type. Allowed: png, jpg, jpeg, webp",
+                    }
+                ),
+                400,
+            )
 
         # Ensure the correct aspect ratio
         if not helpers.is_valid_aspect_ratio(img):
-            return jsonify({"status": "error", "message": "Image must have a 1:1.5 aspect ratio (e.g., 1000x1500)."}), 400
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Image must have a 1:1.5 aspect ratio (e.g., 1000x1500).",
+                    }
+                ),
+                400,
+            )
 
         # Resize if necessary
         img = img.resize((1000, 1500), Image.LANCZOS)  # noqa
@@ -359,12 +406,24 @@ def fetch_library_image():
         # Save the validated and resized image
         img.save(save_path)
 
-        return jsonify({"status": "success", "message": f"Image fetched and saved as {filename}", "filename": filename})
+        return jsonify(
+            {
+                "status": "success",
+                "message": f"Image fetched and saved as {filename}",
+                "filename": filename,
+            }
+        )
 
     except requests.exceptions.RequestException as e:
-        return jsonify({"status": "error", "message": f"Failed to fetch image: {str(e)}"}), 400
+        return (
+            jsonify({"status": "error", "message": f"Failed to fetch image: {str(e)}"}),
+            400,
+        )
     except Exception as e:
-        return jsonify({"status": "error", "message": f"Processing error: {str(e)}"}), 400
+        return (
+            jsonify({"status": "error", "message": f"Processing error: {str(e)}"}),
+            400,
+        )
 
 
 @app.route("/delete_library_image/<filename>", methods=["DELETE"])
@@ -416,7 +475,12 @@ def clear_session():
     persistence.flush_session_storage(config_name)
 
     # Send message to toast
-    return jsonify({"status": "success", "message": f"Session storage cleared for '{config_name}'."})
+    return jsonify(
+        {
+            "status": "success",
+            "message": f"Session storage cleared for '{config_name}'.",
+        }
+    )
 
 
 @app.route("/clear_data/<name>/<section>")
@@ -668,6 +732,34 @@ def step(name):
         )
 
 
+@app.route("/get_top_imdb_items/<library_name>")
+def get_top_imdb_items_route(library_name):
+    media_type = request.args.get("type", "movie")
+    placeholder_id = request.args.get("placeholder_id")
+    settings = persistence.retrieve_settings("010-plex")
+    plex_settings = settings.get("plex", {})
+
+    tmp_key = f"tmp_{media_type}_libraries"
+    raw_libraries = plex_settings.get(tmp_key, "")
+    library_names = [lib.strip() for lib in raw_libraries.split(",") if lib.strip()]
+
+    print(f"[DEBUG] Searching for library name: {library_name}")
+    print(f"[DEBUG] Available libraries of type '{media_type}': {library_names}")
+
+    if library_name not in library_names:
+        return jsonify(
+            {
+                "status": "error",
+                "message": f"Library '{library_name}' not found in Plex settings.",
+            }
+        )
+
+    # Call with placeholder_id
+    items, saved_item = helpers.get_top_imdb_items(library_name, media_type, placeholder_id)
+
+    return jsonify({"status": "success", "items": items, "saved_item": saved_item})
+
+
 @app.route("/download")
 def download():
     yaml_content = session.get("yaml_content", "")
@@ -735,7 +827,15 @@ def refresh_plex_libraries():
 
         # Exit early if the Plex credentials are still using default placeholder values
         if not plex_url or not plex_token or plex_url == default_plex_url or plex_token == default_plex_token:
-            return jsonify({"valid": False, "error": "Plex credentials are using default placeholder values"}), 400
+            return (
+                jsonify(
+                    {
+                        "valid": False,
+                        "error": "Plex credentials are using default placeholder values",
+                    }
+                ),
+                400,
+            )
 
         # Fetch latest libraries from Plex
         plex_response = validations.validate_plex_server({"plex_url": plex_url, "plex_token": plex_token})
@@ -922,7 +1022,15 @@ if __name__ == "__main__":
     else:
         # GUI mode: show tray
         from PyQt5.QtGui import QIcon
-        from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QAction, QInputDialog, QMessageBox, QWidget
+        from PyQt5.QtWidgets import (
+            QApplication,
+            QSystemTrayIcon,
+            QMenu,
+            QAction,
+            QInputDialog,
+            QMessageBox,
+            QWidget,
+        )
         from PyQt5.QtCore import Qt, QTimer
 
         server_thread = Thread(target=start_flask_app)
@@ -973,7 +1081,12 @@ if __name__ == "__main__":
                 self.tray.setContextMenu(self.menu)
                 self.tray.show()
 
-                self.tray.showMessage("Quickstart is Running", f"Access it at http://localhost:{running_port}", QSystemTrayIcon.NoIcon, 8000)  # milliseconds (8 seconds)
+                self.tray.showMessage(
+                    "Quickstart is Running",
+                    f"Access it at http://localhost:{running_port}",
+                    QSystemTrayIcon.NoIcon,
+                    8000,
+                )  # milliseconds (8 seconds)
 
                 print("Quickstart is Running")
                 print(f"Access it at http://localhost:{running_port}")
@@ -1038,16 +1151,26 @@ if __name__ == "__main__":
                     print(f"[INFO] User entered new port: {new_port}")
 
                     if new_port == port:
-                        self.show_messagebox(QMessageBox.Information, "Port Already Selected", f"Port {new_port} is already selected.")
+                        self.show_messagebox(
+                            QMessageBox.Information,
+                            "Port Already Selected",
+                            f"Port {new_port} is already selected.",
+                        )
                     else:
                         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                             if sock.connect_ex(("localhost", new_port)) == 0:
                                 self.show_messagebox(
-                                    QMessageBox.Warning, "Port Conflict", f"Port {new_port} is already in use.\nClose any conflicting applications or choose another port."
+                                    QMessageBox.Warning,
+                                    "Port Conflict",
+                                    f"Port {new_port} is already in use.\nClose any conflicting applications or choose another port.",
                                 )
                             else:
                                 helpers.update_env_variable("QS_PORT", new_port)
-                                self.show_messagebox(QMessageBox.Information, "Port Updated", f"Port number updated to {new_port}.\nQuickstart will now restart automatically.")
+                                self.show_messagebox(
+                                    QMessageBox.Information,
+                                    "Port Updated",
+                                    f"Port number updated to {new_port}.\nQuickstart will now restart automatically.",
+                                )
                                 self.restart_quickstart()
 
                 except Exception as e:
