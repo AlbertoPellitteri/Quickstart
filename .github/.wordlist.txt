@@ -12,3 +12,7 @@ xxxx
 yozora
 yozoraxcii
 localhost
+https
+chmod
+MacOS
+exe
