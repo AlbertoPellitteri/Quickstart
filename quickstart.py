@@ -1011,13 +1011,40 @@ if __name__ == "__main__":
             return True
         return False
 
+    def get_lan_ip():
+        try:
+            # Connect to a dummy address to get the local IP used
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+            s.close()
+            return ip
+        except Exception:
+            return "localhost"
+
     # Headless mode: skip system tray
     if app.config["QUICKSTART_DOCKER"] or not is_gui_available():
         print("[INFO] Running in headless mode — no system tray will be shown.")
+        if app.config["QUICKSTART_DOCKER"]:
+            print("Quickstart is Running inside Docker.")
+            print(f"Access it at http://<your-server-ip>:{running_port}")
+            print("Note: This IP is the HOST machine IP, not the container IP.")
+        else:
+            ip_address = get_lan_ip()
+            print("Quickstart is Running")
+            print(f"Access it at http://{ip_address}:{running_port}")
 
+        print("Port and Debug Settings can be amended by editing your .env file")
         server_thread = Thread(target=start_flask_app)
         server_thread.daemon = True
         server_thread.start()
+
+        try:
+            while True:
+                time.sleep(1)  # Keep main thread alive
+        except KeyboardInterrupt:
+            print("\n[INFO] Shutting down Quickstart...")
+            sys.exit(0)
 
     else:
         # GUI mode: show tray
@@ -1081,17 +1108,19 @@ if __name__ == "__main__":
                 self.tray.setContextMenu(self.menu)
                 self.tray.show()
 
+                ip_address = get_lan_ip()
+
                 self.tray.showMessage(
                     "Quickstart is Running",
-                    f"Access it at http://localhost:{running_port}",
+                    f"Local: http://localhost:{running_port}\nLAN: http://{ip_address}:{running_port}",
                     QSystemTrayIcon.NoIcon,
                     8000,
-                )  # milliseconds (8 seconds)
+                )
 
                 print("Quickstart is Running")
-                print(f"Access it at http://localhost:{running_port}")
-                print("Port and Debug Settings can be amended by right-clicking the system tray icon or by editing your .env file")
-                # Open the browser automatically
+                print(f"Access it locally at: http://localhost:{running_port}")
+                print(f"Access it from other devices at: http://{ip_address}:{running_port}")
+                print("Port and Debug Settings can be amended by right-clicking the system tray icon or by editing your .env file")  # Open the browser automatically
                 webbrowser.open(f"http://localhost:{running_port}")
 
                 # Keep the invisible parent alive
