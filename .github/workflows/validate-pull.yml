@@ -40,7 +40,7 @@ jobs:
       - name: Get changes
         id: get-changes
         run: | 
-            git remote add -f upstream https://github.com/Kometa-Team/${{ vars.REPO_NAME }}.git
+            git remote add -f upstream https://github.com/AlbertoPellitteri/${{ vars.REPO_NAME }}.git
             git remote update
             if [[ ${{ github.event.action }} == "labeled" ]]; then
                 echo "files=$(git diff --name-only upstream/develop HEAD | xargs)" >> $GITHUB_OUTPUT
